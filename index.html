@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Attendance Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<style>
+:root{
+  --bg:#f7f7f8; --surface:#fff; --border:#e6e6ea; --text:#18181b; --muted:#71717a;
+  --accent:#4f46e5; --accent-soft:#eef2ff; --ok:#16a34a; --ok-soft:#dcfce7;
+  --warn:#d97706; --warn-soft:#fef3c7; --err:#dc2626; --err-soft:#fee2e2; --radius:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+button,input,select,textarea{font-family:inherit;font-size:14px}
+.hidden{display:none!important}
+
+/* App shell */
+#app{display:flex;min-height:100vh}
+aside{width:224px;background:var(--surface);border-right:1px solid var(--border);padding:20px 12px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
+.brand{font-weight:700;font-size:16px;padding:0 10px 20px;display:flex;align-items:center;gap:8px}
+.brand i{width:24px;height:24px;border-radius:7px;background:var(--accent);display:inline-block}
+nav{display:flex;flex-direction:column;gap:2px;flex:1}
+nav button{background:none;border:0;text-align:left;padding:9px 10px;border-radius:8px;color:var(--muted);font-weight:500;cursor:pointer}
+nav button:hover{background:var(--bg);color:var(--text)}
+nav button.active{background:var(--accent-soft);color:var(--accent)}
+.side-foot{padding:10px;font-size:12px;color:var(--muted)}
+.side-foot button{margin-top:8px}
+main{flex:1;padding:28px 32px;min-width:0;max-width:1100px}
+h2{font-size:20px;font-weight:700;margin-bottom:4px}
+.sub{color:var(--muted);margin-bottom:20px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+
+/* Controls */
+label{display:block;font-size:12px;font-weight:500;color:var(--muted);margin-bottom:4px}
+input,select,textarea{width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:8px;background:#fff;color:var(--text);outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.btn{border:1px solid var(--border);background:#fff;padding:9px 14px;border-radius:8px;font-weight:500;cursor:pointer;color:var(--text)}
+.btn:hover{background:var(--bg)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{opacity:.92}
+.btn.danger{color:var(--err)}
+.btn.sm{padding:5px 10px;font-size:12px}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}
+.row>.f{flex:1;min-width:140px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:10px;flex-wrap:wrap}
+
+/* Icons */
+nav button{display:flex;align-items:center;gap:9px}
+nav button i{font-size:16px}
+.btn i{margin-right:6px;vertical-align:-1px}
+.btn.sm i{margin-right:4px}
+.brand i.bi{background:none;width:auto;height:auto;color:var(--accent);font-size:22px;border-radius:0}
+.scan-btn i{display:block;font-size:30px;margin-bottom:8px}
+.search-wrap{position:relative}
+.search-wrap i{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+.search-wrap input{padding-left:32px}
+
+/* Table */
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:12px;font-weight:600;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.actions{text-align:right}
+td.actions .btn{margin-left:4px}
+.empty{text-align:center;color:var(--muted);padding:28px}
+.pill{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:500;background:var(--bg);color:var(--muted)}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.err{background:var(--err-soft);color:var(--err)}
+.pill.info{background:var(--accent-soft);color:var(--accent)}
+
+/* Scanner */
+.scan-btns{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.scan-btn{padding:26px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);cursor:pointer;font-weight:600;font-size:16px;text-align:center}
+.scan-btn small{display:block;font-weight:400;color:var(--muted);margin-top:4px;font-size:12px}
+.scan-btn:hover{border-color:var(--accent)}
+.scan-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.scan-btn.active small{color:#e0e7ff}
+#reader{width:100%;max-width:420px;margin:0 auto;border-radius:var(--radius);overflow:hidden}
+.result{margin-top:16px;padding:16px;border-radius:var(--radius);text-align:center}
+.result.ok{background:var(--ok-soft);color:#14532d}
+.result.warn{background:var(--warn-soft);color:#78350f}
+.result.err{background:var(--err-soft);color:#7f1d1d}
+.result .big{font-size:18px;font-weight:700}
+
+/* Tabs */
+.tabs{display:flex;gap:4px;margin-bottom:14px;border-bottom:1px solid var(--border)}
+.tabs button{background:none;border:0;padding:9px 14px;color:var(--muted);font-weight:500;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs button.active{color:var(--accent);border-color:var(--accent)}
+
+/* Modal & toast */
+.modal-bg{position:fixed;inset:0;background:rgba(24,24,27,.45);display:flex;align-items:center;justify-content:center;padding:20px;z-index:50}
+.modal{background:#fff;border-radius:14px;padding:24px;width:100%;max-width:440px}
+.modal h3{margin-bottom:16px;font-size:16px}
+.modal .fld{margin-bottom:12px}
+.modal .foot{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+#toast{position:fixed;bottom:22px;right:22px;z-index:99;display:flex;flex-direction:column;gap:8px}
+.toast{background:var(--text);color:#fff;padding:11px 16px;border-radius:9px;font-size:13px;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+.toast.err{background:var(--err)}
+.demo-tag{background:var(--warn-soft);color:var(--warn);padding:2px 8px;border-radius:99px;font-size:11px;font-weight:600}
+
+@media(max-width:760px){
+  #app{flex-direction:column}
+  aside{width:100%;height:auto;position:static;flex-direction:row;align-items:center;overflow-x:auto;padding:10px}
+  .brand{padding:0 10px 0 0}
+  nav{flex-direction:row}
+  .side-foot{display:none}
+  main{padding:18px 14px}
+  .scan-btns,.grid2{grid-template-columns:1fr}
+}
+@media print{
+  aside,.toolbar .btn,.tabs,.no-print{display:none!important}
+  main{padding:0;max-width:none}
+  .card{border:0;padding:0}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ APP ============ -->
+<div id="app">
+  <aside>
+    <div class="brand"><i class="bi bi-qr-code-scan"></i>Attendance</div>
+    <nav id="nav">
+      <button data-view="scanner" class="active"><i class="bi bi-upc-scan"></i>Scanner</button>
+      <button data-view="employees"><i class="bi bi-people"></i>Employees</button>
+      <button data-view="manual"><i class="bi bi-pencil-square"></i>Manual Entry</button>
+      <button data-view="reports"><i class="bi bi-bar-chart-line"></i>Reports</button>
+      <button data-view="departments"><i class="bi bi-building"></i>Departments</button>
+      <button data-view="schedules"><i class="bi bi-clock-history"></i>Time Settings</button>
+    </nav>
+    <div class="side-foot">
+      <span id="modeLabel"></span>
+    </div>
+  </aside>
+
+  <main>
+    <!-- Scanner -->
+    <section id="view-scanner">
+      <h2>Scanner</h2>
+      <p class="sub">Choose Time In or Time Out, then show the QR code to the camera.</p>
+      <div class="scan-btns">
+        <button class="scan-btn" id="btnIn"><i class="bi bi-box-arrow-in-right"></i>Time In<small>Scan to record arrival</small></button>
+        <button class="scan-btn" id="btnOut"><i class="bi bi-box-arrow-right"></i>Time Out<small>Scan to record departure</small></button>
+      </div>
+      <div class="card hidden" id="scanCard" style="margin-top:16px">
+        <div class="toolbar">
+          <strong id="scanTitle"></strong>
+          <button class="btn sm" id="stopScan"><i class="bi bi-camera-video-off"></i>Stop camera</button>
+        </div>
+        <div id="reader"></div>
+        <div id="scanResult"></div>
+      </div>
+    </section>
+
+    <!-- Employees -->
+    <section id="view-employees" class="hidden">
+      <h2>Registered Employees</h2>
+      <p class="sub">Everyone who registered through the form, with today's attendance status.</p>
+      <div class="card no-print">
+        <div class="row">
+          <div class="f search-wrap" style="flex:2"><label>Search</label><i class="bi bi-search" style="top:68%"></i><input id="eSearch" placeholder="ID, name or email"></div>
+          <div class="f"><label>Department</label><select id="eDept"></select></div>
+          <div class="f"><label>Today</label>
+            <select id="eStatus">
+              <option value="">All</option>
+              <option value="in">Timed in</option>
+              <option value="out">Timed out</option>
+              <option value="none">Not yet timed in</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="toolbar">
+          <span id="eCount" class="sub" style="margin:0"></span>
+          <span>
+            <button class="btn sm" id="eRefresh"><i class="bi bi-arrow-clockwise"></i>Refresh</button>
+            <button class="btn sm" id="eCsv"><i class="bi bi-download"></i>Export CSV</button>
+            <button class="btn sm" id="ePrint"><i class="bi bi-printer"></i>Print</button>
+          </span>
+        </div>
+        <div class="tbl-wrap" id="empTable"></div>
+      </div>
+    </section>
+
+    <!-- Manual -->
+    <section id="view-manual" class="hidden">
+      <h2>Manual Entry</h2>
+      <p class="sub">Use this when a scan fails. Entries are marked as Manual in reports.</p>
+      <div class="card">
+        <form id="manualForm">
+          <div class="fld" style="margin-bottom:12px">
+            <label>Employee (ID or name)</label>
+            <input id="mEmp" list="empList" placeholder="Start typing…" required autocomplete="off">
+            <datalist id="empList"></datalist>
+          </div>
+          <div class="grid2" style="margin-bottom:12px">
+            <div><label>Date</label><input type="date" id="mDate" required></div>
+            <div><label>Time</label><input type="time" id="mTime" required></div>
+          </div>
+          <div class="grid2" style="margin-bottom:12px">
+            <div><label>Type</label>
+              <select id="mType"><option value="IN">Time In</option><option value="OUT">Time Out</option></select>
+            </div>
+            <div><label>Remark (optional)</label><input id="mRemark" placeholder="e.g. camera not working"></div>
+          </div>
+          <button class="btn primary" type="submit"><i class="bi bi-check-lg"></i>Save attendance</button>
+        </form>
+      </div>
+      <div class="card">
+        <strong>Recent manual entries</strong>
+        <div class="tbl-wrap" style="margin-top:10px" id="manualRecent"></div>
+      </div>
+    </section>
+
+    <!-- Reports -->
+    <section id="view-reports" class="hidden">
+      <h2>Reports</h2>
+      <p class="sub">Filter, review, export or print attendance records.</p>
+      <div class="card no-print">
+        <div class="row">
+          <div class="f"><label>From</label><input type="date" id="rFrom"></div>
+          <div class="f"><label>To</label><input type="date" id="rTo"></div>
+          <div class="f"><label>Department</label><select id="rDept"></select></div>
+          <div class="f"><label>Type</label>
+            <select id="rType"><option value="">All</option><option value="IN">Time In</option><option value="OUT">Time Out</option></select>
+          </div>
+          <div class="f"><label>Employee</label><input id="rEmp" placeholder="ID or name"></div>
+          <button class="btn primary" id="rRun"><i class="bi bi-funnel"></i>Generate</button>
+        </div>
+      </div>
+      <div class="tabs">
+        <button class="active" data-tab="log">Daily Log</button>
+        <button data-tab="emp">Per Employee</button>
+        <button data-tab="dept">Per Department</button>
+      </div>
+      <div class="card">
+        <div class="toolbar">
+          <span id="rCount" class="sub" style="margin:0"></span>
+          <span>
+            <button class="btn sm" id="rCsv"><i class="bi bi-download"></i>Export CSV</button>
+            <button class="btn sm" id="rPrint"><i class="bi bi-printer"></i>Print</button>
+          </span>
+        </div>
+        <div class="tbl-wrap" id="rTable"></div>
+      </div>
+    </section>
+
+    <!-- Departments -->
+    <section id="view-departments" class="hidden">
+      <h2>Departments</h2>
+      <p class="sub">These appear in the registration form dropdown.</p>
+      <div class="card">
+        <div class="toolbar"><span></span><button class="btn primary" id="addDept"><i class="bi bi-plus-lg"></i>Add department</button></div>
+        <div class="tbl-wrap" id="deptTable"></div>
+      </div>
+    </section>
+
+    <!-- Schedules -->
+    <section id="view-schedules" class="hidden">
+      <h2>Time In / Time Out Settings</h2>
+      <p class="sub">A scan is accepted only inside a schedule's window. Cutoff decides Late (Time In) or Early Out (Time Out).</p>
+      <div class="card">
+        <div class="toolbar"><span></span><button class="btn primary" id="addSched"><i class="bi bi-plus-lg"></i>Add schedule</button></div>
+        <div class="tbl-wrap" id="schedTable"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div id="toast"></div>
+<div id="modalHost"></div>
+
+<script>
+/* =====================================================
+   CONFIG — paste your Apps Script Web App URL here.
+   Leave empty to run in DEMO MODE (data in this browser only).
+   ===================================================== */
+const API_URL = "https://script.google.com/macros/s/AKfycbw21HGaKOQxEHX81QSv35mya9GNhEJH_SCcVDdUyXb-rKwUeHpGqwQQvfr9U6UVyW16GA/exec";
+
+/* The admin key is NOT stored in this file, so the page is safe to host online.
+   It is asked once on each device and remembered in that browser only.
+   It must equal the ADMIN_KEY value in Apps Script → Project Settings → Script Properties. */
+const KEY_STORE = 'att_admin_key';
+function getKey(){ try{ return localStorage.getItem(KEY_STORE) || ''; }catch(e){ return ''; } }
+function askKey(){
+  openModal('Admin key', [{name:'key', label:'Enter the admin key (set in Apps Script)', type:'password'}], {}, async r=>{
+    try{ localStorage.setItem(KEY_STORE, r.key); }catch(e){ throw new Error('This browser blocks storage. Disable private mode and try again.'); }
+    location.reload();
+  });
+}
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad = n => String(n).padStart(2,'0');
+const today = () => { const d=new Date(); return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; };
+const nowHM = () => { const d=new Date(); return `${pad(d.getHours())}:${pad(d.getMinutes())}`; };
+const nowHMS = () => { const d=new Date(); return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`; };
+const uid = () => Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const state = { depts:[], scheds:[], emps:[], report:[] };
+
+function toast(msg, isErr){
+  const t=document.createElement('div'); t.className='toast'+(isErr?' err':''); t.textContent=msg;
+  $('#toast').appendChild(t); setTimeout(()=>t.remove(), 3200);
+}
+
+/* ---------- API layer ---------- */
+async function api(action, data={}){
+  if(!API_URL) return demoApi(action, data);
+  const res = await fetch(API_URL, {
+    method:'POST',
+    headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify({action, key: getKey(), ...data})
+  });
+  const j = await res.json();
+  if(!j.ok){
+    if(j.error==='Unauthorized'){
+      try{ localStorage.removeItem(KEY_STORE); }catch(e){}
+      askKey();
+      throw new Error('Wrong admin key. Please enter it again.');
+    }
+    throw new Error(j.error || 'Request failed');
+  }
+  return j.data;
+}
+
+/* ---------- DEMO backend (mirrors the real API contract) ---------- */
+function demoDb(){
+  let db = JSON.parse(localStorage.getItem('att_demo')||'null');
+  if(!db){
+    db = {
+      Departments:[{id:'d1',name:'Office of the Mayor'},{id:'d2',name:'GSO'},{id:'d3',name:'HRMO'}],
+      Schedules:[
+        {id:'s1',name:'Morning In',type:'IN',start:'05:00',end:'11:59',cutoff:'08:15'},
+        {id:'s2',name:'Afternoon Out',type:'OUT',start:'12:00',end:'20:00',cutoff:'17:00'}
+      ],
+      Employees:[
+        {id:'e1',empId:'EMP-001',first:'Juan',middle:'D',last:'Dela Cruz',email:'juan@example.com',dept:'GSO',registeredAt:'2026-11-21 08:00:00'},
+        {id:'e2',empId:'EMP-002',first:'Maria',middle:'S',last:'Santos',email:'maria@example.com',dept:'HRMO',registeredAt:'2026-11-21 08:05:00'}
+      ],
+      Attendance:[]
+    };
+    localStorage.setItem('att_demo', JSON.stringify(db));
+  }
+  return db;
+}
+const demoSave = db => localStorage.setItem('att_demo', JSON.stringify(db));
+
+function matchSchedule(scheds, type, hm){
+  return scheds.find(s => s.type===type && s.start<=hm && hm<=s.end);
+}
+function statusFor(sched, type, hm){
+  if(!sched) return 'Manual';
+  if(type==='IN')  return hm > sched.cutoff ? 'Late' : 'On time';
+  return hm < sched.cutoff ? 'Early out' : 'On time';
+}
+function buildRecord(emp, type, date, time, source, sched, remark){
+  return {
+    id:uid(), date, time, empId:emp.empId,
+    name:[emp.first, emp.middle, emp.last].filter(Boolean).join(' '),
+    dept:emp.dept, type, schedule: sched ? sched.name : '',
+    status: statusFor(sched, type, time.slice(0,5)), source, remark: remark||''
+  };
+}
+
+async function demoApi(action, d){
+  const db = demoDb();
+  await new Promise(r=>setTimeout(r,120));
+  switch(action){
+    case 'list': return db[d.sheet] || [];
+    case 'save': {
+      const arr = db[d.sheet];
+      if(d.row.id){ const i=arr.findIndex(x=>x.id===d.row.id); if(i>=0) arr[i]=d.row; }
+      else { d.row.id=uid(); arr.push(d.row); }
+      demoSave(db); return d.row;
+    }
+    case 'remove': {
+      db[d.sheet] = db[d.sheet].filter(x=>x.id!==d.id); demoSave(db); return true;
+    }
+    case 'scan': {
+      const code = String(d.code||'').split('|')[0].trim();
+      const emp = db.Employees.find(e=>e.empId===code);
+      if(!emp) throw new Error('QR not registered');
+      const date=today(), time=nowHMS();
+      const sched = matchSchedule(db.Schedules, d.type, time.slice(0,5));
+      if(!sched) throw new Error('Outside allowed time window');
+      const dup = db.Attendance.find(a=>a.empId===emp.empId && a.date===date && a.type===d.type && a.schedule===sched.name);
+      if(dup) throw new Error('Already scanned at '+dup.time.slice(0,5));
+      const rec = buildRecord(emp, d.type, date, time, 'Scan', sched);
+      db.Attendance.push(rec); demoSave(db); return rec;
+    }
+    case 'manual': {
+      const emp = db.Employees.find(e=>e.empId===d.empId);
+      if(!emp) throw new Error('Employee not found');
+      const sched = matchSchedule(db.Schedules, d.type, d.time.slice(0,5));
+      const rec = buildRecord(emp, d.type, d.date, d.time.length===5?d.time+':00':d.time, 'Manual', sched, d.remark);
+      db.Attendance.push(rec); demoSave(db); return rec;
+    }
+    case 'attendance':
+      return db.Attendance.filter(a => (!d.from||a.date>=d.from) && (!d.to||a.date<=d.to));
+  }
+  throw new Error('Unknown action');
+}
+
+/* ---------- start ---------- */
+if(!API_URL) $('#modeLabel').innerHTML='<span class="demo-tag">DEMO MODE</span>';
+else{
+  $('#modeLabel').innerHTML='Connected to Google Sheet<br><button class="btn sm" id="changeKey" style="margin-top:8px"><i class="bi bi-key"></i>Change key</button>';
+  $('#changeKey').onclick = askKey;
+}
+
+async function enterApp(){
+  await loadRefs();
+  $('#mDate').value = today(); $('#mTime').value = nowHM();
+  $('#rFrom').value = today(); $('#rTo').value = today();
+  go('scanner');
+}
+async function loadRefs(){
+  try{
+    [state.depts, state.scheds, state.emps] = await Promise.all([
+      api('list',{sheet:'Departments'}), api('list',{sheet:'Schedules'}), api('list',{sheet:'Employees'})
+    ]);
+    $('#empList').innerHTML = state.emps.map(e=>`<option value="${esc(e.empId)}">${esc(e.first+' '+e.last)}</option>`).join('');
+    $('#rDept').innerHTML = '<option value="">All</option>'+state.depts.map(d=>`<option>${esc(d.name)}</option>`).join('');
+  }catch(err){ toast(err.message,true); }
+}
+
+/* ---------- navigation ---------- */
+function go(view){
+  if(view!=='scanner') stopScanner();
+  $$('main section').forEach(s=>s.classList.add('hidden'));
+  $('#view-'+view).classList.remove('hidden');
+  $$('#nav button').forEach(b=>b.classList.toggle('active', b.dataset.view===view));
+  if(view==='employees') renderEmployees();
+  if(view==='departments') renderDepts();
+  if(view==='schedules') renderScheds();
+  if(view==='manual') renderManualRecent();
+  if(view==='reports') runReport();
+}
+$('#nav').addEventListener('click', e=>{ const b=e.target.closest('button'); if(b) go(b.dataset.view); });
+
+/* ---------- modal ---------- */
+function openModal(title, fields, values, onSave){
+  const host=$('#modalHost');
+  host.innerHTML = `<div class="modal-bg"><form class="modal"><h3>${esc(title)}</h3>
+    ${fields.map(f=>`<div class="fld"><label>${esc(f.label)}</label>
+      ${f.type==='select'
+        ? `<select name="${f.name}" required>${f.options.map(o=>`<option value="${esc(o.v)}" ${values[f.name]===o.v?'selected':''}>${esc(o.t)}</option>`).join('')}</select>`
+        : `<input name="${f.name}" type="${f.type||'text'}" value="${esc(values[f.name]||'')}" required>`}
+    </div>`).join('')}
+    <div class="foot"><button type="button" class="btn" id="mCancel">Cancel</button><button class="btn primary" type="submit">Save</button></div>
+  </form></div>`;
+  host.querySelector('#mCancel').onclick = ()=>host.innerHTML='';
+  host.querySelector('form').onsubmit = async e=>{
+    e.preventDefault();
+    const row = {...values}; new FormData(e.target).forEach((v,k)=>row[k]=v.trim());
+    try{ await onSave(row); host.innerHTML=''; }catch(err){ toast(err.message,true); }
+  };
+}
+function confirmDelete(msg){ return confirm(msg); }
+
+/* ---------- Departments CRUD ---------- */
+async function renderDepts(){
+  state.depts = await api('list',{sheet:'Departments'});
+  $('#deptTable').innerHTML = state.depts.length ? `<table><thead><tr><th>Department</th><th></th></tr></thead><tbody>
+    ${state.depts.map(d=>`<tr><td>${esc(d.name)}</td><td class="actions">
+      <button class="btn sm" data-edit="${d.id}"><i class="bi bi-pencil"></i>Edit</button><button class="btn sm danger" data-del="${d.id}"><i class="bi bi-trash"></i>Delete</button></td></tr>`).join('')}
+    </tbody></table>` : '<div class="empty">No departments yet.</div>';
+}
+function deptForm(row){
+  openModal(row.id?'Edit department':'Add department',[{name:'name',label:'Department name'}],row, async r=>{
+    if(state.depts.some(d=>d.id!==r.id && d.name.toLowerCase()===r.name.toLowerCase())) throw new Error('Department already exists');
+    await api('save',{sheet:'Departments',row:r}); toast('Saved'); await loadRefs(); renderDepts();
+  });
+}
+$('#addDept').onclick = ()=>deptForm({});
+$('#deptTable').addEventListener('click', async e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  const ed=b.dataset.edit, del=b.dataset.del;
+  if(ed) deptForm(state.depts.find(d=>d.id===ed));
+  if(del && confirmDelete('Delete this department?')){
+    try{ await api('remove',{sheet:'Departments',id:del}); toast('Deleted'); await loadRefs(); renderDepts(); }catch(err){ toast(err.message,true); }
+  }
+});
+
+/* ---------- Schedules CRUD ---------- */
+async function renderScheds(){
+  state.scheds = await api('list',{sheet:'Schedules'});
+  const sorted=[...state.scheds].sort((a,b)=>a.start.localeCompare(b.start));
+  $('#schedTable').innerHTML = sorted.length ? `<table><thead><tr><th>Name</th><th>Type</th><th>Window</th><th>Cutoff</th><th></th></tr></thead><tbody>
+    ${sorted.map(s=>`<tr><td>${esc(s.name)}</td>
+      <td><span class="pill ${s.type==='IN'?'ok':'info'}">${s.type==='IN'?'Time In':'Time Out'}</span></td>
+      <td>${esc(s.start)} – ${esc(s.end)}</td>
+      <td>${s.type==='IN'?'Late after ':'Early out before '}${esc(s.cutoff)}</td>
+      <td class="actions"><button class="btn sm" data-edit="${s.id}"><i class="bi bi-pencil"></i>Edit</button><button class="btn sm danger" data-del="${s.id}"><i class="bi bi-trash"></i>Delete</button></td></tr>`).join('')}
+    </tbody></table>` : '<div class="empty">No schedules yet.</div>';
+}
+function schedForm(row){
+  openModal(row.id?'Edit schedule':'Add schedule',[
+    {name:'name',label:'Name (e.g. Morning In)'},
+    {name:'type',label:'Type',type:'select',options:[{v:'IN',t:'Time In'},{v:'OUT',t:'Time Out'}]},
+    {name:'start',label:'Window start',type:'time'},
+    {name:'end',label:'Window end',type:'time'},
+    {name:'cutoff',label:'Cutoff (Late after / Early out before)',type:'time'}
+  ], row, async r=>{
+    if(r.start>=r.end) throw new Error('Window end must be after start');
+    await api('save',{sheet:'Schedules',row:r}); toast('Saved'); await loadRefs(); renderScheds();
+  });
+}
+$('#addSched').onclick = ()=>schedForm({type:'IN'});
+$('#schedTable').addEventListener('click', async e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  const ed=b.dataset.edit, del=b.dataset.del;
+  if(ed) schedForm(state.scheds.find(s=>s.id===ed));
+  if(del && confirmDelete('Delete this schedule?')){
+    try{ await api('remove',{sheet:'Schedules',id:del}); toast('Deleted'); renderScheds(); }catch(err){ toast(err.message,true); }
+  }
+});
+
+/* ---------- Scanner ---------- */
+let scanner=null, scanType=null, busy=false, lastCode='', lastAt=0;
+const COOLDOWN_MS = 4000;
+
+async function startScanner(type){
+  await stopScanner();
+  scanType=type;
+  $('#btnIn').classList.toggle('active', type==='IN');
+  $('#btnOut').classList.toggle('active', type==='OUT');
+  $('#scanCard').classList.remove('hidden');
+  $('#scanTitle').textContent = type==='IN' ? 'Scanning for TIME IN' : 'Scanning for TIME OUT';
+  $('#scanResult').innerHTML='';
+  try{
+    scanner = new Html5Qrcode('reader');
+    await scanner.start({facingMode:'environment'}, {fps:10, qrbox:{width:240,height:240}}, onScan, ()=>{});
+  }catch(err){
+    toast('Camera error: '+(err.message||err), true);
+    $('#scanCard').classList.add('hidden');
+    $('#btnIn').classList.remove('active'); $('#btnOut').classList.remove('active');
+  }
+}
+async function stopScanner(){
+  if(scanner){ try{ await scanner.stop(); scanner.clear(); }catch(e){} scanner=null; }
+  scanType=null;
+  $('#scanCard').classList.add('hidden');
+  $('#btnIn').classList.remove('active'); $('#btnOut').classList.remove('active');
+}
+async function onScan(text){
+  const now=Date.now();
+  if(busy || (text===lastCode && now-lastAt<COOLDOWN_MS)) return;
+  busy=true; lastCode=text; lastAt=now;
+  try{
+    const r = await api('scan',{code:text, type:scanType});
+    const cls = r.status==='Late'||r.status==='Early out' ? 'warn' : 'ok';
+    showResult(cls, `<div class="big">${esc(r.name)}</div>
+      <div>${esc(r.dept)} · ${esc(r.type==='IN'?'Time In':'Time Out')} at ${esc(r.time.slice(0,5))}</div>
+      <div style="margin-top:6px"><span class="pill ${cls==='ok'?'ok':'warn'}">${esc(r.status)}</span></div>`);
+  }catch(err){
+    showResult('err', `<div class="big">Not recorded</div><div>${esc(err.message)}</div>`);
+  }
+  busy=false;
+}
+function showResult(cls, html){ $('#scanResult').innerHTML = `<div class="result ${cls}">${html}</div>`; }
+$('#btnIn').onclick = ()=>startScanner('IN');
+$('#btnOut').onclick = ()=>startScanner('OUT');
+$('#stopScan').onclick = stopScanner;
+
+/* ---------- Employees (registered users) ---------- */
+let empRows=[];
+async function renderEmployees(){
+  try{
+    const [emps, att] = await Promise.all([
+      api('list',{sheet:'Employees'}),
+      api('attendance',{from:today(), to:today()})
+    ]);
+    state.emps = emps;
+    const m={};
+    att.forEach(a=>{
+      const o=m[a.empId]=m[a.empId]||{in:null,out:null};
+      if(a.type==='IN'){ if(!o.in||a.time<o.in) o.in=a.time; }
+      else { if(!o.out||a.time>o.out) o.out=a.time; }
+    });
+    empRows = emps.map(e=>({
+      ...e,
+      fullName:[e.first,e.middle,e.last].filter(Boolean).join(' '),
+      tin:(m[e.empId]||{}).in||'', tout:(m[e.empId]||{}).out||''
+    }));
+    const cur=$('#eDept').value;
+    $('#eDept').innerHTML='<option value="">All</option>'+state.depts.map(d=>`<option>${esc(d.name)}</option>`).join('');
+    $('#eDept').value=cur;
+    drawEmployees();
+  }catch(err){ toast(err.message,true); }
+}
+function filteredEmployees(){
+  const q=$('#eSearch').value.trim().toLowerCase(), dept=$('#eDept').value, st=$('#eStatus').value;
+  return empRows.filter(e=>
+    (!q || e.empId.toLowerCase().includes(q) || e.fullName.toLowerCase().includes(q) || (e.email||'').toLowerCase().includes(q)) &&
+    (!dept || e.dept===dept) &&
+    (!st || (st==='in'&&e.tin) || (st==='out'&&e.tout) || (st==='none'&&!e.tin))
+  );
+}
+function drawEmployees(){
+  const rows=filteredEmployees();
+  $('#eCount').textContent=`${rows.length} of ${empRows.length} employee${empRows.length===1?'':'s'}`;
+  $('#empTable').innerHTML = rows.length ? `<table><thead><tr>
+    <th>Employee ID</th><th>Name</th><th>Department</th><th>Email</th><th>Registered</th><th>Today In</th><th>Today Out</th><th class="no-print"></th></tr></thead><tbody>
+    ${rows.map(e=>`<tr>
+      <td><strong>${esc(e.empId)}</strong></td>
+      <td>${esc(e.fullName)}</td>
+      <td>${esc(e.dept)}</td>
+      <td>${esc(e.email||'—')}</td>
+      <td>${esc((e.registeredAt||'—').slice(0,16))}</td>
+      <td>${e.tin?`<span class="pill ok">${esc(e.tin.slice(0,5))}</span>`:'<span class="pill">—</span>'}</td>
+      <td>${e.tout?`<span class="pill info">${esc(e.tout.slice(0,5))}</span>`:'<span class="pill">—</span>'}</td>
+      <td class="actions no-print"><button class="btn sm danger" data-del="${e.id}"><i class="bi bi-trash"></i>Delete</button></td>
+    </tr>`).join('')}</tbody></table>` : '<div class="empty">No registered employees found.</div>';
+}
+$('#eSearch').oninput = drawEmployees;
+$('#eDept').onchange = drawEmployees;
+$('#eStatus').onchange = drawEmployees;
+$('#eRefresh').onclick = renderEmployees;
+$('#ePrint').onclick = ()=>window.print();
+$('#eCsv').onclick = ()=>{
+  const q=v=>`"${String(v??'').replace(/"/g,'""')}"`;
+  const head=['Employee ID','First Name','Middle Name','Last Name','Email','Department','Registered'];
+  const rows=filteredEmployees().map(e=>[e.empId,e.first,e.middle,e.last,e.email,e.dept,e.registeredAt||'']);
+  const csv=[head,...rows].map(r=>r.map(q).join(',')).join('\r\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob(['﻿'+csv],{type:'text/csv'}));
+  a.download=`employees_${today()}.csv`; a.click();
+};
+$('#empTable').addEventListener('click', async e=>{
+  const b=e.target.closest('button'); if(!b || !b.dataset.del) return;
+  const emp=empRows.find(x=>x.id===b.dataset.del); if(!emp) return;
+  if(!confirm(`Delete ${emp.fullName} (${emp.empId})?\n\nTheir past attendance records are kept, but their QR code will stop working and they can register again.`)) return;
+  try{ await api('remove',{sheet:'Employees',id:emp.id}); toast('Employee deleted'); renderEmployees(); }
+  catch(err){ toast(err.message,true); }
+});
+
+/* ---------- Manual entry ---------- */
+function findEmp(q){
+  q=q.trim().toLowerCase();
+  return state.emps.find(e=>e.empId.toLowerCase()===q) ||
+         state.emps.find(e=>(e.first+' '+e.last).toLowerCase()===q);
+}
+$('#manualForm').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const emp = findEmp($('#mEmp').value);
+  if(!emp) return toast('Employee not found. Pick from the list.', true);
+  try{
+    await api('manual',{empId:emp.empId, date:$('#mDate').value, time:$('#mTime').value, type:$('#mType').value, remark:$('#mRemark').value.trim()});
+    toast('Attendance saved'); $('#mEmp').value=''; $('#mRemark').value=''; renderManualRecent();
+  }catch(err){ toast(err.message,true); }
+});
+async function renderManualRecent(){
+  try{
+    const rows=(await api('attendance',{from:'',to:''})).filter(r=>r.source==='Manual').slice(-8).reverse();
+    $('#manualRecent').innerHTML = rows.length ? tableHtml(['Date','Time','Employee','Type','Remark'],
+      rows.map(r=>[r.date,r.time.slice(0,5),r.name,r.type==='IN'?'Time In':'Time Out',r.remark||'—'])) : '<div class="empty">No manual entries yet.</div>';
+  }catch(err){ toast(err.message,true); }
+}
+
+/* ---------- Reports ---------- */
+let reportTab='log', reportData={head:[],rows:[]};
+
+function tableHtml(head, rows){
+  return `<table><thead><tr>${head.map(h=>`<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>
+    ${rows.map(r=>`<tr>${r.map(c=>`<td>${c&&c.html!==undefined?c.html:esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+}
+const statusPill = s => ({html:`<span class="pill ${s==='On time'?'ok':s==='Manual'?'info':'warn'}">${esc(s)}</span>`});
+
+async function runReport(){
+  try{
+    let rows = await api('attendance',{from:$('#rFrom').value, to:$('#rTo').value});
+    const dept=$('#rDept').value, type=$('#rType').value, q=$('#rEmp').value.trim().toLowerCase();
+    rows = rows.filter(r=>(!dept||r.dept===dept)&&(!type||r.type===type)&&(!q||r.empId.toLowerCase().includes(q)||r.name.toLowerCase().includes(q)));
+    rows.sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
+    state.report = rows; renderReport();
+  }catch(err){ toast(err.message,true); }
+}
+function renderReport(){
+  const rows=state.report; let head, data;
+  if(reportTab==='log'){
+    head=['Date','Time','Employee ID','Name','Department','Type','Schedule','Status','Source'];
+    data=rows.map(r=>[r.date,r.time.slice(0,5),r.empId,r.name,r.dept,r.type==='IN'?'Time In':'Time Out',r.schedule||'—',statusPill(r.status),r.source]);
+    reportData={head,rows:rows.map(r=>[r.date,r.time,r.empId,r.name,r.dept,r.type,r.schedule,r.status,r.source])};
+  } else if(reportTab==='emp'){
+    const m={};
+    rows.forEach(r=>{
+      const k=r.empId; m[k]=m[k]||{empId:r.empId,name:r.name,dept:r.dept,days:{},late:0,early:0,ins:0,outs:0};
+      const o=m[k], day=o.days[r.date]=o.days[r.date]||{in:null,out:null};
+      if(r.type==='IN'){ o.ins++; if(!day.in||r.time<day.in) day.in=r.time; if(r.status==='Late') o.late++; }
+      else { o.outs++; if(!day.out||r.time>day.out) day.out=r.time; if(r.status==='Early out') o.early++; }
+    });
+    const secs=t=>{const[h,mi,s]=t.split(':').map(Number);return h*3600+mi*60+(s||0);};
+    const list=Object.values(m).map(o=>{
+      let tot=0; Object.values(o.days).forEach(d=>{ if(d.in&&d.out&&d.out>d.in) tot+=secs(d.out)-secs(d.in); });
+      return [o.empId,o.name,o.dept,Object.values(o.days).filter(d=>d.in).length,o.late,o.early,(tot/3600).toFixed(2)];
+    });
+    head=['Employee ID','Name','Department','Days Present','Late','Early Out','Total Hours']; data=list; reportData={head,rows:list};
+  } else {
+    const m={};
+    rows.forEach(r=>{
+      const o=m[r.dept]=m[r.dept]||{dept:r.dept,emps:new Set(),ins:0,outs:0,late:0};
+      o.emps.add(r.empId);
+      if(r.type==='IN'){ o.ins++; if(r.status==='Late') o.late++; } else o.outs++;
+    });
+    const list=Object.values(m).map(o=>[o.dept,o.emps.size,o.ins,o.outs,o.late]);
+    head=['Department','Employees','Time Ins','Time Outs','Late']; data=list; reportData={head,rows:list};
+  }
+  $('#rCount').textContent = `${rows.length} record${rows.length===1?'':'s'}`;
+  $('#rTable').innerHTML = data.length ? tableHtml(head,data) : '<div class="empty">No records for these filters.</div>';
+}
+$('#rRun').onclick = runReport;
+$$('.tabs button').forEach(b=>b.onclick=()=>{
+  $$('.tabs button').forEach(x=>x.classList.toggle('active',x===b)); reportTab=b.dataset.tab; renderReport();
+});
+$('#rPrint').onclick = ()=>window.print();
+$('#rCsv').onclick = ()=>{
+  const q=v=>`"${String(v??'').replace(/"/g,'""')}"`;
+  const csv=[reportData.head,...reportData.rows].map(r=>r.map(q).join(',')).join('\r\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv'}));
+  a.download=`attendance_${reportTab}_${today()}.csv`; a.click();
+};
+
+/* ---------- boot ---------- */
+if(API_URL && !getKey()) askKey(); else enterApp();
+</script>
+</body>
+</html>
