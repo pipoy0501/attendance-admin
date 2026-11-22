@@ -1,741 +1,1452 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Attendance Admin</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#142a3f">
+<title>Admin Panel — Event Attendance</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
 <style>
-:root{
-  --bg:#f7f7f8; --surface:#fff; --border:#e6e6ea; --text:#18181b; --muted:#71717a;
-  --accent:#4f46e5; --accent-soft:#eef2ff; --ok:#16a34a; --ok-soft:#dcfce7;
-  --warn:#d97706; --warn-soft:#fef3c7; --err:#dc2626; --err-soft:#fee2e2; --radius:10px;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
-button,input,select,textarea{font-family:inherit;font-size:14px}
-.hidden{display:none!important}
+  :root {
+    --brand: #1F4E78;
+    --brand-dark: #163a5b;
+    --brand-light: #eef4fb;
+    --sidebar-bg: #142a3f;
+    --sidebar-text: #b7c7d6;
+    --sidebar-active: #1F4E78;
+    --bottom-nav-h: 66px;
+  }
 
-/* App shell */
-#app{display:flex;min-height:100vh}
-aside{width:224px;background:var(--surface);border-right:1px solid var(--border);padding:20px 12px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
-.brand{font-weight:700;font-size:16px;padding:0 10px 20px;display:flex;align-items:center;gap:8px}
-.brand i{width:24px;height:24px;border-radius:7px;background:var(--accent);display:inline-block}
-nav{display:flex;flex-direction:column;gap:2px;flex:1}
-nav button{background:none;border:0;text-align:left;padding:9px 10px;border-radius:8px;color:var(--muted);font-weight:500;cursor:pointer}
-nav button:hover{background:var(--bg);color:var(--text)}
-nav button.active{background:var(--accent-soft);color:var(--accent)}
-.side-foot{padding:10px;font-size:12px;color:var(--muted)}
-.side-foot button{margin-top:8px}
-main{flex:1;padding:28px 32px;min-width:0;max-width:1100px}
-h2{font-size:20px;font-weight:700;margin-bottom:4px}
-.sub{color:var(--muted);margin-bottom:20px}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+  * { -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    background: #eef2f7; color: #1f2d3d; margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 
-/* Controls */
-label{display:block;font-size:12px;font-weight:500;color:var(--muted);margin-bottom:4px}
-input,select,textarea{width:100%;padding:9px 11px;border:1px solid var(--border);border-radius:8px;background:#fff;color:var(--text);outline:none}
-input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
-.btn{border:1px solid var(--border);background:#fff;padding:9px 14px;border-radius:8px;font-weight:500;cursor:pointer;color:var(--text)}
-.btn:hover{background:var(--bg)}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
-.btn.primary:hover{opacity:.92}
-.btn.danger{color:var(--err)}
-.btn.sm{padding:5px 10px;font-size:12px}
-.row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}
-.row>.f{flex:1;min-width:140px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:10px;flex-wrap:wrap}
+  /* =====================================================
+   *  PIN GATE
+   * ===================================================== */
+  .gate-wrap {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100vh; min-height: 100dvh; padding: 20px;
+  }
+  .gate-card {
+    background: #fff; border-radius: 16px; padding: 32px 24px;
+    box-shadow: 0 10px 40px rgba(31, 78, 120, 0.15);
+    width: 100%; max-width: 380px; text-align: center;
+  }
+  .gate-icon {
+    width: 64px; height: 64px; border-radius: 16px;
+    background: var(--brand-light); color: var(--brand);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 32px; margin-bottom: 16px;
+  }
+  .gate-title { font-size: 20px; font-weight: 700; color: var(--brand); margin: 0 0 6px; }
+  .gate-sub { font-size: 13px; color: #5b6b7c; margin: 0 0 22px; }
+  .pin-input {
+    width: 100%; padding: 14px 18px; font-size: 24px; font-weight: 700;
+    letter-spacing: 12px; text-align: center;
+    border: 2px solid #cfd8e3; border-radius: 10px; outline: none;
+    font-family: 'Inter', monospace; color: var(--brand);
+    transition: border 0.15s, box-shadow 0.15s;
+  }
+  .pin-input:focus { border-color: var(--brand); box-shadow: 0 0 0 4px rgba(31, 78, 120, 0.15); }
+  .pin-input.is-err { border-color: #e53935; }
+  .gate-msg { font-size: 13px; color: #b71c1c; margin-top: 12px; min-height: 20px; font-weight: 500; }
 
-/* Icons */
-nav button{display:flex;align-items:center;gap:9px}
-nav button i{font-size:16px}
-.btn i{margin-right:6px;vertical-align:-1px}
-.btn.sm i{margin-right:4px}
-.brand i.bi{background:none;width:auto;height:auto;color:var(--accent);font-size:22px;border-radius:0}
-.scan-btn i{display:block;font-size:30px;margin-bottom:8px}
-.search-wrap{position:relative}
-.search-wrap i{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
-.search-wrap input{padding-left:32px}
+  /* =====================================================
+   *  LAYOUT
+   * ===================================================== */
+  .layout { display: none; min-height: 100vh; min-height: 100dvh; }
 
-/* Table */
-.tbl-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse}
-th{text-align:left;font-size:12px;font-weight:600;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
-td{padding:10px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
-tr:last-child td{border-bottom:0}
-td.actions{text-align:right}
-td.actions .btn{margin-left:4px}
-.empty{text-align:center;color:var(--muted);padding:28px}
-.pill{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:500;background:var(--bg);color:var(--muted)}
-.pill.ok{background:var(--ok-soft);color:var(--ok)}
-.pill.warn{background:var(--warn-soft);color:var(--warn)}
-.pill.err{background:var(--err-soft);color:var(--err)}
-.pill.info{background:var(--accent-soft);color:var(--accent)}
+  .sidebar {
+    width: 240px; background: var(--sidebar-bg); color: var(--sidebar-text);
+    padding: 20px 12px; flex-shrink: 0; display: flex; flex-direction: column;
+    position: fixed; top: 0; left: 0; bottom: 0; overflow-y: auto;
+  }
+  .brand-block {
+    padding: 6px 12px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 14px;
+  }
+  .brand-block h1 {
+    font-size: 15px; font-weight: 700; color: #fff; margin: 0 0 2px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .brand-block .small { font-size: 11px; color: #7f97a9; }
 
-/* Scanner */
-.scan-btns{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.scan-btn{padding:26px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);cursor:pointer;font-weight:600;font-size:16px;text-align:center}
-.scan-btn small{display:block;font-weight:400;color:var(--muted);margin-top:4px;font-size:12px}
-.scan-btn:hover{border-color:var(--accent)}
-.scan-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-.scan-btn.active small{color:#e0e7ff}
-#reader{width:100%;max-width:420px;margin:0 auto;border-radius:var(--radius);overflow:hidden}
-.result{margin-top:16px;padding:16px;border-radius:var(--radius);text-align:center}
-.result.ok{background:var(--ok-soft);color:#14532d}
-.result.warn{background:var(--warn-soft);color:#78350f}
-.result.err{background:var(--err-soft);color:#7f1d1d}
-.result .big{font-size:18px;font-weight:700}
+  .nav-item-btn {
+    display: flex; align-items: center; gap: 10px;
+    padding: 11px 14px; border-radius: 8px;
+    color: var(--sidebar-text); cursor: pointer;
+    font-size: 14px; font-weight: 500;
+    border: none; background: transparent; width: 100%; text-align: left;
+    margin-bottom: 4px;
+    transition: background 0.15s, color 0.15s;
+    min-height: 44px;
+  }
+  .nav-item-btn:hover { background: rgba(255,255,255,0.06); color: #fff; }
+  .nav-item-btn.active { background: var(--sidebar-active); color: #fff; font-weight: 600; }
+  .nav-item-btn i { font-size: 16px; width: 18px; text-align: center; }
 
-/* Tabs */
-.tabs{display:flex;gap:4px;margin-bottom:14px;border-bottom:1px solid var(--border)}
-.tabs button{background:none;border:0;padding:9px 14px;color:var(--muted);font-weight:500;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
-.tabs button.active{color:var(--accent);border-color:var(--accent)}
+  .sidebar-footer {
+    margin-top: auto; padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    font-size: 11px; color: #7f97a9; padding-left: 12px;
+  }
 
-/* Modal & toast */
-.modal-bg{position:fixed;inset:0;background:rgba(24,24,27,.45);display:flex;align-items:center;justify-content:center;padding:20px;z-index:50}
-.modal{background:#fff;border-radius:14px;padding:24px;width:100%;max-width:440px}
-.modal h3{margin-bottom:16px;font-size:16px}
-.modal .fld{margin-bottom:12px}
-.modal .foot{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
-#toast{position:fixed;bottom:22px;right:22px;z-index:99;display:flex;flex-direction:column;gap:8px}
-.toast{background:var(--text);color:#fff;padding:11px 16px;border-radius:9px;font-size:13px;box-shadow:0 4px 14px rgba(0,0,0,.18)}
-.toast.err{background:var(--err)}
-.demo-tag{background:var(--warn-soft);color:var(--warn);padding:2px 8px;border-radius:99px;font-size:11px;font-weight:600}
+  .main-area {
+    margin-left: 240px; padding: 24px 28px 60px;
+    min-width: 0; width: calc(100% - 240px);
+  }
 
-@media(max-width:760px){
-  #app{flex-direction:column}
-  aside{width:100%;height:auto;position:static;flex-direction:row;align-items:center;overflow-x:auto;padding:10px}
-  .brand{padding:0 10px 0 0}
-  nav{flex-direction:row}
-  .side-foot{display:none}
-  main{padding:18px 14px}
-  .scan-btns,.grid2{grid-template-columns:1fr}
-}
-@media print{
-  aside,.toolbar .btn,.tabs,.no-print{display:none!important}
-  main{padding:0;max-width:none}
-  .card{border:0;padding:0}
-}
+  .mobile-appbar {
+    display: none;
+    position: sticky; top: 0; z-index: 100;
+    background: var(--sidebar-bg); color: #fff;
+    padding: 12px 16px;
+    align-items: center; justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .mobile-appbar .title { font-size: 15px; font-weight: 700; }
+  .mobile-appbar .icon-btn {
+    background: transparent; border: none; color: #fff;
+    font-size: 20px; padding: 6px; line-height: 1;
+  }
+
+  .bottom-nav {
+    display: none;
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #fff;
+    border-top: 1px solid #e2e8f0;
+    box-shadow: 0 -2px 12px rgba(0,0,0,0.06);
+    z-index: 200;
+    height: var(--bottom-nav-h);
+    padding-bottom: env(safe-area-inset-bottom);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .bottom-nav::-webkit-scrollbar { display: none; }
+  .bottom-nav-inner {
+    display: flex; height: 100%;
+    min-width: 100%; justify-content: space-around;
+  }
+  .bn-item {
+    flex: 1; min-width: 60px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 2px; padding: 6px 4px;
+    background: transparent; border: none;
+    color: #6b7d92; font-size: 10px; font-weight: 600;
+    cursor: pointer;
+  }
+  .bn-item i { font-size: 18px; }
+  .bn-item.active { color: var(--brand); }
+  .bn-item.active i { transform: scale(1.1); }
+
+  .main-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 22px; gap: 12px; flex-wrap: wrap;
+  }
+  .main-header h2 { font-size: 22px; font-weight: 700; color: #1f2d3d; margin: 0; }
+  .main-header .sub { font-size: 13px; color: #6b7d92; margin: 2px 0 0; }
+
+  .module { display: none; }
+  .module.active { display: block; }
+
+  .card-soft {
+    background: #fff; border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(31, 78, 120, 0.06);
+    border: 1px solid #e6ecf2;
+    overflow: hidden;
+  }
+  .card-soft .card-body { padding: 20px; }
+  .card-soft .card-head {
+    padding: 14px 20px;
+    border-bottom: 1px solid #eef2f7;
+    font-size: 14px; font-weight: 600; color: #33475b;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 8px;
+  }
+
+  .table-app {
+    margin: 0; font-size: 13px; width: 100%;
+    border-collapse: separate; border-spacing: 0;
+  }
+  .table-app thead th {
+    background: #f5f8fb; color: #5b6b7c;
+    font-weight: 600; font-size: 12px; text-transform: uppercase;
+    letter-spacing: 0.3px; padding: 10px 12px;
+    border-bottom: 1px solid #e2e8f0; white-space: nowrap;
+  }
+  .table-app tbody td {
+    padding: 10px 12px; border-bottom: 1px solid #f0f3f7;
+    vertical-align: middle;
+  }
+  .table-app tbody tr:hover { background: #f8fafc; }
+  .table-app .empty-row td {
+    text-align: center; color: #8a98a8; padding: 30px; font-style: italic;
+  }
+
+  .badge-status {
+    font-size: 11px; font-weight: 600; padding: 3px 8px;
+    border-radius: 20px; display: inline-block;
+  }
+  .badge-active { background: #e8f5e9; color: #2e7d32; }
+  .badge-inactive { background: #fdecec; color: #b71c1c; }
+  .badge-morning { background: #fff4e5; color: #b35a00; }
+  .badge-afternoon { background: #e8f1fb; color: #1F4E78; }
+
+  .scan-config {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px;
+  }
+  .mode-toggle { display: flex; gap: 8px; margin-bottom: 18px; }
+  .mode-btn {
+    flex: 1; padding: 14px; border-radius: 10px;
+    border: 2px solid #cfd8e3; background: #fff; color: #5b6b7c;
+    font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: all 0.15s;
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    min-height: 64px;
+  }
+  .mode-btn i { font-size: 22px; }
+  .mode-btn.active.in { background: #e8f5e9; border-color: #2e7d32; color: #2e7d32; }
+  .mode-btn.active.out { background: #fff4e5; border-color: #b35a00; color: #b35a00; }
+
+  #reader {
+    border-radius: 12px; overflow: hidden;
+    background: #000; min-height: 260px;
+  }
+  #reader video { border-radius: 12px; }
+
+  .scan-result {
+    border-radius: 12px; padding: 18px; margin-top: 16px;
+    display: none;
+  }
+  .scan-result.show { display: block; }
+  .scan-result.success { background: #e8f5e9; border: 2px solid #4caf50; }
+  .scan-result.error { background: #fdecec; border: 2px solid #e53935; }
+  .scan-result h4 { margin: 0 0 6px; font-size: 16px; font-weight: 700; }
+  .scan-result .meta { font-size: 13px; color: #33475b; }
+  .scan-result .time-big {
+    font-size: 24px; font-weight: 800; color: var(--brand); margin: 8px 0;
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+  }
+
+  .form-label { font-size: 12px; font-weight: 600; color: #33475b; margin-bottom: 4px; }
+  .form-control, .form-select {
+    font-size: 14px; padding: 10px 12px;
+    border: 1px solid #cfd8e3; border-radius: 8px;
+    font-family: inherit;
+    min-height: 44px;
+  }
+  .form-control:focus, .form-select:focus {
+    border-color: var(--brand); box-shadow: 0 0 0 3px rgba(31, 78, 120, 0.12);
+  }
+
+  .btn {
+    font-family: inherit; font-weight: 600; font-size: 13px;
+    min-height: 40px;
+  }
+  .btn-brand {
+    background: var(--brand); color: #fff; border: none;
+    padding: 10px 16px; border-radius: 8px;
+  }
+  .btn-brand:hover, .btn-brand:focus { background: var(--brand-dark); color: #fff; }
+  .btn-outline-brand {
+    background: #fff; color: var(--brand);
+    border: 1.5px solid var(--brand);
+    padding: 10px 16px; border-radius: 8px;
+  }
+  .btn-outline-brand:hover, .btn-outline-brand:focus {
+    background: var(--brand-light); color: var(--brand);
+  }
+  .btn-sm { font-size: 12px; padding: 6px 10px; min-height: 34px; }
+
+  .stat-card {
+    background: #fff; border-radius: 12px; padding: 16px;
+    box-shadow: 0 2px 10px rgba(31, 78, 120, 0.06);
+    border: 1px solid #e6ecf2;
+  }
+  .stat-card .label {
+    font-size: 11px; color: #6b7d92; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.4px;
+  }
+  .stat-card .value {
+    font-size: 26px; font-weight: 800; color: var(--brand); margin: 4px 0 0;
+  }
+
+  .msg {
+    font-size: 13px; padding: 10px 12px; border-radius: 8px;
+    margin-top: 12px; display: none; font-weight: 500;
+  }
+  .msg.show { display: block; }
+  .msg.err { background: #fdecec; color: #b71c1c; border: 1px solid #f5c6c6; }
+  .msg.ok { background: #e8f5e9; color: #2e7d32; border: 1px solid #b8e0b8; }
+
+  .spinner-inline {
+    display: inline-block;
+    width: 14px; height: 14px;
+    border: 2px solid rgba(255,255,255,0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.65s linear infinite;
+    margin-right: 6px;
+    vertical-align: -2px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .is-busy { pointer-events: none; opacity: 0.9; }
+
+  .toast-holder {
+    position: fixed; top: 20px; right: 20px; z-index: 9999;
+    display: flex; flex-direction: column; gap: 8px;
+    max-width: calc(100vw - 40px);
+  }
+  .mini-toast {
+    background: #1f2d3d; color: #fff;
+    padding: 10px 16px; border-radius: 8px;
+    font-size: 13px; font-weight: 500;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    animation: slideIn 0.2s ease-out;
+  }
+  .mini-toast.ok { background: #2e7d32; }
+  .mini-toast.err { background: #b71c1c; }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  @media (max-width: 575px) {
+    .modal-dialog { margin: 0.5rem; }
+    .modal-content { border-radius: 12px; }
+  }
+
+  @media (max-width: 767.98px) {
+    .sidebar { display: none; }
+    .main-area {
+      margin-left: 0;
+      width: 100%;
+      padding: 16px 14px calc(var(--bottom-nav-h) + 24px);
+    }
+    .mobile-appbar { display: flex; }
+    .bottom-nav { display: block; }
+
+    .main-header h2 { font-size: 18px; }
+    .main-header .sub { font-size: 12px; }
+    .main-header { margin-bottom: 16px; }
+
+    .card-soft .card-body { padding: 16px; }
+    .card-soft .card-head { padding: 12px 16px; font-size: 13px; }
+
+    .stat-card { padding: 14px; }
+    .stat-card .value { font-size: 22px; }
+
+    .scan-config { grid-template-columns: 1fr; gap: 10px; }
+    #reader { min-height: 220px; }
+
+    .table-app thead { display: none; }
+    .table-app, .table-app tbody, .table-app tr, .table-app td {
+      display: block; width: 100%;
+    }
+    .table-app tbody tr {
+      background: #fff;
+      border: 1px solid #e6ecf2;
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+    }
+    .table-app tbody tr:hover { background: #fff; }
+    .table-app tbody td {
+      padding: 4px 0;
+      border: none;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 13px;
+    }
+    .table-app tbody td::before {
+      content: attr(data-label);
+      font-weight: 600;
+      color: #6b7d92;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      flex-shrink: 0;
+    }
+    .table-app .empty-row {
+      display: block;
+      border: 1px dashed #cfd8e3;
+      background: #f8fafc;
+    }
+    .table-app .empty-row td {
+      display: block;
+      text-align: center;
+      padding: 20px;
+    }
+    .table-app .empty-row td::before { display: none; }
+
+    .table-app tbody td .btn { min-height: 32px; font-size: 12px; }
+  }
+
+  @media (min-width: 768px) and (max-width: 1023.98px) {
+    .sidebar { width: 200px; padding: 16px 8px; }
+    .main-area { margin-left: 200px; width: calc(100% - 200px); padding: 20px 18px 40px; }
+    .brand-block h1 { font-size: 14px; }
+    .nav-item-btn { padding: 10px 12px; font-size: 13px; }
+  }
 </style>
 </head>
 <body>
 
-<!-- ============ APP ============ -->
-<div id="app">
-  <aside>
-    <div class="brand"><i class="bi bi-qr-code-scan"></i>Attendance</div>
-    <nav id="nav">
-      <button data-view="scanner" class="active"><i class="bi bi-upc-scan"></i>Scanner</button>
-      <button data-view="employees"><i class="bi bi-people"></i>Employees</button>
-      <button data-view="manual"><i class="bi bi-pencil-square"></i>Manual Entry</button>
-      <button data-view="reports"><i class="bi bi-bar-chart-line"></i>Reports</button>
-      <button data-view="departments"><i class="bi bi-building"></i>Departments</button>
-      <button data-view="schedules"><i class="bi bi-clock-history"></i>Time Settings</button>
-    </nav>
-    <div class="side-foot">
-      <span id="modeLabel"></span>
+<!-- ==================== PIN GATE ==================== -->
+<div class="gate-wrap" id="gate">
+  <div class="gate-card">
+    <div class="gate-icon"><i class="bi bi-shield-lock"></i></div>
+    <h2 class="gate-title">Admin Access</h2>
+    <p class="gate-sub">Enter your 4-digit PIN to continue</p>
+
+    <input type="password" class="pin-input" id="pinInput" maxlength="4"
+           inputmode="numeric" pattern="\d{4}" placeholder="••••" autocomplete="off">
+
+    <div class="gate-msg" id="gateMsg"></div>
+
+    <button class="btn btn-brand w-100 mt-3" id="btnLogin" onclick="doLogin()">
+      <i class="bi bi-box-arrow-in-right me-1"></i> Unlock Panel
+    </button>
+  </div>
+</div>
+
+<!-- ==================== MAIN LAYOUT ==================== -->
+<div class="layout" id="layout">
+
+  <div class="mobile-appbar">
+    <div class="title" id="mobileTitle">Dashboard</div>
+    <button class="icon-btn" onclick="doLogout(event)" title="Log out">
+      <i class="bi bi-box-arrow-right"></i>
+    </button>
+  </div>
+
+  <aside class="sidebar">
+    <div class="brand-block">
+      <h1><i class="bi bi-qr-code-scan"></i> Attendance</h1>
+      <div class="small">Admin Panel v1.0</div>
+    </div>
+    <button class="nav-item-btn active" data-module="dashboard"><i class="bi bi-speedometer2"></i> Dashboard</button>
+    <button class="nav-item-btn" data-module="scan"><i class="bi bi-camera-video"></i> Scan Attendance</button>
+    <button class="nav-item-btn" data-module="employees"><i class="bi bi-people"></i> Employees</button>
+    <button class="nav-item-btn" data-module="attendance"><i class="bi bi-clipboard-check"></i> Attendance</button>
+    <button class="nav-item-btn" data-module="departments"><i class="bi bi-building"></i> Departments</button>
+    <button class="nav-item-btn" data-module="events"><i class="bi bi-calendar-event"></i> Events</button>
+    <button class="nav-item-btn" data-module="settings"><i class="bi bi-gear"></i> Settings</button>
+    <div class="sidebar-footer">
+      Logged in · <a href="#" class="text-decoration-none" style="color:#b7c7d6;" onclick="doLogout(event)">Log out</a>
     </div>
   </aside>
 
-  <main>
-    <!-- Scanner -->
-    <section id="view-scanner">
-      <h2>Scanner</h2>
-      <p class="sub">Choose Time In or Time Out, then show the QR code to the camera.</p>
-      <div class="scan-btns">
-        <button class="scan-btn" id="btnIn"><i class="bi bi-box-arrow-in-right"></i>Time In<small>Scan to record arrival</small></button>
-        <button class="scan-btn" id="btnOut"><i class="bi bi-box-arrow-right"></i>Time Out<small>Scan to record departure</small></button>
+  <main class="main-area">
+
+    <!-- DASHBOARD -->
+    <section class="module active" id="mod-dashboard">
+      <div class="main-header"><div><h2>Dashboard</h2><p class="sub" id="dashActiveEvent">Loading active event…</p></div></div>
+      <div class="row g-2 g-md-3 mb-3">
+        <div class="col-6 col-md-3"><div class="stat-card"><div class="label">Employees</div><div class="value" id="statTotal">—</div></div></div>
+        <div class="col-6 col-md-3"><div class="stat-card"><div class="label">Active</div><div class="value" id="statActive">—</div></div></div>
+        <div class="col-6 col-md-3"><div class="stat-card"><div class="label">Today In</div><div class="value" id="statIn">—</div></div></div>
+        <div class="col-6 col-md-3"><div class="stat-card"><div class="label">Today Out</div><div class="value" id="statOut">—</div></div></div>
       </div>
-      <div class="card hidden" id="scanCard" style="margin-top:16px">
-        <div class="toolbar">
-          <strong id="scanTitle"></strong>
-          <button class="btn sm" id="stopScan"><i class="bi bi-camera-video-off"></i>Stop camera</button>
+      <div class="card-soft">
+        <div class="card-head">
+          <span><i class="bi bi-clock-history me-1"></i> Latest Activity</span>
+          <button class="btn btn-sm btn-outline-brand" onclick="loadDashboard()"><i class="bi bi-arrow-clockwise me-1"></i> Refresh</button>
         </div>
-        <div id="reader"></div>
-        <div id="scanResult"></div>
+        <div class="table-responsive">
+          <table class="table-app">
+            <thead><tr><th>Date & Time</th><th>Employee</th><th>Session</th><th>Action</th><th>Remarks</th></tr></thead>
+            <tbody id="dashActivity"><tr class="empty-row"><td colspan="5">Loading…</td></tr></tbody>
+          </table>
+        </div>
       </div>
     </section>
 
-    <!-- Employees -->
-    <section id="view-employees" class="hidden">
-      <h2>Registered Employees</h2>
-      <p class="sub">Everyone who registered through the form, with today's attendance status.</p>
-      <div class="card no-print">
-        <div class="row">
-          <div class="f search-wrap" style="flex:2"><label>Search</label><i class="bi bi-search" style="top:68%"></i><input id="eSearch" placeholder="ID, name or email"></div>
-          <div class="f"><label>Department</label><select id="eDept"></select></div>
-          <div class="f"><label>Today</label>
-            <select id="eStatus">
-              <option value="">All</option>
-              <option value="in">Timed in</option>
-              <option value="out">Timed out</option>
-              <option value="none">Not yet timed in</option>
-            </select>
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="toolbar">
-          <span id="eCount" class="sub" style="margin:0"></span>
-          <span>
-            <button class="btn sm" id="eRefresh"><i class="bi bi-arrow-clockwise"></i>Refresh</button>
-            <button class="btn sm" id="eCsv"><i class="bi bi-download"></i>Export CSV</button>
-            <button class="btn sm" id="ePrint"><i class="bi bi-printer"></i>Print</button>
-          </span>
-        </div>
-        <div class="tbl-wrap" id="empTable"></div>
-      </div>
-    </section>
-
-    <!-- Manual -->
-    <section id="view-manual" class="hidden">
-      <h2>Manual Entry</h2>
-      <p class="sub">Use this when a scan fails. Entries are marked as Manual in reports.</p>
-      <div class="card">
-        <form id="manualForm">
-          <div class="fld" style="margin-bottom:12px">
-            <label>Employee (ID or name)</label>
-            <input id="mEmp" list="empList" placeholder="Start typing…" required autocomplete="off">
-            <datalist id="empList"></datalist>
-          </div>
-          <div class="grid2" style="margin-bottom:12px">
-            <div><label>Date</label><input type="date" id="mDate" required></div>
-            <div><label>Time</label><input type="time" id="mTime" required></div>
-          </div>
-          <div class="grid2" style="margin-bottom:12px">
-            <div><label>Type</label>
-              <select id="mType"><option value="IN">Time In</option><option value="OUT">Time Out</option></select>
+    <!-- SCAN -->
+    <section class="module" id="mod-scan">
+      <div class="main-header"><div><h2>Scan Attendance</h2><p class="sub" id="scanEventInfo">—</p></div></div>
+      <div class="card-soft mb-3">
+        <div class="card-body">
+          <div class="scan-config">
+            <div>
+              <label class="form-label">Session</label>
+              <select class="form-select" id="scanSession">
+                <option value="Morning">Morning</option>
+                <option value="Afternoon">Afternoon</option>
+              </select>
             </div>
-            <div><label>Remark (optional)</label><input id="mRemark" placeholder="e.g. camera not working"></div>
+            <div>
+              <label class="form-label">Manual Entry</label>
+              <div class="d-flex gap-2">
+                <input type="text" class="form-control" id="manualEmpId" placeholder="Employee ID">
+                <button class="btn btn-outline-brand btn-sm" onclick="submitManual()">Submit</button>
+              </div>
+            </div>
           </div>
-          <button class="btn primary" type="submit"><i class="bi bi-check-lg"></i>Save attendance</button>
-        </form>
-      </div>
-      <div class="card">
-        <strong>Recent manual entries</strong>
-        <div class="tbl-wrap" style="margin-top:10px" id="manualRecent"></div>
-      </div>
-    </section>
-
-    <!-- Reports -->
-    <section id="view-reports" class="hidden">
-      <h2>Reports</h2>
-      <p class="sub">Filter, review, export or print attendance records.</p>
-      <div class="card no-print">
-        <div class="row">
-          <div class="f"><label>From</label><input type="date" id="rFrom"></div>
-          <div class="f"><label>To</label><input type="date" id="rTo"></div>
-          <div class="f"><label>Department</label><select id="rDept"></select></div>
-          <div class="f"><label>Type</label>
-            <select id="rType"><option value="">All</option><option value="IN">Time In</option><option value="OUT">Time Out</option></select>
+          <div class="mode-toggle">
+            <button class="mode-btn in active" id="modeIN" onclick="setScanMode('IN')"><i class="bi bi-box-arrow-in-right"></i> TIME IN</button>
+            <button class="mode-btn out" id="modeOUT" onclick="setScanMode('OUT')"><i class="bi bi-box-arrow-right"></i> TIME OUT</button>
           </div>
-          <div class="f"><label>Employee</label><input id="rEmp" placeholder="ID or name"></div>
-          <button class="btn primary" id="rRun"><i class="bi bi-funnel"></i>Generate</button>
+          <div id="reader"></div>
+          <div class="d-flex gap-2 mt-3">
+            <button class="btn btn-brand flex-fill" id="btnStartCam" onclick="startCamera()"><i class="bi bi-camera-video me-1"></i> Start Camera</button>
+            <button class="btn btn-outline-brand flex-fill" id="btnStopCam" onclick="stopCamera()" style="display:none;"><i class="bi bi-stop-circle me-1"></i> Stop</button>
+          </div>
+          <div class="scan-result" id="scanResult">
+            <h4 id="scanTitle">—</h4>
+            <div class="time-big" id="scanTime">—</div>
+            <div class="meta" id="scanMeta">—</div>
+          </div>
         </div>
       </div>
-      <div class="tabs">
-        <button class="active" data-tab="log">Daily Log</button>
-        <button data-tab="emp">Per Employee</button>
-        <button data-tab="dept">Per Department</button>
+    </section>
+
+    <!-- EMPLOYEES -->
+    <section class="module" id="mod-employees">
+      <div class="main-header">
+        <div><h2>Employees</h2><p class="sub" id="empCount">—</p></div>
+        <button class="btn btn-outline-brand btn-sm" onclick="exportEmployees()"><i class="bi bi-download me-1"></i> CSV</button>
       </div>
-      <div class="card">
-        <div class="toolbar">
-          <span id="rCount" class="sub" style="margin:0"></span>
-          <span>
-            <button class="btn sm" id="rCsv"><i class="bi bi-download"></i>Export CSV</button>
-            <button class="btn sm" id="rPrint"><i class="bi bi-printer"></i>Print</button>
-          </span>
+      <div class="card-soft mb-3">
+        <div class="card-body">
+          <div class="row g-2">
+            <div class="col-12 col-md-7"><input class="form-control" id="empSearch" placeholder="Search name, ID, or dept…" oninput="renderEmployees()"></div>
+            <div class="col-12 col-md-5">
+              <select class="form-select" id="empFilterStatus" onchange="renderEmployees()">
+                <option value="">All Statuses</option><option value="Active">Active</option><option value="Inactive">Inactive</option>
+              </select>
+            </div>
+          </div>
         </div>
-        <div class="tbl-wrap" id="rTable"></div>
+      </div>
+      <div class="card-soft">
+        <div class="table-responsive">
+          <table class="table-app">
+            <thead><tr><th>Employee ID</th><th>Name</th><th>Department</th><th>Registered</th><th>Status</th><th></th></tr></thead>
+            <tbody id="empTable"><tr class="empty-row"><td colspan="6">Loading…</td></tr></tbody>
+          </table>
+        </div>
       </div>
     </section>
 
-    <!-- Departments -->
-    <section id="view-departments" class="hidden">
-      <h2>Departments</h2>
-      <p class="sub">These appear in the registration form dropdown.</p>
-      <div class="card">
-        <div class="toolbar"><span></span><button class="btn primary" id="addDept"><i class="bi bi-plus-lg"></i>Add department</button></div>
-        <div class="tbl-wrap" id="deptTable"></div>
+    <!-- ATTENDANCE -->
+    <section class="module" id="mod-attendance">
+      <div class="main-header">
+        <div><h2>Attendance</h2><p class="sub" id="attCount">—</p></div>
+        <button class="btn btn-outline-brand btn-sm" onclick="exportAttendance()"><i class="bi bi-download me-1"></i> CSV</button>
+      </div>
+      <div class="card-soft mb-3">
+        <div class="card-body">
+          <div class="row g-2">
+            <div class="col-6 col-md-3"><label class="form-label">From</label><input type="date" class="form-control" id="attFrom" onchange="renderAttendance()"></div>
+            <div class="col-6 col-md-3"><label class="form-label">To</label><input type="date" class="form-control" id="attTo" onchange="renderAttendance()"></div>
+            <div class="col-6 col-md-3"><label class="form-label">Session</label><select class="form-select" id="attSession" onchange="renderAttendance()"><option value="">All</option><option value="Morning">Morning</option><option value="Afternoon">Afternoon</option></select></div>
+            <div class="col-6 col-md-3"><label class="form-label">Department</label><select class="form-select" id="attDept" onchange="renderAttendance()"><option value="">All</option></select></div>
+          </div>
+        </div>
+      </div>
+      <div class="card-soft">
+        <div class="table-responsive">
+          <table class="table-app">
+            <thead><tr><th>Date</th><th>Employee</th><th>Department</th><th>Session</th><th>In</th><th>Out</th><th>Remarks</th><th>By</th><th></th></tr></thead>
+            <tbody id="attTable"><tr class="empty-row"><td colspan="9">Loading…</td></tr></tbody>
+          </table>
+        </div>
       </div>
     </section>
 
-    <!-- Schedules -->
-    <section id="view-schedules" class="hidden">
-      <h2>Time In / Time Out Settings</h2>
-      <p class="sub">A scan is accepted only inside a schedule's window. Cutoff decides Late (Time In) or Early Out (Time Out).</p>
-      <div class="card">
-        <div class="toolbar"><span></span><button class="btn primary" id="addSched"><i class="bi bi-plus-lg"></i>Add schedule</button></div>
-        <div class="tbl-wrap" id="schedTable"></div>
+    <!-- DEPARTMENTS -->
+    <section class="module" id="mod-departments">
+      <div class="main-header"><div><h2>Departments</h2><p class="sub">Shown on registration form</p></div></div>
+      <div class="card-soft mb-3">
+        <div class="card-body">
+          <div class="d-flex gap-2">
+            <input class="form-control" id="newDeptName" placeholder="New department name">
+            <button class="btn btn-brand" onclick="addDepartment()"><i class="bi bi-plus-lg"></i></button>
+          </div>
+          <div class="msg" id="deptMsg"></div>
+        </div>
+      </div>
+      <div class="card-soft">
+        <div class="table-responsive">
+          <table class="table-app">
+            <thead><tr><th>Department</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="deptTable"><tr class="empty-row"><td colspan="3">Loading…</td></tr></tbody>
+          </table>
+        </div>
       </div>
     </section>
+
+    <!-- EVENTS -->
+    <section class="module" id="mod-events">
+      <div class="main-header">
+        <div><h2>Events</h2><p class="sub">One active at a time</p></div>
+        <button class="btn btn-brand btn-sm" onclick="openEventModal()"><i class="bi bi-plus-lg me-1"></i> New</button>
+      </div>
+      <div class="card-soft">
+        <div class="table-responsive">
+          <table class="table-app">
+            <thead><tr><th>Event</th><th>Dates</th><th>AM</th><th>PM</th><th>Status</th><th></th></tr></thead>
+            <tbody id="eventTable"><tr class="empty-row"><td colspan="6">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section class="module" id="mod-settings">
+      <div class="main-header"><div><h2>Settings</h2><p class="sub">System configuration</p></div></div>
+      <div class="card-soft mb-3">
+        <div class="card-head">Change Admin PIN</div>
+        <div class="card-body">
+          <div class="row g-2">
+            <div class="col-12 col-md-4"><label class="form-label">New PIN (4 digits)</label><input type="password" class="form-control" id="setNewPin" maxlength="4" inputmode="numeric" placeholder="••••"></div>
+            <div class="col-12 col-md-4"><label class="form-label">Confirm</label><input type="password" class="form-control" id="setConfirmPin" maxlength="4" inputmode="numeric" placeholder="••••"></div>
+            <div class="col-12 col-md-4 d-flex align-items-end"><button class="btn btn-brand w-100" onclick="updatePin()"><i class="bi bi-key me-1"></i> Update PIN</button></div>
+          </div>
+          <div class="msg" id="pinMsg"></div>
+        </div>
+      </div>
+      <div class="card-soft">
+        <div class="card-head">Grace Period</div>
+        <div class="card-body">
+          <p class="small text-muted mb-2">Minutes before an employee is marked <strong>Late</strong>.</p>
+          <div class="row g-2">
+            <div class="col-12 col-md-4"><label class="form-label">Minutes</label><input type="number" class="form-control" id="setGrace" min="0" max="120"></div>
+            <div class="col-12 col-md-4 d-flex align-items-end"><button class="btn btn-brand w-100" onclick="updateGrace()"><i class="bi bi-check2 me-1"></i> Save</button></div>
+          </div>
+          <div class="msg" id="graceMsg"></div>
+        </div>
+      </div>
+    </section>
+
   </main>
+
+  <nav class="bottom-nav">
+    <div class="bottom-nav-inner">
+      <button class="bn-item active" data-module="dashboard"><i class="bi bi-speedometer2"></i><span>Home</span></button>
+      <button class="bn-item" data-module="scan"><i class="bi bi-camera-video"></i><span>Scan</span></button>
+      <button class="bn-item" data-module="employees"><i class="bi bi-people"></i><span>People</span></button>
+      <button class="bn-item" data-module="attendance"><i class="bi bi-clipboard-check"></i><span>Attend</span></button>
+      <button class="bn-item" data-module="events"><i class="bi bi-calendar-event"></i><span>Events</span></button>
+    </div>
+  </nav>
 </div>
 
-<div id="toast"></div>
-<div id="modalHost"></div>
+<!-- ============ EVENT MODAL ============ -->
+<div class="modal fade" id="eventModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
+    <div class="modal-content" style="border-radius: 12px; border: none;">
+      <div class="modal-header" style="border-bottom: 1px solid #eef2f7;">
+        <h5 class="modal-title" id="eventModalTitle" style="font-size: 16px; font-weight: 700; color: var(--brand);">New Event</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="evtId">
+        <div class="mb-3">
+          <label class="form-label">Event Name</label>
+          <input class="form-control" id="evtName" placeholder="e.g. Annual Company Outing">
+        </div>
+        <div class="row g-3 mb-3">
+          <div class="col-6"><label class="form-label">Date From</label><input type="date" class="form-control" id="evtFrom"></div>
+          <div class="col-6"><label class="form-label">Date To</label><input type="date" class="form-control" id="evtTo"></div>
+        </div>
+        <div class="row g-3">
+          <div class="col-6"><label class="form-label">AM Time In</label><input type="time" class="form-control" id="evtAmIn"></div>
+          <div class="col-6"><label class="form-label">AM Time Out</label><input type="time" class="form-control" id="evtAmOut"></div>
+          <div class="col-6"><label class="form-label">PM Time In</label><input type="time" class="form-control" id="evtPmIn"></div>
+          <div class="col-6"><label class="form-label">PM Time Out</label><input type="time" class="form-control" id="evtPmOut"></div>
+        </div>
+        <div class="msg" id="evtMsg"></div>
+      </div>
+      <div class="modal-footer" style="border-top: 1px solid #eef2f7;">
+        <button class="btn btn-outline-brand" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-brand" onclick="saveEvent()"><i class="bi bi-check2 me-1"></i> Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ OVERRIDE MODAL ============ -->
+<div class="modal fade" id="overrideModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
+    <div class="modal-content" style="border-radius: 12px; border: none;">
+      <div class="modal-header" style="border-bottom: 1px solid #eef2f7;">
+        <h5 class="modal-title" style="font-size: 16px; font-weight: 700; color: var(--brand);">Override Attendance</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="ovEmpId">
+        <input type="hidden" id="ovDate">
+        <input type="hidden" id="ovSession">
+        <p class="small text-muted mb-3" id="ovContext">—</p>
+        <div class="mb-3"><label class="form-label">Time In</label><input type="time" step="1" class="form-control" id="ovTimeIn"></div>
+        <div class="mb-3"><label class="form-label">Time Out</label><input type="time" step="1" class="form-control" id="ovTimeOut"></div>
+        <div class="mb-2"><label class="form-label">Remarks</label><input class="form-control" id="ovRemarks" placeholder="Optional note"></div>
+        <div class="msg" id="ovMsg"></div>
+      </div>
+      <div class="modal-footer" style="border-top: 1px solid #eef2f7;">
+        <button class="btn btn-outline-brand" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-brand" onclick="submitOverride()"><i class="bi bi-pencil-square me-1"></i> Apply</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast-holder" id="toastHolder"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-/* =====================================================
-   CONFIG — paste your Apps Script Web App URL here.
-   Leave empty to run in DEMO MODE (data in this browser only).
-   ===================================================== */
-const API_URL = "https://script.google.com/macros/s/AKfycbw21HGaKOQxEHX81QSv35mya9GNhEJH_SCcVDdUyXb-rKwUeHpGqwQQvfr9U6UVyW16GA/exec";
+/* =========================================================
+ *  CONFIG — point this to your deployed Apps Script
+ * ========================================================= */
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxkurUegjjNbOOd1BMpS3KHQup6EA8P4if9IbXS1XECTdwBtPxEQlmCtYPgxhsVtyUR/exec';
 
-/* The admin key is NOT stored in this file, so the page is safe to host online.
-   It is asked once on each device and remembered in that browser only.
-   It must equal the ADMIN_KEY value in Apps Script → Project Settings → Script Properties. */
-const KEY_STORE = 'att_admin_key';
-function getKey(){ try{ return localStorage.getItem(KEY_STORE) || ''; }catch(e){ return ''; } }
-function askKey(){
-  openModal('Admin key', [{name:'key', label:'Enter the admin key (set in Apps Script)', type:'password'}], {}, async r=>{
-    try{ localStorage.setItem(KEY_STORE, r.key); }catch(e){ throw new Error('This browser blocks storage. Disable private mode and try again.'); }
-    location.reload();
-  });
-}
-
-/* ---------- helpers ---------- */
-const $ = s => document.querySelector(s);
-const $$ = s => [...document.querySelectorAll(s)];
-const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const pad = n => String(n).padStart(2,'0');
-const today = () => { const d=new Date(); return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; };
-const nowHM = () => { const d=new Date(); return `${pad(d.getHours())}:${pad(d.getMinutes())}`; };
-const nowHMS = () => { const d=new Date(); return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`; };
-const uid = () => Date.now().toString(36)+Math.random().toString(36).slice(2,6);
-const state = { depts:[], scheds:[], emps:[], report:[] };
-
-function toast(msg, isErr){
-  const t=document.createElement('div'); t.className='toast'+(isErr?' err':''); t.textContent=msg;
-  $('#toast').appendChild(t); setTimeout(()=>t.remove(), 3200);
-}
-
-/* ---------- API layer ---------- */
-async function api(action, data={}){
-  if(!API_URL) return demoApi(action, data);
-  const res = await fetch(API_URL, {
-    method:'POST',
-    headers:{'Content-Type':'text/plain;charset=utf-8'},
-    body: JSON.stringify({action, key: getKey(), ...data})
-  });
-  const j = await res.json();
-  if(!j.ok){
-    if(j.error==='Unauthorized'){
-      try{ localStorage.removeItem(KEY_STORE); }catch(e){}
-      askKey();
-      throw new Error('Wrong admin key. Please enter it again.');
-    }
-    throw new Error(j.error || 'Request failed');
-  }
-  return j.data;
-}
-
-/* ---------- DEMO backend (mirrors the real API contract) ---------- */
-function demoDb(){
-  let db = JSON.parse(localStorage.getItem('att_demo')||'null');
-  if(!db){
-    db = {
-      Departments:[{id:'d1',name:'Office of the Mayor'},{id:'d2',name:'GSO'},{id:'d3',name:'HRMO'}],
-      Schedules:[
-        {id:'s1',name:'Morning In',type:'IN',start:'05:00',end:'11:59',cutoff:'08:15'},
-        {id:'s2',name:'Afternoon Out',type:'OUT',start:'12:00',end:'20:00',cutoff:'17:00'}
-      ],
-      Employees:[
-        {id:'e1',empId:'EMP-001',first:'Juan',middle:'D',last:'Dela Cruz',email:'juan@example.com',dept:'GSO',registeredAt:'2026-11-21 08:00:00'},
-        {id:'e2',empId:'EMP-002',first:'Maria',middle:'S',last:'Santos',email:'maria@example.com',dept:'HRMO',registeredAt:'2026-11-21 08:05:00'}
-      ],
-      Attendance:[]
-    };
-    localStorage.setItem('att_demo', JSON.stringify(db));
-  }
-  return db;
-}
-const demoSave = db => localStorage.setItem('att_demo', JSON.stringify(db));
-
-function matchSchedule(scheds, type, hm){
-  return scheds.find(s => s.type===type && s.start<=hm && hm<=s.end);
-}
-function statusFor(sched, type, hm){
-  if(!sched) return 'Manual';
-  if(type==='IN')  return hm > sched.cutoff ? 'Late' : 'On time';
-  return hm < sched.cutoff ? 'Early out' : 'On time';
-}
-function buildRecord(emp, type, date, time, source, sched, remark){
-  return {
-    id:uid(), date, time, empId:emp.empId,
-    name:[emp.first, emp.middle, emp.last].filter(Boolean).join(' '),
-    dept:emp.dept, type, schedule: sched ? sched.name : '',
-    status: statusFor(sched, type, time.slice(0,5)), source, remark: remark||''
-  };
-}
-
-async function demoApi(action, d){
-  const db = demoDb();
-  await new Promise(r=>setTimeout(r,120));
-  switch(action){
-    case 'list': return db[d.sheet] || [];
-    case 'save': {
-      const arr = db[d.sheet];
-      if(d.row.id){ const i=arr.findIndex(x=>x.id===d.row.id); if(i>=0) arr[i]=d.row; }
-      else { d.row.id=uid(); arr.push(d.row); }
-      demoSave(db); return d.row;
-    }
-    case 'remove': {
-      db[d.sheet] = db[d.sheet].filter(x=>x.id!==d.id); demoSave(db); return true;
-    }
-    case 'scan': {
-      const code = String(d.code||'').split('|')[0].trim();
-      const emp = db.Employees.find(e=>e.empId===code);
-      if(!emp) throw new Error('QR not registered');
-      const date=today(), time=nowHMS();
-      const sched = matchSchedule(db.Schedules, d.type, time.slice(0,5));
-      if(!sched) throw new Error('Outside allowed time window');
-      const dup = db.Attendance.find(a=>a.empId===emp.empId && a.date===date && a.type===d.type && a.schedule===sched.name);
-      if(dup) throw new Error('Already scanned at '+dup.time.slice(0,5));
-      const rec = buildRecord(emp, d.type, date, time, 'Scan', sched);
-      db.Attendance.push(rec); demoSave(db); return rec;
-    }
-    case 'manual': {
-      const emp = db.Employees.find(e=>e.empId===d.empId);
-      if(!emp) throw new Error('Employee not found');
-      const sched = matchSchedule(db.Schedules, d.type, d.time.slice(0,5));
-      const rec = buildRecord(emp, d.type, d.date, d.time.length===5?d.time+':00':d.time, 'Manual', sched, d.remark);
-      db.Attendance.push(rec); demoSave(db); return rec;
-    }
-    case 'attendance':
-      return db.Attendance.filter(a => (!d.from||a.date>=d.from) && (!d.to||a.date<=d.to));
-  }
-  throw new Error('Unknown action');
-}
-
-/* ---------- start ---------- */
-if(!API_URL) $('#modeLabel').innerHTML='<span class="demo-tag">DEMO MODE</span>';
-else{
-  $('#modeLabel').innerHTML='Connected to Google Sheet<br><button class="btn sm" id="changeKey" style="margin-top:8px"><i class="bi bi-key"></i>Change key</button>';
-  $('#changeKey').onclick = askKey;
-}
-
-async function enterApp(){
-  await loadRefs();
-  $('#mDate').value = today(); $('#mTime').value = nowHM();
-  $('#rFrom').value = today(); $('#rTo').value = today();
-  go('scanner');
-}
-async function loadRefs(){
-  try{
-    [state.depts, state.scheds, state.emps] = await Promise.all([
-      api('list',{sheet:'Departments'}), api('list',{sheet:'Schedules'}), api('list',{sheet:'Employees'})
-    ]);
-    $('#empList').innerHTML = state.emps.map(e=>`<option value="${esc(e.empId)}">${esc(e.first+' '+e.last)}</option>`).join('');
-    $('#rDept').innerHTML = '<option value="">All</option>'+state.depts.map(d=>`<option>${esc(d.name)}</option>`).join('');
-  }catch(err){ toast(err.message,true); }
-}
-
-/* ---------- navigation ---------- */
-function go(view){
-  if(view!=='scanner') stopScanner();
-  $$('main section').forEach(s=>s.classList.add('hidden'));
-  $('#view-'+view).classList.remove('hidden');
-  $$('#nav button').forEach(b=>b.classList.toggle('active', b.dataset.view===view));
-  if(view==='employees') renderEmployees();
-  if(view==='departments') renderDepts();
-  if(view==='schedules') renderScheds();
-  if(view==='manual') renderManualRecent();
-  if(view==='reports') runReport();
-}
-$('#nav').addEventListener('click', e=>{ const b=e.target.closest('button'); if(b) go(b.dataset.view); });
-
-/* ---------- modal ---------- */
-function openModal(title, fields, values, onSave){
-  const host=$('#modalHost');
-  host.innerHTML = `<div class="modal-bg"><form class="modal"><h3>${esc(title)}</h3>
-    ${fields.map(f=>`<div class="fld"><label>${esc(f.label)}</label>
-      ${f.type==='select'
-        ? `<select name="${f.name}" required>${f.options.map(o=>`<option value="${esc(o.v)}" ${values[f.name]===o.v?'selected':''}>${esc(o.t)}</option>`).join('')}</select>`
-        : `<input name="${f.name}" type="${f.type||'text'}" value="${esc(values[f.name]||'')}" required>`}
-    </div>`).join('')}
-    <div class="foot"><button type="button" class="btn" id="mCancel">Cancel</button><button class="btn primary" type="submit">Save</button></div>
-  </form></div>`;
-  host.querySelector('#mCancel').onclick = ()=>host.innerHTML='';
-  host.querySelector('form').onsubmit = async e=>{
-    e.preventDefault();
-    const row = {...values}; new FormData(e.target).forEach((v,k)=>row[k]=v.trim());
-    try{ await onSave(row); host.innerHTML=''; }catch(err){ toast(err.message,true); }
-  };
-}
-function confirmDelete(msg){ return confirm(msg); }
-
-/* ---------- Departments CRUD ---------- */
-async function renderDepts(){
-  state.depts = await api('list',{sheet:'Departments'});
-  $('#deptTable').innerHTML = state.depts.length ? `<table><thead><tr><th>Department</th><th></th></tr></thead><tbody>
-    ${state.depts.map(d=>`<tr><td>${esc(d.name)}</td><td class="actions">
-      <button class="btn sm" data-edit="${d.id}"><i class="bi bi-pencil"></i>Edit</button><button class="btn sm danger" data-del="${d.id}"><i class="bi bi-trash"></i>Delete</button></td></tr>`).join('')}
-    </tbody></table>` : '<div class="empty">No departments yet.</div>';
-}
-function deptForm(row){
-  openModal(row.id?'Edit department':'Add department',[{name:'name',label:'Department name'}],row, async r=>{
-    if(state.depts.some(d=>d.id!==r.id && d.name.toLowerCase()===r.name.toLowerCase())) throw new Error('Department already exists');
-    await api('save',{sheet:'Departments',row:r}); toast('Saved'); await loadRefs(); renderDepts();
-  });
-}
-$('#addDept').onclick = ()=>deptForm({});
-$('#deptTable').addEventListener('click', async e=>{
-  const b=e.target.closest('button'); if(!b) return;
-  const ed=b.dataset.edit, del=b.dataset.del;
-  if(ed) deptForm(state.depts.find(d=>d.id===ed));
-  if(del && confirmDelete('Delete this department?')){
-    try{ await api('remove',{sheet:'Departments',id:del}); toast('Deleted'); await loadRefs(); renderDepts(); }catch(err){ toast(err.message,true); }
-  }
-});
-
-/* ---------- Schedules CRUD ---------- */
-async function renderScheds(){
-  state.scheds = await api('list',{sheet:'Schedules'});
-  const sorted=[...state.scheds].sort((a,b)=>a.start.localeCompare(b.start));
-  $('#schedTable').innerHTML = sorted.length ? `<table><thead><tr><th>Name</th><th>Type</th><th>Window</th><th>Cutoff</th><th></th></tr></thead><tbody>
-    ${sorted.map(s=>`<tr><td>${esc(s.name)}</td>
-      <td><span class="pill ${s.type==='IN'?'ok':'info'}">${s.type==='IN'?'Time In':'Time Out'}</span></td>
-      <td>${esc(s.start)} – ${esc(s.end)}</td>
-      <td>${s.type==='IN'?'Late after ':'Early out before '}${esc(s.cutoff)}</td>
-      <td class="actions"><button class="btn sm" data-edit="${s.id}"><i class="bi bi-pencil"></i>Edit</button><button class="btn sm danger" data-del="${s.id}"><i class="bi bi-trash"></i>Delete</button></td></tr>`).join('')}
-    </tbody></table>` : '<div class="empty">No schedules yet.</div>';
-}
-function schedForm(row){
-  openModal(row.id?'Edit schedule':'Add schedule',[
-    {name:'name',label:'Name (e.g. Morning In)'},
-    {name:'type',label:'Type',type:'select',options:[{v:'IN',t:'Time In'},{v:'OUT',t:'Time Out'}]},
-    {name:'start',label:'Window start',type:'time'},
-    {name:'end',label:'Window end',type:'time'},
-    {name:'cutoff',label:'Cutoff (Late after / Early out before)',type:'time'}
-  ], row, async r=>{
-    if(r.start>=r.end) throw new Error('Window end must be after start');
-    await api('save',{sheet:'Schedules',row:r}); toast('Saved'); await loadRefs(); renderScheds();
-  });
-}
-$('#addSched').onclick = ()=>schedForm({type:'IN'});
-$('#schedTable').addEventListener('click', async e=>{
-  const b=e.target.closest('button'); if(!b) return;
-  const ed=b.dataset.edit, del=b.dataset.del;
-  if(ed) schedForm(state.scheds.find(s=>s.id===ed));
-  if(del && confirmDelete('Delete this schedule?')){
-    try{ await api('remove',{sheet:'Schedules',id:del}); toast('Deleted'); renderScheds(); }catch(err){ toast(err.message,true); }
-  }
-});
-
-/* ---------- Scanner ---------- */
-let scanner=null, scanType=null, busy=false, lastCode='', lastAt=0;
-const COOLDOWN_MS = 4000;
-
-async function startScanner(type){
-  await stopScanner();
-  scanType=type;
-  $('#btnIn').classList.toggle('active', type==='IN');
-  $('#btnOut').classList.toggle('active', type==='OUT');
-  $('#scanCard').classList.remove('hidden');
-  $('#scanTitle').textContent = type==='IN' ? 'Scanning for TIME IN' : 'Scanning for TIME OUT';
-  $('#scanResult').innerHTML='';
-  try{
-    scanner = new Html5Qrcode('reader');
-    await scanner.start({facingMode:'environment'}, {fps:10, qrbox:{width:240,height:240}}, onScan, ()=>{});
-  }catch(err){
-    toast('Camera error: '+(err.message||err), true);
-    $('#scanCard').classList.add('hidden');
-    $('#btnIn').classList.remove('active'); $('#btnOut').classList.remove('active');
-  }
-}
-async function stopScanner(){
-  if(scanner){ try{ await scanner.stop(); scanner.clear(); }catch(e){} scanner=null; }
-  scanType=null;
-  $('#scanCard').classList.add('hidden');
-  $('#btnIn').classList.remove('active'); $('#btnOut').classList.remove('active');
-}
-async function onScan(text){
-  const now=Date.now();
-  if(busy || (text===lastCode && now-lastAt<COOLDOWN_MS)) return;
-  busy=true; lastCode=text; lastAt=now;
-  try{
-    const r = await api('scan',{code:text, type:scanType});
-    const cls = r.status==='Late'||r.status==='Early out' ? 'warn' : 'ok';
-    showResult(cls, `<div class="big">${esc(r.name)}</div>
-      <div>${esc(r.dept)} · ${esc(r.type==='IN'?'Time In':'Time Out')} at ${esc(r.time.slice(0,5))}</div>
-      <div style="margin-top:6px"><span class="pill ${cls==='ok'?'ok':'warn'}">${esc(r.status)}</span></div>`);
-  }catch(err){
-    showResult('err', `<div class="big">Not recorded</div><div>${esc(err.message)}</div>`);
-  }
-  busy=false;
-}
-function showResult(cls, html){ $('#scanResult').innerHTML = `<div class="result ${cls}">${html}</div>`; }
-$('#btnIn').onclick = ()=>startScanner('IN');
-$('#btnOut').onclick = ()=>startScanner('OUT');
-$('#stopScan').onclick = stopScanner;
-
-/* ---------- Employees (registered users) ---------- */
-let empRows=[];
-async function renderEmployees(){
-  try{
-    const [emps, att] = await Promise.all([
-      api('list',{sheet:'Employees'}),
-      api('attendance',{from:today(), to:today()})
-    ]);
-    state.emps = emps;
-    const m={};
-    att.forEach(a=>{
-      const o=m[a.empId]=m[a.empId]||{in:null,out:null};
-      if(a.type==='IN'){ if(!o.in||a.time<o.in) o.in=a.time; }
-      else { if(!o.out||a.time>o.out) o.out=a.time; }
+/* =========================================================
+ *  API CLIENT
+ * ========================================================= */
+async function api(action, payload) {
+  try {
+    const res = await fetch(WEB_APP_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action, payload: payload || {} }),
+      redirect: 'follow',
     });
-    empRows = emps.map(e=>({
-      ...e,
-      fullName:[e.first,e.middle,e.last].filter(Boolean).join(' '),
-      tin:(m[e.empId]||{}).in||'', tout:(m[e.empId]||{}).out||''
-    }));
-    const cur=$('#eDept').value;
-    $('#eDept').innerHTML='<option value="">All</option>'+state.depts.map(d=>`<option>${esc(d.name)}</option>`).join('');
-    $('#eDept').value=cur;
-    drawEmployees();
-  }catch(err){ toast(err.message,true); }
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    return { ok: false, error: 'Network error: ' + err.message };
+  }
 }
-function filteredEmployees(){
-  const q=$('#eSearch').value.trim().toLowerCase(), dept=$('#eDept').value, st=$('#eStatus').value;
-  return empRows.filter(e=>
-    (!q || e.empId.toLowerCase().includes(q) || e.fullName.toLowerCase().includes(q) || (e.email||'').toLowerCase().includes(q)) &&
-    (!dept || e.dept===dept) &&
-    (!st || (st==='in'&&e.tin) || (st==='out'&&e.tout) || (st==='none'&&!e.tin))
+
+/* =========================================================
+ *  STATE
+ * ========================================================= */
+let currentPin = '';
+let currentModule = 'dashboard';
+let scanMode = 'IN';
+let html5Qr = null;
+let cameraRunning = false;
+let scanLock = false;
+let departmentsCache = [];
+let employeesCache = [];
+let attendanceCache = [];
+let eventsCache = [];
+let eventModal, overrideModal;
+
+/* =========================================================
+ *  DATE / TIME FORMATTERS
+ *  Output: "Nov. 22, 2026"  and  "Nov. 22, 2026 10:30 AM"
+ * ========================================================= */
+const MONTHS_SHORT = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.',
+                      'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'];
+
+function fmtDate(input) {
+  if (!input) return '—';
+  const s = String(input).trim();
+  const m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (m) {
+    const y = m[1], mo = parseInt(m[2], 10), d = parseInt(m[3], 10);
+    if (mo >= 1 && mo <= 12) return `${MONTHS_SHORT[mo - 1]} ${d}, ${y}`;
+  }
+  const dt = new Date(s);
+  if (!isNaN(dt.getTime())) {
+    return `${MONTHS_SHORT[dt.getMonth()]} ${dt.getDate()}, ${dt.getFullYear()}`;
+  }
+  return s;
+}
+
+function fmtDateTime(input) {
+  if (!input) return '—';
+  const s = String(input).trim();
+  const m = s.match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})(?::(\d{2}))?/);
+  if (m) {
+    const y  = m[1];
+    const mo = parseInt(m[2], 10);
+    const d  = parseInt(m[3], 10);
+    let h    = parseInt(m[4], 10);
+    const mi = m[5];
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    let h12 = h % 12; if (h12 === 0) h12 = 12;
+    const hh = String(h12).padStart(2, '0');
+    return `${MONTHS_SHORT[mo - 1]} ${d}, ${y} ${hh}:${mi} ${ampm}`;
+  }
+  const dt = new Date(s);
+  if (!isNaN(dt.getTime())) {
+    const ampm = dt.getHours() >= 12 ? 'PM' : 'AM';
+    let h12 = dt.getHours() % 12; if (h12 === 0) h12 = 12;
+    return `${MONTHS_SHORT[dt.getMonth()]} ${dt.getDate()}, ${dt.getFullYear()} ` +
+           `${String(h12).padStart(2, '0')}:${String(dt.getMinutes()).padStart(2, '0')} ${ampm}`;
+  }
+  return s;
+}
+
+function fmtTime(input) {
+  if (!input) return '—';
+  const s = String(input).trim();
+  const m = s.match(/^(\d{1,2}):(\d{2})(?::(\d{2}))?/);
+  if (m) {
+    let h = parseInt(m[1], 10);
+    const mi = m[2];
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    let h12 = h % 12; if (h12 === 0) h12 = 12;
+    return `${String(h12).padStart(2, '0')}:${mi} ${ampm}`;
+  }
+  return s;
+}
+
+/* =========================================================
+ *  PIN GATE
+ * ========================================================= */
+document.getElementById('pinInput').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') doLogin();
+});
+
+async function doLogin() {
+  const pin = document.getElementById('pinInput').value.trim();
+  const btn = document.getElementById('btnLogin');
+  const msg = document.getElementById('gateMsg');
+  msg.textContent = '';
+
+  if (!/^\d{4}$/.test(pin)) {
+    msg.textContent = 'PIN must be 4 digits.';
+    return;
+  }
+
+  btn.classList.add('is-busy');
+  btn.innerHTML = '<span class="spinner-inline"></span>Verifying…';
+
+  const res = await api('verifyPin', { pin });
+
+  btn.classList.remove('is-busy');
+  btn.innerHTML = '<i class="bi bi-box-arrow-in-right me-1"></i> Unlock Panel';
+
+  if (!res || !res.ok) {
+    document.getElementById('pinInput').classList.add('is-err');
+    msg.textContent = res ? res.error : 'Login failed.';
+    return;
+  }
+
+  currentPin = pin;
+  document.getElementById('gate').style.display = 'none';
+  document.getElementById('layout').style.display = 'block';
+  initPanel();
+}
+
+function doLogout(e) {
+  if (e) e.preventDefault();
+  stopCamera();
+  currentPin = '';
+  document.getElementById('pinInput').value = '';
+  document.getElementById('layout').style.display = 'none';
+  document.getElementById('gate').style.display = 'flex';
+}
+
+/* =========================================================
+ *  MODULE NAVIGATION
+ * ========================================================= */
+document.querySelectorAll('.nav-item-btn').forEach(btn => {
+  btn.addEventListener('click', () => switchModule(btn.dataset.module));
+});
+document.querySelectorAll('.bn-item').forEach(btn => {
+  btn.addEventListener('click', () => switchModule(btn.dataset.module));
+});
+
+function switchModule(name) {
+  if (name !== 'scan') stopCamera();
+  currentModule = name;
+
+  document.querySelectorAll('.nav-item-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.module === name);
+  });
+  document.querySelectorAll('.bn-item').forEach(b => {
+    b.classList.toggle('active', b.dataset.module === name);
+  });
+  document.querySelectorAll('.module').forEach(m => m.classList.remove('active'));
+  document.getElementById('mod-' + name).classList.add('active');
+
+  const titles = {
+    dashboard: 'Dashboard',
+    scan: 'Scan Attendance',
+    employees: 'Employees',
+    attendance: 'Attendance',
+    departments: 'Departments',
+    events: 'Events',
+    settings: 'Settings',
+  };
+  const mt = document.getElementById('mobileTitle');
+  if (mt) mt.textContent = titles[name] || name;
+
+  if (name === 'dashboard')   loadDashboard();
+  if (name === 'scan')        loadScanInfo();
+  if (name === 'employees')   loadEmployees();
+  if (name === 'attendance')  loadAttendanceModule();
+  if (name === 'departments') loadDepartments();
+  if (name === 'events')      loadEvents();
+  if (name === 'settings')    loadSettings();
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function initPanel() {
+  eventModal = new bootstrap.Modal(document.getElementById('eventModal'));
+  overrideModal = new bootstrap.Modal(document.getElementById('overrideModal'));
+  switchModule('dashboard');
+}
+
+/* =========================================================
+ *  TOASTS
+ * ========================================================= */
+function toast(text, type) {
+  const t = document.createElement('div');
+  t.className = 'mini-toast ' + (type || '');
+  t.textContent = text;
+  document.getElementById('toastHolder').appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+
+/* =========================================================
+ *  DASHBOARD
+ * ========================================================= */
+async function loadDashboard() {
+  const res = await api('getDashboardStats');
+  if (!res || !res.ok) return;
+
+  const d = res.data;
+  document.getElementById('statTotal').textContent = d.totalEmployees;
+  document.getElementById('statActive').textContent = d.activeEmployees;
+  document.getElementById('statIn').textContent = d.todayCheckIns;
+  document.getElementById('statOut').textContent = d.todayCheckOuts;
+
+  const ev = d.activeEvent;
+  document.getElementById('dashActiveEvent').textContent = ev
+    ? `Active: ${ev.EventName} (${fmtDate(ev.DateFrom)} – ${fmtDate(ev.DateTo)})`
+    : 'No active event.';
+
+  const today = todayStr();
+  const r2 = await api('getAttendance', { filter: { dateFrom: today, dateTo: today } });
+  const rows = (r2 && r2.ok ? r2.data : []).slice(0, 10);
+  const tb = document.getElementById('dashActivity');
+  if (!rows.length) {
+    tb.innerHTML = '<tr class="empty-row"><td colspan="5">No activity today yet.</td></tr>';
+    return;
+  }
+  tb.innerHTML = rows.map(r => {
+    const outT = r.TimeOut || '';
+    const action = outT ? 'OUT' : 'IN';
+    const time = fmtTime(outT || r.TimeIn || '');
+    const date = fmtDate(r.Date);
+    return `<tr>
+      <td data-label="Date & Time"><strong>${escapeHtml(date)}</strong><br><span class="text-muted small">${escapeHtml(time)}</span></td>
+      <td data-label="Employee">${escapeHtml(r.FullName)}<br><span class="text-muted small">${escapeHtml(r.EmployeeID)}</span></td>
+      <td data-label="Session"><span class="badge-status badge-${r.Session.toLowerCase()}">${r.Session}</span></td>
+      <td data-label="Action">${action}</td>
+      <td data-label="Remarks">${escapeHtml(r.Remarks || '—')}</td>
+    </tr>`;
+  }).join('');
+}
+
+function todayStr() {
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+
+/* =========================================================
+ *  SCAN
+ * ========================================================= */
+async function loadScanInfo() {
+  const res = await api('getTodaySchedule');
+  const el = document.getElementById('scanEventInfo');
+  if (!res || !res.ok) {
+    el.textContent = res ? res.error : 'No active event.';
+    el.style.color = '#b71c1c';
+    return;
+  }
+  const ev = res.data;
+  el.textContent = `${ev.EventName} • ${fmtDate(ev.DateFrom)} – ${fmtDate(ev.DateTo)}`;
+  el.style.color = '#6b7d92';
+}
+
+function setScanMode(mode) {
+  scanMode = mode;
+  document.getElementById('modeIN').classList.toggle('active', mode === 'IN');
+  document.getElementById('modeOUT').classList.toggle('active', mode === 'OUT');
+}
+
+function startCamera() {
+  if (cameraRunning) return;
+  const reader = document.getElementById('reader');
+  reader.innerHTML = '';
+
+  html5Qr = new Html5Qrcode("reader");
+  const config = { fps: 10, qrbox: { width: 240, height: 240 } };
+
+  html5Qr.start(
+    { facingMode: "environment" },
+    config,
+    onScanSuccess,
+    () => {}
+  ).then(() => {
+    cameraRunning = true;
+    document.getElementById('btnStartCam').style.display = 'none';
+    document.getElementById('btnStopCam').style.display = '';
+  }).catch((err) => {
+    toast('Camera error: ' + err, 'err');
+  });
+}
+
+function stopCamera() {
+  if (!html5Qr || !cameraRunning) return;
+  html5Qr.stop().then(() => {
+    html5Qr.clear();
+    html5Qr = null;
+    cameraRunning = false;
+    document.getElementById('btnStartCam').style.display = '';
+    document.getElementById('btnStopCam').style.display = 'none';
+  }).catch(() => {});
+}
+
+let lastScanTime = 0;
+let lastScanPayload = '';
+
+function onScanSuccess(decodedText) {
+  const now = Date.now();
+  if (scanLock) return;
+  if (decodedText === lastScanPayload && now - lastScanTime < 2500) return;
+  lastScanPayload = decodedText;
+  lastScanTime = now;
+  scanLock = true;
+
+  const session = document.getElementById('scanSession').value;
+  submitScan({ qrPayload: decodedText, mode: scanMode, session, manual: false });
+}
+
+function submitManual() {
+  const empId = document.getElementById('manualEmpId').value.trim();
+  if (!empId) return toast('Enter an Employee ID.', 'err');
+  const session = document.getElementById('scanSession').value;
+  submitScan({ employeeId: empId, mode: scanMode, session, manual: true });
+  document.getElementById('manualEmpId').value = '';
+}
+
+async function submitScan(payload) {
+  const resultEl = document.getElementById('scanResult');
+  resultEl.classList.remove('show', 'success', 'error');
+  resultEl.classList.add('show');
+  document.getElementById('scanTitle').textContent = 'Processing…';
+  document.getElementById('scanTime').textContent = '—';
+  document.getElementById('scanMeta').textContent = '—';
+
+  const res = await api('scanAttendance', payload);
+  scanLock = false;
+
+  if (!res || !res.ok) {
+    resultEl.classList.remove('success');
+    resultEl.classList.add('error');
+    document.getElementById('scanTitle').textContent = '❌ ' + (res ? res.error : 'Unknown error');
+    document.getElementById('scanTime').textContent = '—';
+    document.getElementById('scanMeta').textContent = '';
+    return;
+  }
+  const d = res.data;
+  resultEl.classList.remove('error');
+  resultEl.classList.add('success');
+  document.getElementById('scanTitle').textContent = '✅ ' + d.Action + ' · ' + d.FullName;
+  document.getElementById('scanTime').textContent = fmtTime(d.TimeIn || d.TimeOut || '');
+  document.getElementById('scanMeta').innerHTML =
+    `<strong>${escapeHtml(d.EmployeeID)}</strong> · ${escapeHtml(d.Department)} · ${d.Session} · ${escapeHtml(d.Remarks || '')}`;
+}
+
+/* =========================================================
+ *  EMPLOYEES
+ * ========================================================= */
+async function loadEmployees() {
+  const tb = document.getElementById('empTable');
+  tb.innerHTML = '<tr class="empty-row"><td colspan="6">Loading…</td></tr>';
+  const res = await api('getEmployees', { onlyActive: false });
+  employeesCache = res && res.ok ? res.data : [];
+  document.getElementById('empCount').textContent = employeesCache.length + ' total';
+  renderEmployees();
+}
+
+function renderEmployees() {
+  const q = (document.getElementById('empSearch').value || '').toLowerCase();
+  const st = document.getElementById('empFilterStatus').value;
+  let rows = employeesCache;
+  if (q) rows = rows.filter(r =>
+    r.EmployeeID.toLowerCase().includes(q) ||
+    r.FullName.toLowerCase().includes(q) ||
+    r.Department.toLowerCase().includes(q)
   );
-}
-function drawEmployees(){
-  const rows=filteredEmployees();
-  $('#eCount').textContent=`${rows.length} of ${empRows.length} employee${empRows.length===1?'':'s'}`;
-  $('#empTable').innerHTML = rows.length ? `<table><thead><tr>
-    <th>Employee ID</th><th>Name</th><th>Department</th><th>Email</th><th>Registered</th><th>Today In</th><th>Today Out</th><th class="no-print"></th></tr></thead><tbody>
-    ${rows.map(e=>`<tr>
-      <td><strong>${esc(e.empId)}</strong></td>
-      <td>${esc(e.fullName)}</td>
-      <td>${esc(e.dept)}</td>
-      <td>${esc(e.email||'—')}</td>
-      <td>${esc((e.registeredAt||'—').slice(0,16))}</td>
-      <td>${e.tin?`<span class="pill ok">${esc(e.tin.slice(0,5))}</span>`:'<span class="pill">—</span>'}</td>
-      <td>${e.tout?`<span class="pill info">${esc(e.tout.slice(0,5))}</span>`:'<span class="pill">—</span>'}</td>
-      <td class="actions no-print"><button class="btn sm danger" data-del="${e.id}"><i class="bi bi-trash"></i>Delete</button></td>
-    </tr>`).join('')}</tbody></table>` : '<div class="empty">No registered employees found.</div>';
-}
-$('#eSearch').oninput = drawEmployees;
-$('#eDept').onchange = drawEmployees;
-$('#eStatus').onchange = drawEmployees;
-$('#eRefresh').onclick = renderEmployees;
-$('#ePrint').onclick = ()=>window.print();
-$('#eCsv').onclick = ()=>{
-  const q=v=>`"${String(v??'').replace(/"/g,'""')}"`;
-  const head=['Employee ID','First Name','Middle Name','Last Name','Email','Department','Registered'];
-  const rows=filteredEmployees().map(e=>[e.empId,e.first,e.middle,e.last,e.email,e.dept,e.registeredAt||'']);
-  const csv=[head,...rows].map(r=>r.map(q).join(',')).join('\r\n');
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob(['﻿'+csv],{type:'text/csv'}));
-  a.download=`employees_${today()}.csv`; a.click();
-};
-$('#empTable').addEventListener('click', async e=>{
-  const b=e.target.closest('button'); if(!b || !b.dataset.del) return;
-  const emp=empRows.find(x=>x.id===b.dataset.del); if(!emp) return;
-  if(!confirm(`Delete ${emp.fullName} (${emp.empId})?\n\nTheir past attendance records are kept, but their QR code will stop working and they can register again.`)) return;
-  try{ await api('remove',{sheet:'Employees',id:emp.id}); toast('Employee deleted'); renderEmployees(); }
-  catch(err){ toast(err.message,true); }
-});
+  if (st) rows = rows.filter(r => r.Status === st);
 
-/* ---------- Manual entry ---------- */
-function findEmp(q){
-  q=q.trim().toLowerCase();
-  return state.emps.find(e=>e.empId.toLowerCase()===q) ||
-         state.emps.find(e=>(e.first+' '+e.last).toLowerCase()===q);
-}
-$('#manualForm').addEventListener('submit', async e=>{
-  e.preventDefault();
-  const emp = findEmp($('#mEmp').value);
-  if(!emp) return toast('Employee not found. Pick from the list.', true);
-  try{
-    await api('manual',{empId:emp.empId, date:$('#mDate').value, time:$('#mTime').value, type:$('#mType').value, remark:$('#mRemark').value.trim()});
-    toast('Attendance saved'); $('#mEmp').value=''; $('#mRemark').value=''; renderManualRecent();
-  }catch(err){ toast(err.message,true); }
-});
-async function renderManualRecent(){
-  try{
-    const rows=(await api('attendance',{from:'',to:''})).filter(r=>r.source==='Manual').slice(-8).reverse();
-    $('#manualRecent').innerHTML = rows.length ? tableHtml(['Date','Time','Employee','Type','Remark'],
-      rows.map(r=>[r.date,r.time.slice(0,5),r.name,r.type==='IN'?'Time In':'Time Out',r.remark||'—'])) : '<div class="empty">No manual entries yet.</div>';
-  }catch(err){ toast(err.message,true); }
-}
-
-/* ---------- Reports ---------- */
-let reportTab='log', reportData={head:[],rows:[]};
-
-function tableHtml(head, rows){
-  return `<table><thead><tr>${head.map(h=>`<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>
-    ${rows.map(r=>`<tr>${r.map(c=>`<td>${c&&c.html!==undefined?c.html:esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
-}
-const statusPill = s => ({html:`<span class="pill ${s==='On time'?'ok':s==='Manual'?'info':'warn'}">${esc(s)}</span>`});
-
-async function runReport(){
-  try{
-    let rows = await api('attendance',{from:$('#rFrom').value, to:$('#rTo').value});
-    const dept=$('#rDept').value, type=$('#rType').value, q=$('#rEmp').value.trim().toLowerCase();
-    rows = rows.filter(r=>(!dept||r.dept===dept)&&(!type||r.type===type)&&(!q||r.empId.toLowerCase().includes(q)||r.name.toLowerCase().includes(q)));
-    rows.sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
-    state.report = rows; renderReport();
-  }catch(err){ toast(err.message,true); }
-}
-function renderReport(){
-  const rows=state.report; let head, data;
-  if(reportTab==='log'){
-    head=['Date','Time','Employee ID','Name','Department','Type','Schedule','Status','Source'];
-    data=rows.map(r=>[r.date,r.time.slice(0,5),r.empId,r.name,r.dept,r.type==='IN'?'Time In':'Time Out',r.schedule||'—',statusPill(r.status),r.source]);
-    reportData={head,rows:rows.map(r=>[r.date,r.time,r.empId,r.name,r.dept,r.type,r.schedule,r.status,r.source])};
-  } else if(reportTab==='emp'){
-    const m={};
-    rows.forEach(r=>{
-      const k=r.empId; m[k]=m[k]||{empId:r.empId,name:r.name,dept:r.dept,days:{},late:0,early:0,ins:0,outs:0};
-      const o=m[k], day=o.days[r.date]=o.days[r.date]||{in:null,out:null};
-      if(r.type==='IN'){ o.ins++; if(!day.in||r.time<day.in) day.in=r.time; if(r.status==='Late') o.late++; }
-      else { o.outs++; if(!day.out||r.time>day.out) day.out=r.time; if(r.status==='Early out') o.early++; }
-    });
-    const secs=t=>{const[h,mi,s]=t.split(':').map(Number);return h*3600+mi*60+(s||0);};
-    const list=Object.values(m).map(o=>{
-      let tot=0; Object.values(o.days).forEach(d=>{ if(d.in&&d.out&&d.out>d.in) tot+=secs(d.out)-secs(d.in); });
-      return [o.empId,o.name,o.dept,Object.values(o.days).filter(d=>d.in).length,o.late,o.early,(tot/3600).toFixed(2)];
-    });
-    head=['Employee ID','Name','Department','Days Present','Late','Early Out','Total Hours']; data=list; reportData={head,rows:list};
-  } else {
-    const m={};
-    rows.forEach(r=>{
-      const o=m[r.dept]=m[r.dept]||{dept:r.dept,emps:new Set(),ins:0,outs:0,late:0};
-      o.emps.add(r.empId);
-      if(r.type==='IN'){ o.ins++; if(r.status==='Late') o.late++; } else o.outs++;
-    });
-    const list=Object.values(m).map(o=>[o.dept,o.emps.size,o.ins,o.outs,o.late]);
-    head=['Department','Employees','Time Ins','Time Outs','Late']; data=list; reportData={head,rows:list};
+  const tb = document.getElementById('empTable');
+  if (!rows.length) {
+    tb.innerHTML = '<tr class="empty-row"><td colspan="6">No employees match.</td></tr>';
+    return;
   }
-  $('#rCount').textContent = `${rows.length} record${rows.length===1?'':'s'}`;
-  $('#rTable').innerHTML = data.length ? tableHtml(head,data) : '<div class="empty">No records for these filters.</div>';
+  tb.innerHTML = rows.map(r => `
+    <tr>
+      <td data-label="ID"><strong>${escapeHtml(r.EmployeeID)}</strong></td>
+      <td data-label="Name">${escapeHtml(r.FullName)}</td>
+      <td data-label="Department">${escapeHtml(r.Department)}</td>
+      <td data-label="Registered">${escapeHtml(fmtDateTime(r.RegisteredAt))}</td>
+      <td data-label="Status"><span class="badge-status badge-${r.Status.toLowerCase()}">${r.Status}</span></td>
+      <td data-label="Action">
+        <button class="btn btn-sm btn-outline-brand"
+                onclick="toggleEmpStatus('${escapeHtml(r.EmployeeID)}','${r.Status}')">
+          ${r.Status === 'Active' ? 'Deactivate' : 'Activate'}
+        </button>
+      </td>
+    </tr>
+  `).join('');
 }
-$('#rRun').onclick = runReport;
-$$('.tabs button').forEach(b=>b.onclick=()=>{
-  $$('.tabs button').forEach(x=>x.classList.toggle('active',x===b)); reportTab=b.dataset.tab; renderReport();
-});
-$('#rPrint').onclick = ()=>window.print();
-$('#rCsv').onclick = ()=>{
-  const q=v=>`"${String(v??'').replace(/"/g,'""')}"`;
-  const csv=[reportData.head,...reportData.rows].map(r=>r.map(q).join(',')).join('\r\n');
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv'}));
-  a.download=`attendance_${reportTab}_${today()}.csv`; a.click();
-};
 
-/* ---------- boot ---------- */
-if(API_URL && !getKey()) askKey(); else enterApp();
+async function toggleEmpStatus(empId, currentStatus) {
+  const next = currentStatus === 'Active' ? 'Inactive' : 'Active';
+  if (!confirm(`Set ${empId} to ${next}?`)) return;
+  const res = await api('updateEmployeeStatus', { employeeId: empId, status: next });
+  if (!res || !res.ok) return toast(res ? res.error : 'Failed', 'err');
+  toast(empId + ' set to ' + next, 'ok');
+  loadEmployees();
+}
+
+async function exportEmployees() {
+  const res = await api('exportEmployeesCsv');
+  if (!res || !res.ok) return toast('Export failed.', 'err');
+  downloadCsv(res.data.filename, res.data.csv);
+}
+
+/* =========================================================
+ *  ATTENDANCE
+ * ========================================================= */
+async function loadAttendanceModule() {
+  const sel = document.getElementById('attDept');
+  if (sel.options.length <= 1) {
+    const res = await api('getDepartments', { onlyActive: false });
+    departmentsCache = res && res.ok ? res.data : [];
+    sel.innerHTML = '<option value="">All</option>' +
+      departmentsCache.map(d => `<option value="${escapeHtml(d.Department)}">${escapeHtml(d.Department)}</option>`).join('');
+  }
+  renderAttendance();
+}
+
+async function renderAttendance() {
+  const filter = {
+    dateFrom: document.getElementById('attFrom').value || undefined,
+    dateTo: document.getElementById('attTo').value || undefined,
+    session: document.getElementById('attSession').value || undefined,
+    department: document.getElementById('attDept').value || undefined,
+  };
+  const tb = document.getElementById('attTable');
+  tb.innerHTML = '<tr class="empty-row"><td colspan="9">Loading…</td></tr>';
+
+  const res = await api('getAttendance', { filter });
+  attendanceCache = res && res.ok ? res.data : [];
+  document.getElementById('attCount').textContent = attendanceCache.length + ' records';
+
+  if (!attendanceCache.length) {
+    tb.innerHTML = '<tr class="empty-row"><td colspan="9">No records.</td></tr>';
+    return;
+  }
+  tb.innerHTML = attendanceCache.map(r => `
+    <tr>
+      <td data-label="Date"><strong>${escapeHtml(fmtDate(r.Date))}</strong></td>
+      <td data-label="Employee">${escapeHtml(r.FullName)}<br><span class="text-muted small">${escapeHtml(r.EmployeeID)}</span></td>
+      <td data-label="Dept">${escapeHtml(r.Department)}</td>
+      <td data-label="Session"><span class="badge-status badge-${r.Session.toLowerCase()}">${r.Session}</span></td>
+      <td data-label="In">${escapeHtml(fmtTime(r.TimeIn))}</td>
+      <td data-label="Out">${escapeHtml(fmtTime(r.TimeOut))}</td>
+      <td data-label="Remarks">${escapeHtml(r.Remarks || '—')}</td>
+      <td data-label="By">${escapeHtml(r.EncodedBy || '—')}</td>
+      <td data-label="Action">
+        <button class="btn btn-sm btn-outline-brand"
+                onclick="openOverride('${escapeHtml(r.EmployeeID)}','${escapeHtml(r.Date)}','${escapeHtml(r.Session)}','${escapeHtml(r.TimeIn)}','${escapeHtml(r.TimeOut)}','${escapeHtml(r.Remarks)}')">
+          Edit
+        </button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+async function exportAttendance() {
+  const filter = {
+    dateFrom: document.getElementById('attFrom').value || undefined,
+    dateTo: document.getElementById('attTo').value || undefined,
+    session: document.getElementById('attSession').value || undefined,
+    department: document.getElementById('attDept').value || undefined,
+  };
+  const res = await api('exportAttendanceCsv', { filter });
+  if (!res || !res.ok) return toast('Export failed.', 'err');
+  downloadCsv(res.data.filename, res.data.csv);
+}
+
+function openOverride(empId, date, session, timeIn, timeOut, remarks) {
+  document.getElementById('ovEmpId').value = empId;
+  document.getElementById('ovDate').value = date;
+  document.getElementById('ovSession').value = session;
+  document.getElementById('ovContext').textContent = `${empId} · ${fmtDate(date)} · ${session}`;
+  document.getElementById('ovTimeIn').value = toTimeInput(timeIn);
+  document.getElementById('ovTimeOut').value = toTimeInput(timeOut);
+  document.getElementById('ovRemarks').value = remarks || '';
+  document.getElementById('ovMsg').className = 'msg';
+  overrideModal.show();
+}
+
+function toTimeInput(t) {
+  if (!t) return '';
+  const p = String(t).split(':');
+  if (p.length < 2) return '';
+  return p[0].padStart(2, '0') + ':' + p[1].padStart(2, '0');
+}
+
+async function submitOverride() {
+  const payload = {
+    EmployeeID: document.getElementById('ovEmpId').value,
+    Date: document.getElementById('ovDate').value,
+    Session: document.getElementById('ovSession').value,
+    TimeIn: document.getElementById('ovTimeIn').value,
+    TimeOut: document.getElementById('ovTimeOut').value,
+    Remarks: document.getElementById('ovRemarks').value,
+  };
+  const res = await api('overrideAttendance', payload);
+  if (!res || !res.ok) {
+    const m = document.getElementById('ovMsg');
+    m.className = 'msg show err'; m.textContent = res ? res.error : 'Failed';
+    return;
+  }
+  overrideModal.hide();
+  toast('Attendance updated', 'ok');
+  renderAttendance();
+}
+
+/* =========================================================
+ *  DEPARTMENTS
+ * ========================================================= */
+async function loadDepartments() {
+  const tb = document.getElementById('deptTable');
+  tb.innerHTML = '<tr class="empty-row"><td colspan="3">Loading…</td></tr>';
+  const res = await api('getDepartments', { onlyActive: false });
+  departmentsCache = res && res.ok ? res.data : [];
+  if (!departmentsCache.length) {
+    tb.innerHTML = '<tr class="empty-row"><td colspan="3">No departments yet.</td></tr>';
+    return;
+  }
+  tb.innerHTML = departmentsCache.map(d => `
+    <tr>
+      <td data-label="Department"><strong>${escapeHtml(d.Department)}</strong></td>
+      <td data-label="Status"><span class="badge-status badge-${d.Status.toLowerCase()}">${d.Status}</span></td>
+      <td data-label="Actions">
+        <button class="btn btn-sm btn-outline-brand me-1"
+                onclick="toggleDept('${escapeHtml(d.Department)}','${d.Status}')">
+          ${d.Status === 'Active' ? 'Deactivate' : 'Activate'}
+        </button>
+        <button class="btn btn-sm btn-outline-brand" style="color:#b71c1c;border-color:#b71c1c;"
+                onclick="deleteDept('${escapeHtml(d.Department)}')">Delete</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+async function addDepartment() {
+  const name = document.getElementById('newDeptName').value.trim();
+  const msg = document.getElementById('deptMsg');
+  msg.className = 'msg';
+  if (!name) { msg.className = 'msg show err'; msg.textContent = 'Enter a name.'; return; }
+  const res = await api('addDepartment', { name });
+  if (!res || !res.ok) {
+    msg.className = 'msg show err'; msg.textContent = res ? res.error : 'Failed';
+    return;
+  }
+  document.getElementById('newDeptName').value = '';
+  msg.className = 'msg show ok'; msg.textContent = 'Added.';
+  loadDepartments();
+}
+
+async function toggleDept(name, status) {
+  const next = status === 'Active' ? 'Inactive' : 'Active';
+  const res = await api('updateDepartment', { originalName: name, newName: name, status: next });
+  if (!res || !res.ok) return toast(res ? res.error : 'Failed', 'err');
+  toast(name + ' ' + next.toLowerCase(), 'ok');
+  loadDepartments();
+}
+
+async function deleteDept(name) {
+  if (!confirm(`Delete "${name}"?`)) return;
+  const res = await api('deleteDepartment', { name });
+  if (!res || !res.ok) return toast(res ? res.error : 'Failed', 'err');
+  toast('Deleted', 'ok');
+  loadDepartments();
+}
+
+/* =========================================================
+ *  EVENTS
+ * ========================================================= */
+async function loadEvents() {
+  const tb = document.getElementById('eventTable');
+  tb.innerHTML = '<tr class="empty-row"><td colspan="6">Loading…</td></tr>';
+  const res = await api('getEvents');
+  eventsCache = res && res.ok ? res.data : [];
+  if (!eventsCache.length) {
+    tb.innerHTML = '<tr class="empty-row"><td colspan="6">No events yet.</td></tr>';
+    return;
+  }
+  tb.innerHTML = eventsCache.map(e => `
+    <tr>
+      <td data-label="Event"><strong>${escapeHtml(e.EventName)}</strong><br><span class="text-muted small">${escapeHtml(e.EventID)}</span></td>
+      <td data-label="Dates">${escapeHtml(fmtDate(e.DateFrom))} → ${escapeHtml(fmtDate(e.DateTo))}</td>
+      <td data-label="AM">${escapeHtml(fmtTime(e.AMIn))} – ${escapeHtml(fmtTime(e.AMOut))}</td>
+      <td data-label="PM">${escapeHtml(fmtTime(e.PMIn))} – ${escapeHtml(fmtTime(e.PMOut))}</td>
+      <td data-label="Status"><span class="badge-status badge-${e.Status.toLowerCase()}">${e.Status}</span></td>
+      <td data-label="Actions">
+        <button class="btn btn-sm btn-outline-brand me-1"
+                onclick='editEvent(${JSON.stringify(e).replace(/'/g, "&#39;")})'>Edit</button>
+        ${e.Status !== 'Active'
+          ? `<button class="btn btn-sm btn-brand" onclick="activateEvent('${escapeHtml(e.EventID)}')">Set Active</button>`
+          : `<span class="badge-status badge-active ms-1">Active</span>`}
+      </td>
+    </tr>
+  `).join('');
+}
+
+function openEventModal() {
+  document.getElementById('eventModalTitle').textContent = 'New Event';
+  document.getElementById('evtId').value = '';
+  document.getElementById('evtName').value = '';
+  document.getElementById('evtFrom').value = '';
+  document.getElementById('evtTo').value = '';
+  document.getElementById('evtAmIn').value = '';
+  document.getElementById('evtAmOut').value = '';
+  document.getElementById('evtPmIn').value = '';
+  document.getElementById('evtPmOut').value = '';
+  document.getElementById('evtMsg').className = 'msg';
+  eventModal.show();
+}
+
+function editEvent(ev) {
+  document.getElementById('eventModalTitle').textContent = 'Edit Event';
+  document.getElementById('evtId').value = ev.EventID;
+  document.getElementById('evtName').value = ev.EventName;
+  document.getElementById('evtFrom').value = ev.DateFrom;
+  document.getElementById('evtTo').value = ev.DateTo;
+  document.getElementById('evtAmIn').value = toTimeInput(ev.AMIn);
+  document.getElementById('evtAmOut').value = toTimeInput(ev.AMOut);
+  document.getElementById('evtPmIn').value = toTimeInput(ev.PMIn);
+  document.getElementById('evtPmOut').value = toTimeInput(ev.PMOut);
+  document.getElementById('evtMsg').className = 'msg';
+  eventModal.show();
+}
+
+async function saveEvent() {
+  const payload = {
+    EventID: document.getElementById('evtId').value || undefined,
+    EventName: document.getElementById('evtName').value.trim(),
+    DateFrom: document.getElementById('evtFrom').value,
+    DateTo: document.getElementById('evtTo').value,
+    AMIn: document.getElementById('evtAmIn').value,
+    AMOut: document.getElementById('evtAmOut').value,
+    PMIn: document.getElementById('evtPmIn').value,
+    PMOut: document.getElementById('evtPmOut').value,
+  };
+  const res = await api('saveEvent', payload);
+  if (!res || !res.ok) {
+    const m = document.getElementById('evtMsg');
+    m.className = 'msg show err'; m.textContent = res ? res.error : 'Failed';
+    return;
+  }
+  eventModal.hide();
+  toast('Event saved', 'ok');
+  loadEvents();
+}
+
+async function activateEvent(id) {
+  if (!confirm('Set this event as active?')) return;
+  const res = await api('setActiveEvent', { eventId: id });
+  if (!res || !res.ok) return toast(res ? res.error : 'Failed', 'err');
+  toast('Event activated', 'ok');
+  loadEvents();
+}
+
+/* =========================================================
+ *  SETTINGS
+ * ========================================================= */
+async function loadSettings() {
+  const res = await api('getSettings');
+  if (!res || !res.ok) return;
+  document.getElementById('setGrace').value = res.data.GraceMinutes || '5';
+}
+
+async function updatePin() {
+  const p1 = document.getElementById('setNewPin').value.trim();
+  const p2 = document.getElementById('setConfirmPin').value.trim();
+  const m = document.getElementById('pinMsg');
+  m.className = 'msg';
+  if (!/^\d{4}$/.test(p1)) { m.className = 'msg show err'; m.textContent = 'PIN must be 4 digits.'; return; }
+  if (p1 !== p2) { m.className = 'msg show err'; m.textContent = 'PINs do not match.'; return; }
+
+  const res = await api('changePin', { pin: p1 });
+  if (!res || !res.ok) {
+    m.className = 'msg show err'; m.textContent = res ? res.error : 'Failed';
+    return;
+  }
+  m.className = 'msg show ok'; m.textContent = 'PIN updated.';
+  document.getElementById('setNewPin').value = '';
+  document.getElementById('setConfirmPin').value = '';
+  currentPin = p1;
+}
+
+async function updateGrace() {
+  const m = document.getElementById('graceMsg');
+  const v = document.getElementById('setGrace').value;
+  const res = await api('updateGraceMinutes', { minutes: v });
+  if (!res || !res.ok) {
+    m.className = 'msg show err'; m.textContent = res ? res.error : 'Failed';
+    return;
+  }
+  m.className = 'msg show ok'; m.textContent = 'Grace period updated.';
+}
+
+/* =========================================================
+ *  CSV DOWNLOAD
+ * ========================================================= */
+function downloadCsv(filename, csv) {
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+/* =========================================================
+ *  HELPERS
+ * ========================================================= */
+function escapeHtml(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
 </script>
 </body>
 </html>
