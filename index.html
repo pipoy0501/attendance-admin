@@ -10,7 +10,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 
@@ -200,16 +200,27 @@
     flex-wrap: wrap; gap: 8px;
   }
 
+  /* ============================================
+   *  TABLE — desktop table / mobile card stack
+   * ============================================ */
+  .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
   .table-app {
     margin: 0; font-size: 13px; width: 100%;
     border-collapse: separate; border-spacing: 0;
+    min-width: 700px; /* desktop minimum so columns don't crush */
   }
   .table-app thead th {
     background: #f8fafc; color: var(--ink-muted);
     font-weight: 600; font-size: 11px; text-transform: uppercase;
-    letter-spacing: 0.05em; padding: 11px 14px;
+    letter-spacing: 0.05em; padding: 12px 14px;
     border-bottom: 1px solid var(--line); white-space: nowrap;
     text-align: left;
+    position: sticky; top: 0;
+    z-index: 1;
   }
   .table-app tbody td {
     padding: 12px 14px; border-bottom: 1px solid #f1f5f9;
@@ -218,7 +229,9 @@
   .table-app tbody tr:last-child td { border-bottom: none; }
   .table-app tbody tr:hover { background: #fafbfc; }
   .table-app .empty-row td {
-    text-align: center; color: var(--ink-muted); padding: 40px 20px; font-style: italic;
+    text-align: center; color: var(--ink-muted);
+    padding: 40px 20px; font-style: italic;
+    background: #fff;
   }
 
   .badge-status {
@@ -380,10 +393,7 @@
     padding: 0 !important;
     line-height: 1.5 !important;
   }
-  .swal2-actions {
-    margin: 16px 0 0 !important;
-    gap: 8px !important;
-  }
+  .swal2-actions { margin: 16px 0 0 !important; gap: 8px !important; }
   .swal2-confirm, .swal2-cancel {
     border-radius: 0 !important;
     font-weight: 600 !important;
@@ -413,18 +423,22 @@
     background-color: var(--brand-light) !important;
     color: var(--brand) !important;
   }
-  .swal2-timer-progress-bar {
-    background: var(--brand) !important;
-    height: 2px !important;
-  }
+  .swal2-timer-progress-bar { background: var(--brand) !important; height: 2px !important; }
 
+  /* ============================================
+   *  TABLET
+   * ============================================ */
   @media (min-width: 768px) and (max-width: 1023.98px) {
     .sidebar { width: 210px; padding: 16px 8px; }
     .main-area { margin-left: 210px; width: calc(100% - 210px); padding: 22px 20px 40px; }
     .brand-block h1 { font-size: 14px; }
     .nav-item-btn { padding: 10px 12px; font-size: 13px; }
+    .table-app { min-width: 640px; }
   }
 
+  /* ============================================
+   *  MOBILE — tables become cards
+   * ============================================ */
   @media (max-width: 767.98px) {
     .sidebar { display: none; }
     .main-area {
@@ -450,23 +464,38 @@
     #reader { min-height: 220px; }
     .mode-btn { min-height: 64px; padding: 12px 8px; font-size: 12px; }
 
+    /* Table → card layout */
+    .table-responsive { overflow: visible; }
+    .table-app {
+      display: block;
+      min-width: 0;
+      border-collapse: separate;
+    }
     .table-app thead { display: none; }
-    .table-app, .table-app tbody, .table-app tr, .table-app td { display: block; width: 100%; }
+    .table-app tbody,
+    .table-app tr,
+    .table-app td { display: block; width: 100%; }
+
     .table-app tbody tr {
       border: 1px solid var(--line);
-      padding: 12px 14px;
-      margin-bottom: 10px;
       background: #fff;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      position: relative;
     }
     .table-app tbody tr:hover { background: #fff; }
+    .table-app tbody tr:last-child { margin-bottom: 0; }
+
     .table-app tbody td {
-      padding: 4px 0;
+      padding: 6px 0;
       border: none;
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      gap: 12px;
+      gap: 14px;
       font-size: 13px;
+      line-height: 1.4;
+      text-align: right;
     }
     .table-app tbody td::before {
       content: attr(data-label);
@@ -474,14 +503,39 @@
       color: var(--ink-muted);
       font-size: 10.5px;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.05em;
       flex-shrink: 0;
-      padding-top: 2px;
+      text-align: left;
+      padding-top: 1px;
     }
+    .table-app tbody td > * { text-align: right; }
+    .table-app tbody td:empty { display: none; }
+
+    /* Stack action buttons at bottom of card */
+    .table-app tbody td[data-label="Action"],
+    .table-app tbody td[data-label="Actions"] {
+      padding-top: 10px;
+      margin-top: 6px;
+      border-top: 1px solid #f1f5f9;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .table-app tbody td[data-label="Action"]::before,
+    .table-app tbody td[data-label="Actions"]::before {
+      display: none;
+    }
+    .table-app tbody td[data-label="Action"] .btn,
+    .table-app tbody td[data-label="Actions"] .btn {
+      flex: 0 0 auto;
+      min-height: 36px;
+    }
+
     .table-app .empty-row {
       border: 1px dashed var(--line);
       background: #fafbfc;
       padding: 0;
+      margin: 0;
     }
     .table-app .empty-row td {
       display: block;
@@ -490,7 +544,6 @@
       justify-content: center;
     }
     .table-app .empty-row td::before { display: none; }
-    .table-app tbody td .btn { min-height: 32px; font-size: 12px; }
 
     .btn-sm { min-height: 34px; }
     .form-control, .form-select { min-height: 44px; font-size: 14px; }
@@ -500,6 +553,20 @@
     .modal-content { border-radius: 0 !important; }
   }
 
+  /* ============================================
+   *  SMALL PHONES (≤ 380px)
+   * ============================================ */
+  @media (max-width: 380px) {
+    .main-area { padding: 14px 12px calc(var(--bottom-nav-h) + 20px); }
+    .card-soft .card-body { padding: 14px; }
+    .table-app tbody tr { padding: 12px 14px; }
+    .table-app tbody td { font-size: 12.5px; }
+    .main-header h2 { font-size: 17px; }
+    .stat-card .value { font-size: 20px; }
+    .mode-btn { font-size: 11px; min-height: 60px; }
+  }
+
+  /* MODAL */
   .modal-content { border-radius: 0 !important; border: 1px solid var(--line); }
   .modal-header { border-bottom: 1px solid var(--line); padding: 16px 20px; }
   .modal-title { font-size: 15px; font-weight: 700; color: var(--ink); }
@@ -551,6 +618,7 @@
 
   <main class="main-area">
 
+    <!-- DASHBOARD -->
     <section class="module active" id="mod-dashboard">
       <div class="main-header">
         <div>
@@ -580,6 +648,7 @@
       </div>
     </section>
 
+    <!-- SCAN -->
     <section class="module" id="mod-scan">
       <div class="main-header"><div><h2>Scan Attendance</h2><p class="sub" id="scanEventInfo">—</p></div></div>
       <div class="card-soft mb-3">
@@ -618,6 +687,7 @@
       </div>
     </section>
 
+    <!-- EMPLOYEES -->
     <section class="module" id="mod-employees">
       <div class="main-header">
         <div><h2>Employees</h2><p class="sub" id="empCount">—</p></div>
@@ -638,13 +708,23 @@
       <div class="card-soft">
         <div class="table-responsive">
           <table class="table-app">
-            <thead><tr><th>Employee ID</th><th>Name</th><th>Department</th><th>Registered</th><th>Status</th><th></th></tr></thead>
+            <thead>
+              <tr>
+                <th>Employee ID</th>
+                <th>Name</th>
+                <th>Department</th>
+                <th>Registered</th>
+                <th>Status</th>
+                <th style="text-align:right;">Actions</th>
+              </tr>
+            </thead>
             <tbody id="empTable"><tr class="empty-row"><td colspan="6">Loading…</td></tr></tbody>
           </table>
         </div>
       </div>
     </section>
 
+    <!-- ATTENDANCE -->
     <section class="module" id="mod-attendance">
       <div class="main-header">
         <div><h2>Attendance</h2><p class="sub" id="attCount">—</p></div>
@@ -663,13 +743,26 @@
       <div class="card-soft">
         <div class="table-responsive">
           <table class="table-app">
-            <thead><tr><th>Date</th><th>Employee</th><th>Department</th><th>Session</th><th>In</th><th>Out</th><th>Remarks</th><th>By</th><th></th></tr></thead>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Employee</th>
+                <th>Department</th>
+                <th>Session</th>
+                <th>Time In</th>
+                <th>Time Out</th>
+                <th>Remarks</th>
+                <th>Encoded By</th>
+                <th style="text-align:right;">Actions</th>
+              </tr>
+            </thead>
             <tbody id="attTable"><tr class="empty-row"><td colspan="9">Loading…</td></tr></tbody>
           </table>
         </div>
       </div>
     </section>
 
+    <!-- DEPARTMENTS -->
     <section class="module" id="mod-departments">
       <div class="main-header"><div><h2>Departments</h2><p class="sub">Shown on registration form</p></div></div>
       <div class="card-soft mb-3">
@@ -683,13 +776,20 @@
       <div class="card-soft">
         <div class="table-responsive">
           <table class="table-app">
-            <thead><tr><th>Department</th><th>Status</th><th>Actions</th></tr></thead>
+            <thead>
+              <tr>
+                <th>Department</th>
+                <th>Status</th>
+                <th style="text-align:right;">Actions</th>
+              </tr>
+            </thead>
             <tbody id="deptTable"><tr class="empty-row"><td colspan="3">Loading…</td></tr></tbody>
           </table>
         </div>
       </div>
     </section>
 
+    <!-- EVENTS -->
     <section class="module" id="mod-events">
       <div class="main-header">
         <div><h2>Events</h2><p class="sub">One active at a time</p></div>
@@ -698,13 +798,23 @@
       <div class="card-soft">
         <div class="table-responsive">
           <table class="table-app">
-            <thead><tr><th>Event</th><th>Dates</th><th>AM</th><th>PM</th><th>Status</th><th></th></tr></thead>
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Dates</th>
+                <th>Morning</th>
+                <th>Afternoon</th>
+                <th>Status</th>
+                <th style="text-align:right;">Actions</th>
+              </tr>
+            </thead>
             <tbody id="eventTable"><tr class="empty-row"><td colspan="6">Loading…</td></tr></tbody>
           </table>
         </div>
       </div>
     </section>
 
+    <!-- SETTINGS -->
     <section class="module" id="mod-settings">
       <div class="main-header"><div><h2>Settings</h2><p class="sub">System configuration</p></div></div>
       <div class="card-soft mb-3">
@@ -742,6 +852,7 @@
   </nav>
 </div>
 
+<!-- EVENT MODAL -->
 <div class="modal fade" id="eventModal" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
     <div class="modal-content">
@@ -774,6 +885,7 @@
   </div>
 </div>
 
+<!-- OVERRIDE MODAL -->
 <div class="modal fade" id="overrideModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
     <div class="modal-content">
@@ -802,14 +914,8 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
 <script>
-/* =========================================================
- *  CONFIG
- * ========================================================= */
 const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjNzvMU7EvFtVHMWBwoUPT-nWWtETD3_G5DvJuTA6L_Odl8ktUaBUULGKlguO-EGTb/exec';
 
-/* =========================================================
- *  API CLIENT
- * ========================================================= */
 async function api(action, payload) {
   try {
     const res = await fetch(WEB_APP_URL, {
@@ -825,9 +931,6 @@ async function api(action, payload) {
   }
 }
 
-/* =========================================================
- *  STATE
- * ========================================================= */
 let currentPin = '';
 let currentModule = 'dashboard';
 let scanMode = 'IN';
@@ -839,9 +942,6 @@ let attendanceCache = [];
 let eventsCache = [];
 let eventModal, overrideModal;
 
-/* =========================================================
- *  DATE / TIME FORMATTERS
- * ========================================================= */
 const MONTHS_SHORT = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.',
                       'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'];
 
@@ -894,9 +994,6 @@ function fmtTime(input) {
   return s;
 }
 
-/* =========================================================
- *  SWEETALERT HELPERS
- * ========================================================= */
 const SwalApp = Swal.mixin({
   customClass: { confirmButton: 'btn', cancelButton: 'btn' },
   buttonsStyling: false,
@@ -921,9 +1018,6 @@ function swalConfirm(text, title, confirmText, isDanger) {
   }).then(r => r.isConfirmed);
 }
 
-/* =========================================================
- *  PIN GATE
- * ========================================================= */
 document.getElementById('pinInput').addEventListener('keydown', (e) => {
   if (e.key === 'Enter') doLogin();
 });
@@ -970,9 +1064,6 @@ function doLogout(e) {
   document.getElementById('gate').style.display = 'flex';
 }
 
-/* =========================================================
- *  MODULE NAVIGATION
- * ========================================================= */
 document.querySelectorAll('.nav-item-btn').forEach(btn => {
   btn.addEventListener('click', () => switchModule(btn.dataset.module));
 });
@@ -1010,9 +1101,6 @@ function initPanel() {
   switchModule('dashboard');
 }
 
-/* =========================================================
- *  DASHBOARD
- * ========================================================= */
 async function loadDashboard() {
   const res = await api('getDashboardStats');
   if (!res || !res.ok) return;
@@ -1056,9 +1144,7 @@ function todayStr() {
   return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
 }
 
-/* =========================================================
- *  SCAN — one-scan-one-alert
- * ========================================================= */
+/* SCAN */
 let scanLock = false;
 let lastScanPayload = '';
 let lastScanTime = 0;
@@ -1117,16 +1203,12 @@ function stopCamera() {
 
 function onScanSuccess(decodedText) {
   if (scanLock || scannerPaused) return;
-
   const now = Date.now();
   if (decodedText === lastScanPayload && now - lastScanTime < 3000) return;
-
   lastScanPayload = decodedText;
   lastScanTime = now;
   scanLock = true;
-
   pauseScanner();
-
   const session = document.getElementById('scanSession').value;
   submitScan({ qrPayload: decodedText, mode: scanMode, session, manual: false });
 }
@@ -1135,7 +1217,6 @@ function submitManual() {
   if (scanLock) return;
   const empId = document.getElementById('manualEmpId').value.trim();
   if (!empId) return swalError('Enter an Employee ID.', 'Missing input');
-
   scanLock = true;
   const session = document.getElementById('scanSession').value;
   submitScan({ employeeId: empId, mode: scanMode, session, manual: true })
@@ -1168,7 +1249,6 @@ async function submitScan(payload) {
     document.getElementById('scanTitle').textContent = '❌ ' + (res ? res.error : 'Unknown error');
     document.getElementById('scanTime').textContent = '—';
     document.getElementById('scanMeta').textContent = '';
-
     await swalError(res ? res.error : 'Unknown error', 'Scan failed');
   } else {
     const d = res.data;
@@ -1178,7 +1258,6 @@ async function submitScan(payload) {
     document.getElementById('scanTime').textContent = fmtTime(d.TimeIn || d.TimeOut || '');
     document.getElementById('scanMeta').innerHTML =
       `<strong>${escapeHtml(d.EmployeeID)}</strong> · ${escapeHtml(d.Department)} · ${d.Session} · ${escapeHtml(d.Remarks || '')}`;
-
     await swalSuccess(
       `${d.FullName} — ${d.Action} at ${fmtTime(d.TimeIn || d.TimeOut || '')}`,
       d.Action + ' successful'
@@ -1211,9 +1290,7 @@ function resumeScanner() {
   }
 }
 
-/* =========================================================
- *  EMPLOYEES
- * ========================================================= */
+/* EMPLOYEES — table */
 async function loadEmployees() {
   const tb = document.getElementById('empTable');
   tb.innerHTML = '<tr class="empty-row"><td colspan="6">Loading…</td></tr>';
@@ -1241,12 +1318,12 @@ function renderEmployees() {
   }
   tb.innerHTML = rows.map(r => `
     <tr>
-      <td data-label="ID"><strong>${escapeHtml(r.EmployeeID)}</strong></td>
+      <td data-label="Employee ID"><strong>${escapeHtml(r.EmployeeID)}</strong></td>
       <td data-label="Name">${escapeHtml(r.FullName)}</td>
       <td data-label="Department">${escapeHtml(r.Department)}</td>
       <td data-label="Registered">${escapeHtml(fmtDateTime(r.RegisteredAt))}</td>
       <td data-label="Status"><span class="badge-status badge-${r.Status.toLowerCase()}">${r.Status}</span></td>
-      <td data-label="Action">
+      <td data-label="Action" style="text-align:right;">
         <button class="btn btn-sm btn-outline-brand"
                 onclick="toggleEmpStatus('${escapeHtml(r.EmployeeID)}','${r.Status}')">
           ${r.Status === 'Active' ? 'Deactivate' : 'Activate'}
@@ -1278,9 +1355,7 @@ async function exportEmployees() {
   swalSuccess('Employees CSV downloaded.', 'Export ready');
 }
 
-/* =========================================================
- *  ATTENDANCE
- * ========================================================= */
+/* ATTENDANCE — table */
 async function loadAttendanceModule() {
   const sel = document.getElementById('attDept');
   if (sel.options.length <= 1) {
@@ -1314,13 +1389,13 @@ async function renderAttendance() {
     <tr>
       <td data-label="Date"><strong>${escapeHtml(fmtDate(r.Date))}</strong></td>
       <td data-label="Employee">${escapeHtml(r.FullName)}<br><span style="color:var(--ink-muted);font-size:11px;">${escapeHtml(r.EmployeeID)}</span></td>
-      <td data-label="Dept">${escapeHtml(r.Department)}</td>
+      <td data-label="Department">${escapeHtml(r.Department)}</td>
       <td data-label="Session"><span class="badge-status badge-${r.Session.toLowerCase()}">${r.Session}</span></td>
-      <td data-label="In">${escapeHtml(fmtTime(r.TimeIn))}</td>
-      <td data-label="Out">${escapeHtml(fmtTime(r.TimeOut))}</td>
+      <td data-label="Time In">${escapeHtml(fmtTime(r.TimeIn))}</td>
+      <td data-label="Time Out">${escapeHtml(fmtTime(r.TimeOut))}</td>
       <td data-label="Remarks">${escapeHtml(r.Remarks || '—')}</td>
-      <td data-label="By">${escapeHtml(r.EncodedBy || '—')}</td>
-      <td data-label="Action">
+      <td data-label="Encoded By">${escapeHtml(r.EncodedBy || '—')}</td>
+      <td data-label="Action" style="text-align:right;">
         <button class="btn btn-sm btn-outline-brand"
                 onclick="openOverride('${escapeHtml(r.EmployeeID)}','${escapeHtml(r.Date)}','${escapeHtml(r.Session)}','${escapeHtml(r.TimeIn)}','${escapeHtml(r.TimeOut)}','${escapeHtml(r.Remarks)}')">
           Edit
@@ -1377,9 +1452,7 @@ async function submitOverride() {
   renderAttendance();
 }
 
-/* =========================================================
- *  DEPARTMENTS
- * ========================================================= */
+/* DEPARTMENTS — table */
 async function loadDepartments() {
   const tb = document.getElementById('deptTable');
   tb.innerHTML = '<tr class="empty-row"><td colspan="3">Loading…</td></tr>';
@@ -1393,8 +1466,8 @@ async function loadDepartments() {
     <tr>
       <td data-label="Department"><strong>${escapeHtml(d.Department)}</strong></td>
       <td data-label="Status"><span class="badge-status badge-${d.Status.toLowerCase()}">${d.Status}</span></td>
-      <td data-label="Actions">
-        <div class="d-flex gap-2 flex-wrap">
+      <td data-label="Action" style="text-align:right;">
+        <div class="d-flex gap-2 flex-wrap justify-content-end">
           <button class="btn btn-sm btn-outline-brand"
                   onclick="toggleDept('${escapeHtml(d.Department)}','${d.Status}')">
             ${d.Status === 'Active' ? 'Deactivate' : 'Activate'}
@@ -1439,9 +1512,7 @@ async function deleteDept(name) {
   loadDepartments();
 }
 
-/* =========================================================
- *  EVENTS
- * ========================================================= */
+/* EVENTS — table */
 async function loadEvents() {
   const tb = document.getElementById('eventTable');
   tb.innerHTML = '<tr class="empty-row"><td colspan="6">Loading…</td></tr>';
@@ -1455,11 +1526,11 @@ async function loadEvents() {
     <tr>
       <td data-label="Event"><strong>${escapeHtml(e.EventName)}</strong><br><span style="color:var(--ink-muted);font-size:11px;">${escapeHtml(e.EventID)}</span></td>
       <td data-label="Dates">${escapeHtml(fmtDate(e.DateFrom))} → ${escapeHtml(fmtDate(e.DateTo))}</td>
-      <td data-label="AM">${escapeHtml(fmtTime(e.AMIn))} – ${escapeHtml(fmtTime(e.AMOut))}</td>
-      <td data-label="PM">${escapeHtml(fmtTime(e.PMIn))} – ${escapeHtml(fmtTime(e.PMOut))}</td>
+      <td data-label="Morning">${escapeHtml(fmtTime(e.AMIn))} – ${escapeHtml(fmtTime(e.AMOut))}</td>
+      <td data-label="Afternoon">${escapeHtml(fmtTime(e.PMIn))} – ${escapeHtml(fmtTime(e.PMOut))}</td>
       <td data-label="Status"><span class="badge-status badge-${e.Status.toLowerCase()}">${e.Status}</span></td>
-      <td data-label="Actions">
-        <div class="d-flex gap-2 flex-wrap">
+      <td data-label="Action" style="text-align:right;">
+        <div class="d-flex gap-2 flex-wrap justify-content-end">
           <button class="btn btn-sm btn-outline-brand"
                   onclick='editEvent(${JSON.stringify(e).replace(/'/g, "&#39;")})'>Edit</button>
           ${e.Status !== 'Active'
@@ -1528,9 +1599,6 @@ async function activateEvent(id) {
   loadEvents();
 }
 
-/* =========================================================
- *  SETTINGS
- * ========================================================= */
 async function loadSettings() {
   const res = await api('getSettings');
   if (!res || !res.ok) return;
@@ -1558,9 +1626,6 @@ async function updateGrace() {
   swalSuccess('Grace period updated.', 'Saved');
 }
 
-/* =========================================================
- *  CSV DOWNLOAD
- * ========================================================= */
 function downloadCsv(filename, csv) {
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
@@ -1573,9 +1638,6 @@ function downloadCsv(filename, csv) {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-/* =========================================================
- *  HELPERS
- * ========================================================= */
 function escapeHtml(s) {
   return String(s == null ? '' : s)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
