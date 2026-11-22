@@ -8,6 +8,7 @@
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -21,57 +22,75 @@
     --sidebar-bg: #142a3f;
     --sidebar-text: #b7c7d6;
     --sidebar-active: #1F4E78;
-    --bottom-nav-h: 66px;
+    --ink: #0f172a;
+    --ink-soft: #475569;
+    --ink-muted: #64748b;
+    --line: #e2e8f0;
+    --bg: #f8fafc;
+    --bottom-nav-h: 64px;
   }
 
-  * { -webkit-tap-highlight-color: transparent; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body { height: 100%; }
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-    background: #eef2f7; color: #1f2d3d; margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    margin: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    line-height: 1.5;
   }
 
-  /* =====================================================
+  /* ============================================
    *  PIN GATE
-   * ===================================================== */
+   * ============================================ */
   .gate-wrap {
     display: flex; align-items: center; justify-content: center;
     min-height: 100vh; min-height: 100dvh; padding: 20px;
+    background: var(--bg);
   }
   .gate-card {
-    background: #fff; border-radius: 16px; padding: 32px 24px;
-    box-shadow: 0 10px 40px rgba(31, 78, 120, 0.15);
+    background: #fff;
+    border: 1px solid var(--line);
+    padding: 40px 32px;
     width: 100%; max-width: 380px; text-align: center;
+    box-shadow: 0 1px 0 rgba(15,23,42,0.04), 0 12px 32px -16px rgba(15,23,42,0.10);
   }
   .gate-icon {
-    width: 64px; height: 64px; border-radius: 16px;
-    background: var(--brand-light); color: var(--brand);
+    width: 56px; height: 56px;
+    background: var(--brand); color: #fff;
     display: inline-flex; align-items: center; justify-content: center;
-    font-size: 32px; margin-bottom: 16px;
+    font-size: 26px; margin-bottom: 20px;
   }
-  .gate-title { font-size: 20px; font-weight: 700; color: var(--brand); margin: 0 0 6px; }
-  .gate-sub { font-size: 13px; color: #5b6b7c; margin: 0 0 22px; }
+  .gate-title { font-size: 20px; font-weight: 700; color: var(--ink); margin: 0 0 6px; letter-spacing: -0.01em; }
+  .gate-sub { font-size: 13px; color: var(--ink-muted); margin: 0 0 26px; line-height: 1.5; }
   .pin-input {
-    width: 100%; padding: 14px 18px; font-size: 24px; font-weight: 700;
-    letter-spacing: 12px; text-align: center;
-    border: 2px solid #cfd8e3; border-radius: 10px; outline: none;
-    font-family: 'Inter', monospace; color: var(--brand);
-    transition: border 0.15s, box-shadow 0.15s;
+    width: 100%; padding: 14px 18px;
+    font-size: 22px; font-weight: 700;
+    letter-spacing: 14px; text-align: center;
+    border: 1px solid var(--line);
+    background: #fff; color: var(--ink);
+    outline: none;
+    font-family: 'Inter', monospace;
+    transition: border-color 0.15s, box-shadow 0.15s;
   }
-  .pin-input:focus { border-color: var(--brand); box-shadow: 0 0 0 4px rgba(31, 78, 120, 0.15); }
-  .pin-input.is-err { border-color: #e53935; }
-  .gate-msg { font-size: 13px; color: #b71c1c; margin-top: 12px; min-height: 20px; font-weight: 500; }
+  .pin-input:focus { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(31,78,120,0.12); }
+  .pin-input.is-err { border-color: #dc2626; }
+  .gate-msg { font-size: 12px; color: #b91c1c; margin-top: 10px; min-height: 18px; font-weight: 500; }
 
-  /* =====================================================
+  /* ============================================
    *  LAYOUT
-   * ===================================================== */
+   * ============================================ */
   .layout { display: none; min-height: 100vh; min-height: 100dvh; }
 
   .sidebar {
-    width: 240px; background: var(--sidebar-bg); color: var(--sidebar-text);
-    padding: 20px 12px; flex-shrink: 0; display: flex; flex-direction: column;
+    width: 248px;
+    background: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    padding: 20px 12px;
+    flex-shrink: 0;
+    display: flex; flex-direction: column;
     position: fixed; top: 0; left: 0; bottom: 0; overflow-y: auto;
   }
   .brand-block {
@@ -82,18 +101,19 @@
   .brand-block h1 {
     font-size: 15px; font-weight: 700; color: #fff; margin: 0 0 2px;
     display: flex; align-items: center; gap: 8px;
+    letter-spacing: -0.01em;
   }
-  .brand-block .small { font-size: 11px; color: #7f97a9; }
+  .brand-block .small { font-size: 11px; color: #7f97a9; letter-spacing: 0.04em; text-transform: uppercase; }
 
   .nav-item-btn {
     display: flex; align-items: center; gap: 10px;
-    padding: 11px 14px; border-radius: 8px;
+    padding: 11px 14px;
     color: var(--sidebar-text); cursor: pointer;
-    font-size: 14px; font-weight: 500;
+    font-size: 13.5px; font-weight: 500;
     border: none; background: transparent; width: 100%; text-align: left;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
     transition: background 0.15s, color 0.15s;
-    min-height: 44px;
+    min-height: 42px;
   }
   .nav-item-btn:hover { background: rgba(255,255,255,0.06); color: #fff; }
   .nav-item-btn.active { background: var(--sidebar-active); color: #fff; font-weight: 600; }
@@ -104,32 +124,37 @@
     border-top: 1px solid rgba(255,255,255,0.08);
     font-size: 11px; color: #7f97a9; padding-left: 12px;
   }
+  .sidebar-footer a { color: #b7c7d6; text-decoration: none; }
+  .sidebar-footer a:hover { color: #fff; }
 
   .main-area {
-    margin-left: 240px; padding: 24px 28px 60px;
-    min-width: 0; width: calc(100% - 240px);
+    margin-left: 248px;
+    padding: 28px 32px 60px;
+    min-width: 0;
+    width: calc(100% - 248px);
   }
 
   .mobile-appbar {
     display: none;
     position: sticky; top: 0; z-index: 100;
     background: var(--sidebar-bg); color: #fff;
-    padding: 12px 16px;
+    padding: 14px 16px;
     align-items: center; justify-content: space-between;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.06);
   }
-  .mobile-appbar .title { font-size: 15px; font-weight: 700; }
+  .mobile-appbar .title { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; }
   .mobile-appbar .icon-btn {
     background: transparent; border: none; color: #fff;
     font-size: 20px; padding: 6px; line-height: 1;
+    min-width: 40px; min-height: 40px;
+    display: flex; align-items: center; justify-content: center;
   }
 
   .bottom-nav {
     display: none;
     position: fixed; bottom: 0; left: 0; right: 0;
     background: #fff;
-    border-top: 1px solid #e2e8f0;
-    box-shadow: 0 -2px 12px rgba(0,0,0,0.06);
+    border-top: 1px solid var(--line);
     z-index: 200;
     height: var(--bottom-nav-h);
     padding-bottom: env(safe-area-inset-bottom);
@@ -144,155 +169,213 @@
   .bn-item {
     flex: 1; min-width: 60px;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 2px; padding: 6px 4px;
+    gap: 3px; padding: 8px 4px;
     background: transparent; border: none;
-    color: #6b7d92; font-size: 10px; font-weight: 600;
+    color: var(--ink-muted); font-size: 10px; font-weight: 600;
     cursor: pointer;
+    transition: color 0.15s;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
   }
-  .bn-item i { font-size: 18px; }
+  .bn-item i { font-size: 19px; }
   .bn-item.active { color: var(--brand); }
-  .bn-item.active i { transform: scale(1.1); }
 
+  /* ============================================
+   *  HEADERS
+   * ============================================ */
   .main-header {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 22px; gap: 12px; flex-wrap: wrap;
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 24px; gap: 12px; flex-wrap: wrap;
   }
-  .main-header h2 { font-size: 22px; font-weight: 700; color: #1f2d3d; margin: 0; }
-  .main-header .sub { font-size: 13px; color: #6b7d92; margin: 2px 0 0; }
+  .main-header h2 { font-size: 22px; font-weight: 700; color: var(--ink); margin: 0; letter-spacing: -0.01em; }
+  .main-header .sub { font-size: 13px; color: var(--ink-muted); margin: 4px 0 0; }
 
   .module { display: none; }
   .module.active { display: block; }
 
+  /* ============================================
+   *  CARDS
+   * ============================================ */
   .card-soft {
-    background: #fff; border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(31, 78, 120, 0.06);
-    border: 1px solid #e6ecf2;
+    background: #fff;
+    border: 1px solid var(--line);
     overflow: hidden;
+    box-shadow: 0 1px 0 rgba(15,23,42,0.02);
   }
   .card-soft .card-body { padding: 20px; }
   .card-soft .card-head {
     padding: 14px 20px;
-    border-bottom: 1px solid #eef2f7;
-    font-size: 14px; font-weight: 600; color: #33475b;
+    border-bottom: 1px solid var(--line);
+    font-size: 13px; font-weight: 600; color: var(--ink-soft);
+    text-transform: uppercase; letter-spacing: 0.04em;
     display: flex; justify-content: space-between; align-items: center;
     flex-wrap: wrap; gap: 8px;
   }
 
+  /* ============================================
+   *  TABLES
+   * ============================================ */
   .table-app {
     margin: 0; font-size: 13px; width: 100%;
     border-collapse: separate; border-spacing: 0;
   }
   .table-app thead th {
-    background: #f5f8fb; color: #5b6b7c;
-    font-weight: 600; font-size: 12px; text-transform: uppercase;
-    letter-spacing: 0.3px; padding: 10px 12px;
-    border-bottom: 1px solid #e2e8f0; white-space: nowrap;
+    background: #f8fafc; color: var(--ink-muted);
+    font-weight: 600; font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.05em; padding: 11px 14px;
+    border-bottom: 1px solid var(--line); white-space: nowrap;
+    text-align: left;
   }
   .table-app tbody td {
-    padding: 10px 12px; border-bottom: 1px solid #f0f3f7;
+    padding: 12px 14px; border-bottom: 1px solid #f1f5f9;
     vertical-align: middle;
   }
-  .table-app tbody tr:hover { background: #f8fafc; }
+  .table-app tbody tr:last-child td { border-bottom: none; }
+  .table-app tbody tr:hover { background: #fafbfc; }
   .table-app .empty-row td {
-    text-align: center; color: #8a98a8; padding: 30px; font-style: italic;
+    text-align: center; color: var(--ink-muted); padding: 40px 20px; font-style: italic;
   }
 
+  /* Badges */
   .badge-status {
-    font-size: 11px; font-weight: 600; padding: 3px 8px;
-    border-radius: 20px; display: inline-block;
+    font-size: 10.5px; font-weight: 700; padding: 3px 8px;
+    display: inline-block;
+    text-transform: uppercase; letter-spacing: 0.04em;
+    border: 1px solid;
   }
-  .badge-active { background: #e8f5e9; color: #2e7d32; }
-  .badge-inactive { background: #fdecec; color: #b71c1c; }
-  .badge-morning { background: #fff4e5; color: #b35a00; }
-  .badge-afternoon { background: #e8f1fb; color: #1F4E78; }
+  .badge-active { background: #f0fdf4; color: #15803d; border-color: #bbf7d0; }
+  .badge-inactive { background: #fef2f2; color: #b91c1c; border-color: #fecaca; }
+  .badge-morning { background: #fff7ed; color: #b45309; border-color: #fed7aa; }
+  .badge-afternoon { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
 
+  /* ============================================
+   *  SCANNER
+   * ============================================ */
   .scan-config {
     display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px;
   }
   .mode-toggle { display: flex; gap: 8px; margin-bottom: 18px; }
   .mode-btn {
-    flex: 1; padding: 14px; border-radius: 10px;
-    border: 2px solid #cfd8e3; background: #fff; color: #5b6b7c;
-    font-size: 14px; font-weight: 600;
+    flex: 1; padding: 14px;
+    border: 1px solid var(--line); background: #fff; color: var(--ink-muted);
+    font-size: 13px; font-weight: 700;
     cursor: pointer; transition: all 0.15s;
-    display: flex; flex-direction: column; align-items: center; gap: 4px;
-    min-height: 64px;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    min-height: 72px;
+    text-transform: uppercase; letter-spacing: 0.06em;
   }
   .mode-btn i { font-size: 22px; }
-  .mode-btn.active.in { background: #e8f5e9; border-color: #2e7d32; color: #2e7d32; }
-  .mode-btn.active.out { background: #fff4e5; border-color: #b35a00; color: #b35a00; }
+  .mode-btn:hover { border-color: var(--ink-soft); }
+  .mode-btn.active.in { background: #f0fdf4; border-color: #16a34a; color: #15803d; }
+  .mode-btn.active.out { background: #fff7ed; border-color: #ea580c; color: #c2410c; }
 
   #reader {
-    border-radius: 12px; overflow: hidden;
     background: #000; min-height: 260px;
+    border: 1px solid var(--line);
+    overflow: hidden;
   }
-  #reader video { border-radius: 12px; }
+  #reader video { display: block; width: 100%; height: auto; }
 
   .scan-result {
-    border-radius: 12px; padding: 18px; margin-top: 16px;
-    display: none;
+    padding: 18px; margin-top: 16px;
+    display: none; border: 1px solid;
   }
   .scan-result.show { display: block; }
-  .scan-result.success { background: #e8f5e9; border: 2px solid #4caf50; }
-  .scan-result.error { background: #fdecec; border: 2px solid #e53935; }
-  .scan-result h4 { margin: 0 0 6px; font-size: 16px; font-weight: 700; }
-  .scan-result .meta { font-size: 13px; color: #33475b; }
+  .scan-result.success { background: #f0fdf4; border-color: #86efac; }
+  .scan-result.error { background: #fef2f2; border-color: #fca5a5; }
+  .scan-result h4 { margin: 0 0 8px; font-size: 15px; font-weight: 700; }
+  .scan-result .meta { font-size: 12px; color: var(--ink-soft); }
   .scan-result .time-big {
-    font-size: 24px; font-weight: 800; color: var(--brand); margin: 8px 0;
-    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: 28px; font-weight: 800; color: var(--brand); margin: 10px 0;
+    font-family: ui-monospace, 'Menlo', 'Consolas', monospace;
+    letter-spacing: -0.01em;
   }
 
-  .form-label { font-size: 12px; font-weight: 600; color: #33475b; margin-bottom: 4px; }
+  /* ============================================
+   *  FORMS
+   * ============================================ */
+  .form-label {
+    font-size: 11px; font-weight: 600; color: var(--ink-soft);
+    margin-bottom: 6px;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    display: block;
+  }
   .form-control, .form-select {
-    font-size: 14px; padding: 10px 12px;
-    border: 1px solid #cfd8e3; border-radius: 8px;
+    font-size: 13.5px; padding: 10px 12px;
+    border: 1px solid var(--line); background: #fff; color: var(--ink);
     font-family: inherit;
-    min-height: 44px;
+    min-height: 42px;
+    outline: none;
+    border-radius: 0;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
   }
   .form-control:focus, .form-select:focus {
-    border-color: var(--brand); box-shadow: 0 0 0 3px rgba(31, 78, 120, 0.12);
+    border-color: var(--brand); box-shadow: 0 0 0 3px rgba(31,78,120,0.12);
+  }
+  .form-select {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%2364748b' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M3 6l5 5 5-5'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 14px;
+    padding-right: 36px;
   }
 
+  /* ============================================
+   *  BUTTONS
+   * ============================================ */
   .btn {
     font-family: inherit; font-weight: 600; font-size: 13px;
     min-height: 40px;
+    border-radius: 0;
+    border: 1px solid transparent;
+    padding: 9px 16px;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    cursor: pointer;
+    line-height: 1;
   }
   .btn-brand {
-    background: var(--brand); color: #fff; border: none;
-    padding: 10px 16px; border-radius: 8px;
+    background: var(--brand); color: #fff; border-color: var(--brand);
   }
-  .btn-brand:hover, .btn-brand:focus { background: var(--brand-dark); color: #fff; }
+  .btn-brand:hover, .btn-brand:focus { background: var(--brand-dark); border-color: var(--brand-dark); color: #fff; }
   .btn-outline-brand {
-    background: #fff; color: var(--brand);
-    border: 1.5px solid var(--brand);
-    padding: 10px 16px; border-radius: 8px;
+    background: #fff; color: var(--brand); border-color: var(--line);
   }
   .btn-outline-brand:hover, .btn-outline-brand:focus {
-    background: var(--brand-light); color: var(--brand);
+    border-color: var(--brand); background: var(--brand-light); color: var(--brand);
   }
-  .btn-sm { font-size: 12px; padding: 6px 10px; min-height: 34px; }
+  .btn-danger-outline {
+    background: #fff; color: #b91c1c; border-color: #fecaca;
+  }
+  .btn-danger-outline:hover, .btn-danger-outline:focus {
+    border-color: #b91c1c; background: #fef2f2; color: #b91c1c;
+  }
+  .btn-sm { font-size: 12px; padding: 6px 12px; min-height: 32px; }
 
+  /* ============================================
+   *  STATS
+   * ============================================ */
   .stat-card {
-    background: #fff; border-radius: 12px; padding: 16px;
-    box-shadow: 0 2px 10px rgba(31, 78, 120, 0.06);
-    border: 1px solid #e6ecf2;
+    background: #fff;
+    border: 1px solid var(--line);
+    padding: 18px;
+    box-shadow: 0 1px 0 rgba(15,23,42,0.02);
   }
   .stat-card .label {
-    font-size: 11px; color: #6b7d92; font-weight: 600;
-    text-transform: uppercase; letter-spacing: 0.4px;
+    font-size: 11px; color: var(--ink-muted); font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.05em;
   }
   .stat-card .value {
-    font-size: 26px; font-weight: 800; color: var(--brand); margin: 4px 0 0;
+    font-size: 28px; font-weight: 800; color: var(--ink); margin: 6px 0 0;
+    letter-spacing: -0.02em;
   }
 
-  .msg {
-    font-size: 13px; padding: 10px 12px; border-radius: 8px;
-    margin-top: 12px; display: none; font-weight: 500;
-  }
-  .msg.show { display: block; }
-  .msg.err { background: #fdecec; color: #b71c1c; border: 1px solid #f5c6c6; }
-  .msg.ok { background: #e8f5e9; color: #2e7d32; border: 1px solid #b8e0b8; }
-
+  /* ============================================
+   *  SPINNER
+   * ============================================ */
   .spinner-inline {
     display: inline-block;
     width: 14px; height: 14px;
@@ -304,65 +387,117 @@
     vertical-align: -2px;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
-  .is-busy { pointer-events: none; opacity: 0.9; }
+  .is-busy { pointer-events: none; opacity: 0.85; }
 
-  .toast-holder {
-    position: fixed; top: 20px; right: 20px; z-index: 9999;
-    display: flex; flex-direction: column; gap: 8px;
-    max-width: calc(100vw - 40px);
+  /* ============================================
+   *  SWEETALERT (compact, white buttons)
+   * ============================================ */
+  .swal2-popup {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
+    border-radius: 0 !important;
+    padding: 20px 22px !important;
+    width: 340px !important;
+    max-width: calc(100vw - 32px) !important;
+    border: 1px solid var(--line) !important;
   }
-  .mini-toast {
-    background: #1f2d3d; color: #fff;
-    padding: 10px 16px; border-radius: 8px;
-    font-size: 13px; font-weight: 500;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-    animation: slideIn 0.2s ease-out;
+  .swal2-title {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: var(--ink) !important;
+    padding: 0 !important;
+    margin: 8px 0 4px !important;
   }
-  .mini-toast.ok { background: #2e7d32; }
-  .mini-toast.err { background: #b71c1c; }
-  @keyframes slideIn {
-    from { opacity: 0; transform: translateX(20px); }
-    to { opacity: 1; transform: translateX(0); }
+  .swal2-html-container {
+    font-size: 13px !important;
+    color: var(--ink-soft) !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1.5 !important;
+  }
+  .swal2-actions {
+    margin: 16px 0 0 !important;
+    gap: 8px !important;
+  }
+  .swal2-confirm, .swal2-cancel {
+    border-radius: 0 !important;
+    font-weight: 600 !important;
+    font-size: 12px !important;
+    padding: 8px 18px !important;
+    min-height: 34px !important;
+    margin: 0 !important;
+    font-family: inherit !important;
+  }
+  .swal2-confirm {
+    background-color: var(--brand) !important;
+    color: #ffffff !important;
+    border: 1px solid var(--brand) !important;
+  }
+  .swal2-confirm:hover {
+    background-color: var(--brand-dark) !important;
+    border-color: var(--brand-dark) !important;
+    color: #ffffff !important;
+  }
+  .swal2-cancel {
+    background-color: #fff !important;
+    color: var(--brand) !important;
+    border: 1px solid var(--line) !important;
+  }
+  .swal2-cancel:hover {
+    border-color: var(--brand) !important;
+    background-color: var(--brand-light) !important;
+    color: var(--brand) !important;
+  }
+  .swal2-timer-progress-bar {
+    background: var(--brand) !important;
+    height: 2px !important;
   }
 
-  @media (max-width: 575px) {
-    .modal-dialog { margin: 0.5rem; }
-    .modal-content { border-radius: 12px; }
+  /* ============================================
+   *  RESPONSIVE — TABLET
+   * ============================================ */
+  @media (min-width: 768px) and (max-width: 1023.98px) {
+    .sidebar { width: 210px; padding: 16px 8px; }
+    .main-area { margin-left: 210px; width: calc(100% - 210px); padding: 22px 20px 40px; }
+    .brand-block h1 { font-size: 14px; }
+    .nav-item-btn { padding: 10px 12px; font-size: 13px; }
   }
 
+  /* ============================================
+   *  RESPONSIVE — MOBILE
+   * ============================================ */
   @media (max-width: 767.98px) {
     .sidebar { display: none; }
     .main-area {
       margin-left: 0;
       width: 100%;
-      padding: 16px 14px calc(var(--bottom-nav-h) + 24px);
+      padding: 16px 14px calc(var(--bottom-nav-h) + 20px);
     }
     .mobile-appbar { display: flex; }
     .bottom-nav { display: block; }
 
-    .main-header h2 { font-size: 18px; }
-    .main-header .sub { font-size: 12px; }
     .main-header { margin-bottom: 16px; }
+    .main-header h2 { font-size: 19px; }
+    .main-header .sub { font-size: 12px; margin-top: 2px; }
 
     .card-soft .card-body { padding: 16px; }
-    .card-soft .card-head { padding: 12px 16px; font-size: 13px; }
+    .card-soft .card-head { padding: 12px 16px; font-size: 12px; }
 
     .stat-card { padding: 14px; }
-    .stat-card .value { font-size: 22px; }
+    .stat-card .label { font-size: 10px; }
+    .stat-card .value { font-size: 22px; margin-top: 4px; }
 
     .scan-config { grid-template-columns: 1fr; gap: 10px; }
     #reader { min-height: 220px; }
+    .mode-btn { min-height: 64px; padding: 12px 8px; font-size: 12px; }
 
+    /* Stacked tables */
     .table-app thead { display: none; }
-    .table-app, .table-app tbody, .table-app tr, .table-app td {
-      display: block; width: 100%;
-    }
+    .table-app, .table-app tbody, .table-app tr, .table-app td { display: block; width: 100%; }
     .table-app tbody tr {
-      background: #fff;
-      border: 1px solid #e6ecf2;
-      border-radius: 10px;
-      padding: 10px 12px;
+      border: 1px solid var(--line);
+      padding: 12px 14px;
       margin-bottom: 10px;
+      background: #fff;
     }
     .table-app tbody tr:hover { background: #fff; }
     .table-app tbody td {
@@ -370,39 +505,58 @@
       border: none;
       display: flex;
       justify-content: space-between;
-      gap: 10px;
+      align-items: flex-start;
+      gap: 12px;
       font-size: 13px;
     }
     .table-app tbody td::before {
       content: attr(data-label);
       font-weight: 600;
-      color: #6b7d92;
-      font-size: 11px;
+      color: var(--ink-muted);
+      font-size: 10.5px;
       text-transform: uppercase;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.04em;
       flex-shrink: 0;
+      padding-top: 2px;
     }
     .table-app .empty-row {
-      display: block;
-      border: 1px dashed #cfd8e3;
-      background: #f8fafc;
+      border: 1px dashed var(--line);
+      background: #fafbfc;
+      padding: 0;
     }
     .table-app .empty-row td {
       display: block;
       text-align: center;
-      padding: 20px;
+      padding: 32px 16px;
+      justify-content: center;
     }
     .table-app .empty-row td::before { display: none; }
-
     .table-app tbody td .btn { min-height: 32px; font-size: 12px; }
+
+    /* Buttons full width on mobile when in card context */
+    .btn-sm { min-height: 34px; }
+
+    /* Mobile form adjustments */
+    .form-control, .form-select { min-height: 44px; font-size: 14px; }
+    .btn { min-height: 44px; }
+
+    /* Modal */
+    .modal-dialog { margin: 0.5rem; }
+    .modal-content { border-radius: 0 !important; }
   }
 
-  @media (min-width: 768px) and (max-width: 1023.98px) {
-    .sidebar { width: 200px; padding: 16px 8px; }
-    .main-area { margin-left: 200px; width: calc(100% - 200px); padding: 20px 18px 40px; }
-    .brand-block h1 { font-size: 14px; }
-    .nav-item-btn { padding: 10px 12px; font-size: 13px; }
-  }
+  /* ============================================
+   *  MODAL (sharp corners to match theme)
+   * ============================================ */
+  .modal-content { border-radius: 0 !important; border: 1px solid var(--line); }
+  .modal-header { border-bottom: 1px solid var(--line); padding: 16px 20px; }
+  .modal-title { font-size: 15px; font-weight: 700; color: var(--ink); }
+  .modal-footer { border-top: 1px solid var(--line); padding: 14px 20px; }
+  .modal-body { padding: 20px; }
+  .btn-close:focus { box-shadow: none; }
+
+  /* Toast holder not used but kept for safety */
+  .toast-holder { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; max-width: calc(100vw - 40px); }
 </style>
 </head>
 <body>
@@ -413,14 +567,11 @@
     <div class="gate-icon"><i class="bi bi-shield-lock"></i></div>
     <h2 class="gate-title">Admin Access</h2>
     <p class="gate-sub">Enter your 4-digit PIN to continue</p>
-
     <input type="password" class="pin-input" id="pinInput" maxlength="4"
            inputmode="numeric" pattern="\d{4}" placeholder="••••" autocomplete="off">
-
     <div class="gate-msg" id="gateMsg"></div>
-
-    <button class="btn btn-brand w-100 mt-3" id="btnLogin" onclick="doLogin()">
-      <i class="bi bi-box-arrow-in-right me-1"></i> Unlock Panel
+    <button type="button" class="btn btn-brand w-100 mt-3" id="btnLogin" onclick="doLogin()">
+      <i class="bi bi-box-arrow-in-right"></i> Unlock Panel
     </button>
   </div>
 </div>
@@ -448,7 +599,7 @@
     <button class="nav-item-btn" data-module="events"><i class="bi bi-calendar-event"></i> Events</button>
     <button class="nav-item-btn" data-module="settings"><i class="bi bi-gear"></i> Settings</button>
     <div class="sidebar-footer">
-      Logged in · <a href="#" class="text-decoration-none" style="color:#b7c7d6;" onclick="doLogout(event)">Log out</a>
+      Logged in · <a href="#" onclick="doLogout(event)">Log out</a>
     </div>
   </aside>
 
@@ -456,7 +607,15 @@
 
     <!-- DASHBOARD -->
     <section class="module active" id="mod-dashboard">
-      <div class="main-header"><div><h2>Dashboard</h2><p class="sub" id="dashActiveEvent">Loading active event…</p></div></div>
+      <div class="main-header">
+        <div>
+          <h2>Dashboard</h2>
+          <p class="sub" id="dashActiveEvent">Loading active event…</p>
+        </div>
+        <button class="btn btn-outline-brand btn-sm" onclick="loadDashboard()">
+          <i class="bi bi-arrow-clockwise"></i> Refresh
+        </button>
+      </div>
       <div class="row g-2 g-md-3 mb-3">
         <div class="col-6 col-md-3"><div class="stat-card"><div class="label">Employees</div><div class="value" id="statTotal">—</div></div></div>
         <div class="col-6 col-md-3"><div class="stat-card"><div class="label">Active</div><div class="value" id="statActive">—</div></div></div>
@@ -466,7 +625,6 @@
       <div class="card-soft">
         <div class="card-head">
           <span><i class="bi bi-clock-history me-1"></i> Latest Activity</span>
-          <button class="btn btn-sm btn-outline-brand" onclick="loadDashboard()"><i class="bi bi-arrow-clockwise me-1"></i> Refresh</button>
         </div>
         <div class="table-responsive">
           <table class="table-app">
@@ -504,8 +662,8 @@
           </div>
           <div id="reader"></div>
           <div class="d-flex gap-2 mt-3">
-            <button class="btn btn-brand flex-fill" id="btnStartCam" onclick="startCamera()"><i class="bi bi-camera-video me-1"></i> Start Camera</button>
-            <button class="btn btn-outline-brand flex-fill" id="btnStopCam" onclick="stopCamera()" style="display:none;"><i class="bi bi-stop-circle me-1"></i> Stop</button>
+            <button class="btn btn-brand flex-fill" id="btnStartCam" onclick="startCamera()"><i class="bi bi-camera-video"></i> Start Camera</button>
+            <button class="btn btn-outline-brand flex-fill" id="btnStopCam" onclick="stopCamera()" style="display:none;"><i class="bi bi-stop-circle"></i> Stop</button>
           </div>
           <div class="scan-result" id="scanResult">
             <h4 id="scanTitle">—</h4>
@@ -520,7 +678,7 @@
     <section class="module" id="mod-employees">
       <div class="main-header">
         <div><h2>Employees</h2><p class="sub" id="empCount">—</p></div>
-        <button class="btn btn-outline-brand btn-sm" onclick="exportEmployees()"><i class="bi bi-download me-1"></i> CSV</button>
+        <button class="btn btn-outline-brand btn-sm" onclick="exportEmployees()"><i class="bi bi-download"></i> CSV</button>
       </div>
       <div class="card-soft mb-3">
         <div class="card-body">
@@ -548,7 +706,7 @@
     <section class="module" id="mod-attendance">
       <div class="main-header">
         <div><h2>Attendance</h2><p class="sub" id="attCount">—</p></div>
-        <button class="btn btn-outline-brand btn-sm" onclick="exportAttendance()"><i class="bi bi-download me-1"></i> CSV</button>
+        <button class="btn btn-outline-brand btn-sm" onclick="exportAttendance()"><i class="bi bi-download"></i> CSV</button>
       </div>
       <div class="card-soft mb-3">
         <div class="card-body">
@@ -577,9 +735,8 @@
         <div class="card-body">
           <div class="d-flex gap-2">
             <input class="form-control" id="newDeptName" placeholder="New department name">
-            <button class="btn btn-brand" onclick="addDepartment()"><i class="bi bi-plus-lg"></i></button>
+            <button class="btn btn-brand" onclick="addDepartment()"><i class="bi bi-plus-lg"></i> Add</button>
           </div>
-          <div class="msg" id="deptMsg"></div>
         </div>
       </div>
       <div class="card-soft">
@@ -596,7 +753,7 @@
     <section class="module" id="mod-events">
       <div class="main-header">
         <div><h2>Events</h2><p class="sub">One active at a time</p></div>
-        <button class="btn btn-brand btn-sm" onclick="openEventModal()"><i class="bi bi-plus-lg me-1"></i> New</button>
+        <button class="btn btn-brand btn-sm" onclick="openEventModal()"><i class="bi bi-plus-lg"></i> New Event</button>
       </div>
       <div class="card-soft">
         <div class="table-responsive">
@@ -617,20 +774,18 @@
           <div class="row g-2">
             <div class="col-12 col-md-4"><label class="form-label">New PIN (4 digits)</label><input type="password" class="form-control" id="setNewPin" maxlength="4" inputmode="numeric" placeholder="••••"></div>
             <div class="col-12 col-md-4"><label class="form-label">Confirm</label><input type="password" class="form-control" id="setConfirmPin" maxlength="4" inputmode="numeric" placeholder="••••"></div>
-            <div class="col-12 col-md-4 d-flex align-items-end"><button class="btn btn-brand w-100" onclick="updatePin()"><i class="bi bi-key me-1"></i> Update PIN</button></div>
+            <div class="col-12 col-md-4 d-flex align-items-end"><button class="btn btn-brand w-100" onclick="updatePin()"><i class="bi bi-key"></i> Update PIN</button></div>
           </div>
-          <div class="msg" id="pinMsg"></div>
         </div>
       </div>
       <div class="card-soft">
         <div class="card-head">Grace Period</div>
         <div class="card-body">
-          <p class="small text-muted mb-2">Minutes before an employee is marked <strong>Late</strong>.</p>
+          <p class="small text-muted mb-3" style="font-size: 12px; color: var(--ink-muted);">Minutes before an employee is marked <strong>Late</strong>.</p>
           <div class="row g-2">
             <div class="col-12 col-md-4"><label class="form-label">Minutes</label><input type="number" class="form-control" id="setGrace" min="0" max="120"></div>
-            <div class="col-12 col-md-4 d-flex align-items-end"><button class="btn btn-brand w-100" onclick="updateGrace()"><i class="bi bi-check2 me-1"></i> Save</button></div>
+            <div class="col-12 col-md-4 d-flex align-items-end"><button class="btn btn-brand w-100" onclick="updateGrace()"><i class="bi bi-check2"></i> Save</button></div>
           </div>
-          <div class="msg" id="graceMsg"></div>
         </div>
       </div>
     </section>
@@ -651,9 +806,9 @@
 <!-- ============ EVENT MODAL ============ -->
 <div class="modal fade" id="eventModal" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
-    <div class="modal-content" style="border-radius: 12px; border: none;">
-      <div class="modal-header" style="border-bottom: 1px solid #eef2f7;">
-        <h5 class="modal-title" id="eventModalTitle" style="font-size: 16px; font-weight: 700; color: var(--brand);">New Event</h5>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="eventModalTitle">New Event</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
@@ -672,11 +827,10 @@
           <div class="col-6"><label class="form-label">PM Time In</label><input type="time" class="form-control" id="evtPmIn"></div>
           <div class="col-6"><label class="form-label">PM Time Out</label><input type="time" class="form-control" id="evtPmOut"></div>
         </div>
-        <div class="msg" id="evtMsg"></div>
       </div>
-      <div class="modal-footer" style="border-top: 1px solid #eef2f7;">
+      <div class="modal-footer">
         <button class="btn btn-outline-brand" data-bs-dismiss="modal">Cancel</button>
-        <button class="btn btn-brand" onclick="saveEvent()"><i class="bi bi-check2 me-1"></i> Save</button>
+        <button class="btn btn-brand" onclick="saveEvent()"><i class="bi bi-check2"></i> Save</button>
       </div>
     </div>
   </div>
@@ -685,38 +839,36 @@
 <!-- ============ OVERRIDE MODAL ============ -->
 <div class="modal fade" id="overrideModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
-    <div class="modal-content" style="border-radius: 12px; border: none;">
-      <div class="modal-header" style="border-bottom: 1px solid #eef2f7;">
-        <h5 class="modal-title" style="font-size: 16px; font-weight: 700; color: var(--brand);">Override Attendance</h5>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Override Attendance</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
         <input type="hidden" id="ovEmpId">
         <input type="hidden" id="ovDate">
         <input type="hidden" id="ovSession">
-        <p class="small text-muted mb-3" id="ovContext">—</p>
+        <p class="small text-muted mb-3" id="ovContext" style="font-size: 12px;">—</p>
         <div class="mb-3"><label class="form-label">Time In</label><input type="time" step="1" class="form-control" id="ovTimeIn"></div>
         <div class="mb-3"><label class="form-label">Time Out</label><input type="time" step="1" class="form-control" id="ovTimeOut"></div>
         <div class="mb-2"><label class="form-label">Remarks</label><input class="form-control" id="ovRemarks" placeholder="Optional note"></div>
-        <div class="msg" id="ovMsg"></div>
       </div>
-      <div class="modal-footer" style="border-top: 1px solid #eef2f7;">
+      <div class="modal-footer">
         <button class="btn btn-outline-brand" data-bs-dismiss="modal">Cancel</button>
-        <button class="btn btn-brand" onclick="submitOverride()"><i class="bi bi-pencil-square me-1"></i> Apply</button>
+        <button class="btn btn-brand" onclick="submitOverride()"><i class="bi bi-pencil-square"></i> Apply</button>
       </div>
     </div>
   </div>
 </div>
 
-<div class="toast-holder" id="toastHolder"></div>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
 <script>
 /* =========================================================
  *  CONFIG — point this to your deployed Apps Script
  * ========================================================= */
-const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxkurUegjjNbOOd1BMpS3KHQup6EA8P4if9IbXS1XECTdwBtPxEQlmCtYPgxhsVtyUR/exec';
+const WEB_APP_URL = 'https://script.google.com/macros/s/REPLACE_WITH_YOUR_DEPLOY_ID/exec';
 
 /* =========================================================
  *  API CLIENT
@@ -730,8 +882,7 @@ async function api(action, payload) {
       redirect: 'follow',
     });
     if (!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
-    return data;
+    return await res.json();
   } catch (err) {
     return { ok: false, error: 'Network error: ' + err.message };
   }
@@ -754,7 +905,6 @@ let eventModal, overrideModal;
 
 /* =========================================================
  *  DATE / TIME FORMATTERS
- *  Output: "Nov. 22, 2026"  and  "Nov. 22, 2026 10:30 AM"
  * ========================================================= */
 const MONTHS_SHORT = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.',
                       'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'];
@@ -768,9 +918,7 @@ function fmtDate(input) {
     if (mo >= 1 && mo <= 12) return `${MONTHS_SHORT[mo - 1]} ${d}, ${y}`;
   }
   const dt = new Date(s);
-  if (!isNaN(dt.getTime())) {
-    return `${MONTHS_SHORT[dt.getMonth()]} ${dt.getDate()}, ${dt.getFullYear()}`;
-  }
+  if (!isNaN(dt.getTime())) return `${MONTHS_SHORT[dt.getMonth()]} ${dt.getDate()}, ${dt.getFullYear()}`;
   return s;
 }
 
@@ -779,15 +927,12 @@ function fmtDateTime(input) {
   const s = String(input).trim();
   const m = s.match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})(?::(\d{2}))?/);
   if (m) {
-    const y  = m[1];
-    const mo = parseInt(m[2], 10);
-    const d  = parseInt(m[3], 10);
-    let h    = parseInt(m[4], 10);
+    const y = m[1], mo = parseInt(m[2], 10), d = parseInt(m[3], 10);
+    let h = parseInt(m[4], 10);
     const mi = m[5];
     const ampm = h >= 12 ? 'PM' : 'AM';
     let h12 = h % 12; if (h12 === 0) h12 = 12;
-    const hh = String(h12).padStart(2, '0');
-    return `${MONTHS_SHORT[mo - 1]} ${d}, ${y} ${hh}:${mi} ${ampm}`;
+    return `${MONTHS_SHORT[mo - 1]} ${d}, ${y} ${String(h12).padStart(2,'0')}:${mi} ${ampm}`;
   }
   const dt = new Date(s);
   if (!isNaN(dt.getTime())) {
@@ -814,6 +959,33 @@ function fmtTime(input) {
 }
 
 /* =========================================================
+ *  SWEETALERT HELPERS
+ * ========================================================= */
+const SwalApp = Swal.mixin({
+  customClass: { confirmButton: 'btn', cancelButton: 'btn' },
+  buttonsStyling: false,
+  reverseButtons: true,
+});
+
+function swalError(msg, title) {
+  return SwalApp.fire({ icon: 'error', title: title || 'Oops…', text: msg || 'Something went wrong.', confirmButtonText: 'OK' });
+}
+function swalSuccess(msg, title) {
+  return SwalApp.fire({ icon: 'success', title: title || 'Done', text: msg || '', timer: 1600, timerProgressBar: true, showConfirmButton: false });
+}
+function swalConfirm(text, title, confirmText, isDanger) {
+  return SwalApp.fire({
+    icon: isDanger ? 'warning' : 'question',
+    title: title || 'Are you sure?',
+    text: text || '',
+    showCancelButton: true,
+    confirmButtonText: confirmText || 'Yes',
+    cancelButtonText: 'Cancel',
+    confirmButtonColor: isDanger ? '#b91c1c' : undefined,
+  }).then(r => r.isConfirmed);
+}
+
+/* =========================================================
  *  PIN GATE
  * ========================================================= */
 document.getElementById('pinInput').addEventListener('keydown', (e) => {
@@ -837,11 +1009,13 @@ async function doLogin() {
   const res = await api('verifyPin', { pin });
 
   btn.classList.remove('is-busy');
-  btn.innerHTML = '<i class="bi bi-box-arrow-in-right me-1"></i> Unlock Panel';
+  btn.innerHTML = '<i class="bi bi-box-arrow-in-right"></i> Unlock Panel';
 
   if (!res || !res.ok) {
     document.getElementById('pinInput').classList.add('is-err');
-    msg.textContent = res ? res.error : 'Login failed.';
+    document.getElementById('pinInput').value = '';
+    document.getElementById('pinInput').focus();
+    swalError(res ? res.error : 'Login failed.', 'Access denied');
     return;
   }
 
@@ -874,24 +1048,12 @@ function switchModule(name) {
   if (name !== 'scan') stopCamera();
   currentModule = name;
 
-  document.querySelectorAll('.nav-item-btn').forEach(b => {
-    b.classList.toggle('active', b.dataset.module === name);
-  });
-  document.querySelectorAll('.bn-item').forEach(b => {
-    b.classList.toggle('active', b.dataset.module === name);
-  });
+  document.querySelectorAll('.nav-item-btn').forEach(b => b.classList.toggle('active', b.dataset.module === name));
+  document.querySelectorAll('.bn-item').forEach(b => b.classList.toggle('active', b.dataset.module === name));
   document.querySelectorAll('.module').forEach(m => m.classList.remove('active'));
   document.getElementById('mod-' + name).classList.add('active');
 
-  const titles = {
-    dashboard: 'Dashboard',
-    scan: 'Scan Attendance',
-    employees: 'Employees',
-    attendance: 'Attendance',
-    departments: 'Departments',
-    events: 'Events',
-    settings: 'Settings',
-  };
+  const titles = { dashboard:'Dashboard', scan:'Scan Attendance', employees:'Employees', attendance:'Attendance', departments:'Departments', events:'Events', settings:'Settings' };
   const mt = document.getElementById('mobileTitle');
   if (mt) mt.textContent = titles[name] || name;
 
@@ -910,17 +1072,6 @@ function initPanel() {
   eventModal = new bootstrap.Modal(document.getElementById('eventModal'));
   overrideModal = new bootstrap.Modal(document.getElementById('overrideModal'));
   switchModule('dashboard');
-}
-
-/* =========================================================
- *  TOASTS
- * ========================================================= */
-function toast(text, type) {
-  const t = document.createElement('div');
-  t.className = 'mini-toast ' + (type || '');
-  t.textContent = text;
-  document.getElementById('toastHolder').appendChild(t);
-  setTimeout(() => t.remove(), 3000);
 }
 
 /* =========================================================
@@ -955,8 +1106,8 @@ async function loadDashboard() {
     const time = fmtTime(outT || r.TimeIn || '');
     const date = fmtDate(r.Date);
     return `<tr>
-      <td data-label="Date & Time"><strong>${escapeHtml(date)}</strong><br><span class="text-muted small">${escapeHtml(time)}</span></td>
-      <td data-label="Employee">${escapeHtml(r.FullName)}<br><span class="text-muted small">${escapeHtml(r.EmployeeID)}</span></td>
+      <td data-label="Date & Time"><strong>${escapeHtml(date)}</strong><br><span style="color:var(--ink-muted);font-size:11px;">${escapeHtml(time)}</span></td>
+      <td data-label="Employee">${escapeHtml(r.FullName)}<br><span style="color:var(--ink-muted);font-size:11px;">${escapeHtml(r.EmployeeID)}</span></td>
       <td data-label="Session"><span class="badge-status badge-${r.Session.toLowerCase()}">${r.Session}</span></td>
       <td data-label="Action">${action}</td>
       <td data-label="Remarks">${escapeHtml(r.Remarks || '—')}</td>
@@ -977,12 +1128,12 @@ async function loadScanInfo() {
   const el = document.getElementById('scanEventInfo');
   if (!res || !res.ok) {
     el.textContent = res ? res.error : 'No active event.';
-    el.style.color = '#b71c1c';
+    el.style.color = '#b91c1c';
     return;
   }
   const ev = res.data;
   el.textContent = `${ev.EventName} • ${fmtDate(ev.DateFrom)} – ${fmtDate(ev.DateTo)}`;
-  el.style.color = '#6b7d92';
+  el.style.color = 'var(--ink-muted)';
 }
 
 function setScanMode(mode) {
@@ -999,18 +1150,15 @@ function startCamera() {
   html5Qr = new Html5Qrcode("reader");
   const config = { fps: 10, qrbox: { width: 240, height: 240 } };
 
-  html5Qr.start(
-    { facingMode: "environment" },
-    config,
-    onScanSuccess,
-    () => {}
-  ).then(() => {
-    cameraRunning = true;
-    document.getElementById('btnStartCam').style.display = 'none';
-    document.getElementById('btnStopCam').style.display = '';
-  }).catch((err) => {
-    toast('Camera error: ' + err, 'err');
-  });
+  html5Qr.start({ facingMode: "environment" }, config, onScanSuccess, () => {})
+    .then(() => {
+      cameraRunning = true;
+      document.getElementById('btnStartCam').style.display = 'none';
+      document.getElementById('btnStopCam').style.display = '';
+    })
+    .catch((err) => {
+      swalError('Could not start the camera. Please check permissions.\n\n' + err, 'Camera error');
+    });
 }
 
 function stopCamera() {
@@ -1041,7 +1189,7 @@ function onScanSuccess(decodedText) {
 
 function submitManual() {
   const empId = document.getElementById('manualEmpId').value.trim();
-  if (!empId) return toast('Enter an Employee ID.', 'err');
+  if (!empId) return swalError('Enter an Employee ID.', 'Missing input');
   const session = document.getElementById('scanSession').value;
   submitScan({ employeeId: empId, mode: scanMode, session, manual: true });
   document.getElementById('manualEmpId').value = '';
@@ -1064,6 +1212,7 @@ async function submitScan(payload) {
     document.getElementById('scanTitle').textContent = '❌ ' + (res ? res.error : 'Unknown error');
     document.getElementById('scanTime').textContent = '—';
     document.getElementById('scanMeta').textContent = '';
+    swalError(res ? res.error : 'Unknown error', 'Scan failed');
     return;
   }
   const d = res.data;
@@ -1122,17 +1271,24 @@ function renderEmployees() {
 
 async function toggleEmpStatus(empId, currentStatus) {
   const next = currentStatus === 'Active' ? 'Inactive' : 'Active';
-  if (!confirm(`Set ${empId} to ${next}?`)) return;
+  const ok = await swalConfirm(
+    `Set ${empId} to ${next}?`,
+    next === 'Inactive' ? 'Deactivate employee?' : 'Activate employee?',
+    next === 'Inactive' ? 'Deactivate' : 'Activate',
+    next === 'Inactive'
+  );
+  if (!ok) return;
   const res = await api('updateEmployeeStatus', { employeeId: empId, status: next });
-  if (!res || !res.ok) return toast(res ? res.error : 'Failed', 'err');
-  toast(empId + ' set to ' + next, 'ok');
+  if (!res || !res.ok) return swalError(res ? res.error : 'Failed', 'Update failed');
+  swalSuccess(`${empId} is now ${next}.`, 'Updated');
   loadEmployees();
 }
 
 async function exportEmployees() {
   const res = await api('exportEmployeesCsv');
-  if (!res || !res.ok) return toast('Export failed.', 'err');
+  if (!res || !res.ok) return swalError('Could not export employees.', 'Export failed');
   downloadCsv(res.data.filename, res.data.csv);
+  swalSuccess('Employees CSV downloaded.', 'Export ready');
 }
 
 /* =========================================================
@@ -1170,7 +1326,7 @@ async function renderAttendance() {
   tb.innerHTML = attendanceCache.map(r => `
     <tr>
       <td data-label="Date"><strong>${escapeHtml(fmtDate(r.Date))}</strong></td>
-      <td data-label="Employee">${escapeHtml(r.FullName)}<br><span class="text-muted small">${escapeHtml(r.EmployeeID)}</span></td>
+      <td data-label="Employee">${escapeHtml(r.FullName)}<br><span style="color:var(--ink-muted);font-size:11px;">${escapeHtml(r.EmployeeID)}</span></td>
       <td data-label="Dept">${escapeHtml(r.Department)}</td>
       <td data-label="Session"><span class="badge-status badge-${r.Session.toLowerCase()}">${r.Session}</span></td>
       <td data-label="In">${escapeHtml(fmtTime(r.TimeIn))}</td>
@@ -1195,8 +1351,9 @@ async function exportAttendance() {
     department: document.getElementById('attDept').value || undefined,
   };
   const res = await api('exportAttendanceCsv', { filter });
-  if (!res || !res.ok) return toast('Export failed.', 'err');
+  if (!res || !res.ok) return swalError('Could not export attendance.', 'Export failed');
   downloadCsv(res.data.filename, res.data.csv);
+  swalSuccess('Attendance CSV downloaded.', 'Export ready');
 }
 
 function openOverride(empId, date, session, timeIn, timeOut, remarks) {
@@ -1207,7 +1364,6 @@ function openOverride(empId, date, session, timeIn, timeOut, remarks) {
   document.getElementById('ovTimeIn').value = toTimeInput(timeIn);
   document.getElementById('ovTimeOut').value = toTimeInput(timeOut);
   document.getElementById('ovRemarks').value = remarks || '';
-  document.getElementById('ovMsg').className = 'msg';
   overrideModal.show();
 }
 
@@ -1228,13 +1384,9 @@ async function submitOverride() {
     Remarks: document.getElementById('ovRemarks').value,
   };
   const res = await api('overrideAttendance', payload);
-  if (!res || !res.ok) {
-    const m = document.getElementById('ovMsg');
-    m.className = 'msg show err'; m.textContent = res ? res.error : 'Failed';
-    return;
-  }
+  if (!res || !res.ok) return swalError(res ? res.error : 'Failed', 'Override failed');
   overrideModal.hide();
-  toast('Attendance updated', 'ok');
+  swalSuccess('Attendance record updated.', 'Saved');
   renderAttendance();
 }
 
@@ -1255,12 +1407,14 @@ async function loadDepartments() {
       <td data-label="Department"><strong>${escapeHtml(d.Department)}</strong></td>
       <td data-label="Status"><span class="badge-status badge-${d.Status.toLowerCase()}">${d.Status}</span></td>
       <td data-label="Actions">
-        <button class="btn btn-sm btn-outline-brand me-1"
-                onclick="toggleDept('${escapeHtml(d.Department)}','${d.Status}')">
-          ${d.Status === 'Active' ? 'Deactivate' : 'Activate'}
-        </button>
-        <button class="btn btn-sm btn-outline-brand" style="color:#b71c1c;border-color:#b71c1c;"
-                onclick="deleteDept('${escapeHtml(d.Department)}')">Delete</button>
+        <div class="d-flex gap-2 flex-wrap">
+          <button class="btn btn-sm btn-outline-brand"
+                  onclick="toggleDept('${escapeHtml(d.Department)}','${d.Status}')">
+            ${d.Status === 'Active' ? 'Deactivate' : 'Activate'}
+          </button>
+          <button class="btn btn-sm btn-danger-outline"
+                  onclick="deleteDept('${escapeHtml(d.Department)}')">Delete</button>
+        </div>
       </td>
     </tr>
   `).join('');
@@ -1268,32 +1422,33 @@ async function loadDepartments() {
 
 async function addDepartment() {
   const name = document.getElementById('newDeptName').value.trim();
-  const msg = document.getElementById('deptMsg');
-  msg.className = 'msg';
-  if (!name) { msg.className = 'msg show err'; msg.textContent = 'Enter a name.'; return; }
+  if (!name) return swalError('Enter a department name.', 'Missing input');
   const res = await api('addDepartment', { name });
-  if (!res || !res.ok) {
-    msg.className = 'msg show err'; msg.textContent = res ? res.error : 'Failed';
-    return;
-  }
+  if (!res || !res.ok) return swalError(res ? res.error : 'Failed', 'Could not add');
   document.getElementById('newDeptName').value = '';
-  msg.className = 'msg show ok'; msg.textContent = 'Added.';
+  swalSuccess(`"${name}" added.`, 'Department created');
   loadDepartments();
 }
 
 async function toggleDept(name, status) {
   const next = status === 'Active' ? 'Inactive' : 'Active';
   const res = await api('updateDepartment', { originalName: name, newName: name, status: next });
-  if (!res || !res.ok) return toast(res ? res.error : 'Failed', 'err');
-  toast(name + ' ' + next.toLowerCase(), 'ok');
+  if (!res || !res.ok) return swalError(res ? res.error : 'Failed', 'Update failed');
+  swalSuccess(`${name} is now ${next.toLowerCase()}.`, 'Updated');
   loadDepartments();
 }
 
 async function deleteDept(name) {
-  if (!confirm(`Delete "${name}"?`)) return;
+  const ok = await swalConfirm(
+    `Delete "${name}"? This cannot be undone.`,
+    'Delete department?',
+    'Delete',
+    true
+  );
+  if (!ok) return;
   const res = await api('deleteDepartment', { name });
-  if (!res || !res.ok) return toast(res ? res.error : 'Failed', 'err');
-  toast('Deleted', 'ok');
+  if (!res || !res.ok) return swalError(res ? res.error : 'Failed', 'Delete failed');
+  swalSuccess(`"${name}" deleted.`, 'Deleted');
   loadDepartments();
 }
 
@@ -1311,17 +1466,19 @@ async function loadEvents() {
   }
   tb.innerHTML = eventsCache.map(e => `
     <tr>
-      <td data-label="Event"><strong>${escapeHtml(e.EventName)}</strong><br><span class="text-muted small">${escapeHtml(e.EventID)}</span></td>
+      <td data-label="Event"><strong>${escapeHtml(e.EventName)}</strong><br><span style="color:var(--ink-muted);font-size:11px;">${escapeHtml(e.EventID)}</span></td>
       <td data-label="Dates">${escapeHtml(fmtDate(e.DateFrom))} → ${escapeHtml(fmtDate(e.DateTo))}</td>
       <td data-label="AM">${escapeHtml(fmtTime(e.AMIn))} – ${escapeHtml(fmtTime(e.AMOut))}</td>
       <td data-label="PM">${escapeHtml(fmtTime(e.PMIn))} – ${escapeHtml(fmtTime(e.PMOut))}</td>
       <td data-label="Status"><span class="badge-status badge-${e.Status.toLowerCase()}">${e.Status}</span></td>
       <td data-label="Actions">
-        <button class="btn btn-sm btn-outline-brand me-1"
-                onclick='editEvent(${JSON.stringify(e).replace(/'/g, "&#39;")})'>Edit</button>
-        ${e.Status !== 'Active'
-          ? `<button class="btn btn-sm btn-brand" onclick="activateEvent('${escapeHtml(e.EventID)}')">Set Active</button>`
-          : `<span class="badge-status badge-active ms-1">Active</span>`}
+        <div class="d-flex gap-2 flex-wrap">
+          <button class="btn btn-sm btn-outline-brand"
+                  onclick='editEvent(${JSON.stringify(e).replace(/'/g, "&#39;")})'>Edit</button>
+          ${e.Status !== 'Active'
+            ? `<button class="btn btn-sm btn-brand" onclick="activateEvent('${escapeHtml(e.EventID)}')">Set Active</button>`
+            : `<span class="badge-status badge-active">Active</span>`}
+        </div>
       </td>
     </tr>
   `).join('');
@@ -1337,7 +1494,6 @@ function openEventModal() {
   document.getElementById('evtAmOut').value = '';
   document.getElementById('evtPmIn').value = '';
   document.getElementById('evtPmOut').value = '';
-  document.getElementById('evtMsg').className = 'msg';
   eventModal.show();
 }
 
@@ -1351,7 +1507,6 @@ function editEvent(ev) {
   document.getElementById('evtAmOut').value = toTimeInput(ev.AMOut);
   document.getElementById('evtPmIn').value = toTimeInput(ev.PMIn);
   document.getElementById('evtPmOut').value = toTimeInput(ev.PMOut);
-  document.getElementById('evtMsg').className = 'msg';
   eventModal.show();
 }
 
@@ -1367,21 +1522,22 @@ async function saveEvent() {
     PMOut: document.getElementById('evtPmOut').value,
   };
   const res = await api('saveEvent', payload);
-  if (!res || !res.ok) {
-    const m = document.getElementById('evtMsg');
-    m.className = 'msg show err'; m.textContent = res ? res.error : 'Failed';
-    return;
-  }
+  if (!res || !res.ok) return swalError(res ? res.error : 'Failed', 'Could not save event');
   eventModal.hide();
-  toast('Event saved', 'ok');
+  swalSuccess('Event saved successfully.', 'Saved');
   loadEvents();
 }
 
 async function activateEvent(id) {
-  if (!confirm('Set this event as active?')) return;
+  const ok = await swalConfirm(
+    'Only one event can be active at a time. The current active event will be deactivated.',
+    'Set event as active?',
+    'Set Active'
+  );
+  if (!ok) return;
   const res = await api('setActiveEvent', { eventId: id });
-  if (!res || !res.ok) return toast(res ? res.error : 'Failed', 'err');
-  toast('Event activated', 'ok');
+  if (!res || !res.ok) return swalError(res ? res.error : 'Failed', 'Activation failed');
+  swalSuccess('Event is now active.', 'Activated');
   loadEvents();
 }
 
@@ -1397,31 +1553,22 @@ async function loadSettings() {
 async function updatePin() {
   const p1 = document.getElementById('setNewPin').value.trim();
   const p2 = document.getElementById('setConfirmPin').value.trim();
-  const m = document.getElementById('pinMsg');
-  m.className = 'msg';
-  if (!/^\d{4}$/.test(p1)) { m.className = 'msg show err'; m.textContent = 'PIN must be 4 digits.'; return; }
-  if (p1 !== p2) { m.className = 'msg show err'; m.textContent = 'PINs do not match.'; return; }
+  if (!/^\d{4}$/.test(p1)) return swalError('PIN must be exactly 4 digits.', 'Invalid PIN');
+  if (p1 !== p2) return swalError('The two PINs do not match.', 'PIN mismatch');
 
   const res = await api('changePin', { pin: p1 });
-  if (!res || !res.ok) {
-    m.className = 'msg show err'; m.textContent = res ? res.error : 'Failed';
-    return;
-  }
-  m.className = 'msg show ok'; m.textContent = 'PIN updated.';
+  if (!res || !res.ok) return swalError(res ? res.error : 'Failed', 'Could not update PIN');
   document.getElementById('setNewPin').value = '';
   document.getElementById('setConfirmPin').value = '';
   currentPin = p1;
+  swalSuccess('Admin PIN updated. Use the new PIN next login.', 'PIN changed');
 }
 
 async function updateGrace() {
-  const m = document.getElementById('graceMsg');
   const v = document.getElementById('setGrace').value;
   const res = await api('updateGraceMinutes', { minutes: v });
-  if (!res || !res.ok) {
-    m.className = 'msg show err'; m.textContent = res ? res.error : 'Failed';
-    return;
-  }
-  m.className = 'msg show ok'; m.textContent = 'Grace period updated.';
+  if (!res || !res.ok) return swalError(res ? res.error : 'Failed', 'Could not save');
+  swalSuccess('Grace period updated.', 'Saved');
 }
 
 /* =========================================================
