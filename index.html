@@ -280,20 +280,19 @@
   .mode-btn.active.in { background: #f0fdf4; border-color: #16a34a; color: #15803d; }
   .mode-btn.active.out { background: #fff7ed; border-color: #ea580c; color: #c2410c; }
 
-  /* Camera reader — dashed placeholder when idle, black when active */
   #reader {
     background: #f8fafc;
     border: 1.5px dashed var(--line-strong);
     overflow: hidden;
-    min-height: 0;
-    display: none;
-    padding: 40px 20px;
+    min-height: 80px;
+    display: block;
+    padding: 32px 20px;
     text-align: center;
     color: var(--ink-muted);
     font-size: 13px;
+    position: relative;
   }
   #reader.active {
-    display: block;
     background: #000;
     border: 1.5px solid var(--line-strong);
     padding: 0;
@@ -304,7 +303,16 @@
     display: block;
     font-style: italic;
   }
-  #reader video { display: block; width: 100%; height: auto; }
+  /* Hide html5-qrcode's built-in placeholder when camera is not running */
+  #reader:not(.active) > * { display: none; }
+  #reader.active > video,
+  #reader.active > canvas,
+  #reader.active > div { display: block; }
+  #reader video {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
 
   .scan-result {
     padding: 18px; margin-top: 16px;
@@ -1297,6 +1305,10 @@ function setScanMode(mode) {
 function startCamera() {
   if (cameraRunning) return;
   const reader = document.getElementById('reader');
+
+  // Activate the reader FIRST so it's already visible/black before
+  // html5-qrcode measures the container and injects the video.
+  reader.classList.add('active');
   reader.innerHTML = '';
 
   html5Qr = new Html5Qrcode("reader");
@@ -1306,11 +1318,16 @@ function startCamera() {
     .then(() => {
       cameraRunning = true;
       scannerPaused = false;
-      reader.classList.add('active');
       document.getElementById('btnStartCam').style.display = 'none';
       document.getElementById('btnStopCam').style.display = '';
     })
     .catch((err) => {
+      // Roll back: remove active class + clear innerHTML on failure
+      reader.classList.remove('active');
+      reader.innerHTML = '';
+      cameraRunning = false;
+      document.getElementById('btnStartCam').style.display = '';
+      document.getElementById('btnStopCam').style.display = 'none';
       swalError('Could not start the camera. Please check permissions.\n\n' + err, 'Camera error');
     });
 }
