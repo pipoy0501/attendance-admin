@@ -280,10 +280,29 @@
   .mode-btn.active.in { background: #f0fdf4; border-color: #16a34a; color: #15803d; }
   .mode-btn.active.out { background: #fff7ed; border-color: #ea580c; color: #c2410c; }
 
+  /* Camera reader — dashed placeholder when idle, black when active */
   #reader {
-    background: #000; min-height: 260px;
-    border: 1.5px solid var(--line-strong);
+    background: #f8fafc;
+    border: 1.5px dashed var(--line-strong);
     overflow: hidden;
+    min-height: 0;
+    display: none;
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--ink-muted);
+    font-size: 13px;
+  }
+  #reader.active {
+    display: block;
+    background: #000;
+    border: 1.5px solid var(--line-strong);
+    padding: 0;
+    min-height: 260px;
+  }
+  #reader:not(.active)::before {
+    content: "Camera preview will appear here";
+    display: block;
+    font-style: italic;
   }
   #reader video { display: block; width: 100%; height: auto; }
 
@@ -444,7 +463,6 @@
   }
   .swal2-timer-progress-bar { background: var(--brand) !important; height: 2px !important; }
 
-  /* QR display in modal */
   .qr-display {
     text-align: center;
     padding: 16px;
@@ -496,7 +514,7 @@
     .stat-card .value { font-size: 22px; margin-top: 4px; }
 
     .scan-config { grid-template-columns: 1fr; gap: 10px; }
-    #reader { min-height: 220px; }
+    #reader.active { min-height: 220px; }
     .mode-btn { min-height: 64px; padding: 12px 8px; font-size: 12px; }
 
     .table-responsive { overflow: visible; }
@@ -887,7 +905,6 @@
   </nav>
 </div>
 
-<!-- EVENT MODAL -->
 <div class="modal fade" id="eventModal" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
     <div class="modal-content">
@@ -920,7 +937,6 @@
   </div>
 </div>
 
-<!-- OVERRIDE MODAL -->
 <div class="modal fade" id="overrideModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
     <div class="modal-content">
@@ -945,7 +961,6 @@
   </div>
 </div>
 
-<!-- ADD EMPLOYEE MODAL -->
 <div class="modal fade" id="addEmpModal" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
     <div class="modal-content">
@@ -954,7 +969,6 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-        <!-- Form view -->
         <div id="addEmpForm">
           <p class="small text-muted mb-3" style="font-size: 12px;">
             Use this form to register employees who don't have a device to use the self-registration link.
@@ -986,7 +1000,6 @@
           </div>
         </div>
 
-        <!-- QR result view (shown after successful registration) -->
         <div id="addEmpQr" style="display:none;">
           <div class="alert-success" style="background:#f0fdf4; border:1.5px solid #16a34a; padding:14px; margin-bottom:16px; text-align:center;">
             <i class="bi bi-check-circle-fill" style="color:#16a34a; font-size:20px;"></i>
@@ -1293,6 +1306,7 @@ function startCamera() {
     .then(() => {
       cameraRunning = true;
       scannerPaused = false;
+      reader.classList.add('active');
       document.getElementById('btnStartCam').style.display = 'none';
       document.getElementById('btnStopCam').style.display = '';
     })
@@ -1308,6 +1322,9 @@ function stopCamera() {
     html5Qr = null;
     cameraRunning = false;
     scannerPaused = false;
+    const reader = document.getElementById('reader');
+    reader.classList.remove('active');
+    reader.innerHTML = '';
     document.getElementById('btnStartCam').style.display = '';
     document.getElementById('btnStopCam').style.display = 'none';
   }).catch(() => {});
@@ -1402,9 +1419,6 @@ function resumeScanner() {
   }
 }
 
-/* ============================================================
- *  EMPLOYEES + ADD EMPLOYEE MODAL
- * ============================================================ */
 async function loadEmployees() {
   const tb = document.getElementById('empTable');
   tb.innerHTML = '<tr class="empty-row"><td colspan="6">Loading…</td></tr>';
@@ -1469,9 +1483,7 @@ async function exportEmployees() {
   swalSuccess('Employees CSV downloaded.', 'Export ready');
 }
 
-/* ---- ADD EMPLOYEE MODAL ---- */
 async function openAddEmployee() {
-  // Reset modal to form view
   document.getElementById('addEmpForm').style.display = 'block';
   document.getElementById('addEmpQr').style.display = 'none';
   document.getElementById('btnAddEmpSubmit').style.display = '';
@@ -1486,7 +1498,6 @@ async function openAddEmployee() {
   newEmpData = null;
   newEmpQrInstance = null;
 
-  // Load active departments into dropdown
   const sel = document.getElementById('newEmpDept');
   sel.innerHTML = '<option value="">Loading departments…</option>';
   const res = await api('getDepartments', { onlyActive: true });
@@ -1531,10 +1542,9 @@ async function submitAddEmployee() {
     return swalError(res ? res.error : 'Registration failed.', 'Could not register');
   }
 
-  // Success — show QR view
   newEmpData = res.data;
   showNewEmpQr(res.data);
-  loadEmployees(); // refresh table
+  loadEmployees();
 }
 
 function showNewEmpQr(data) {
@@ -1581,7 +1591,6 @@ function downloadNewEmpQr() {
   const src = container.querySelector('canvas') || container.querySelector('img');
   if (!src) return swalError('QR not ready yet.', 'Please wait');
 
-  // Build a branded QR card (600x700) just like registration page
   const W = 600, H = 700;
   const cv = document.createElement('canvas');
   cv.width = W; cv.height = H;
@@ -1653,9 +1662,6 @@ function downloadNewEmpQr() {
   }
 }
 
-/* ============================================================
- *  ATTENDANCE
- * ============================================================ */
 async function loadAttendanceModule() {
   const sel = document.getElementById('attDept');
   if (sel.options.length <= 1) {
@@ -1752,9 +1758,6 @@ async function submitOverride() {
   renderAttendance();
 }
 
-/* ============================================================
- *  DEPARTMENTS
- * ============================================================ */
 async function loadDepartments() {
   const tb = document.getElementById('deptTable');
   tb.innerHTML = '<tr class="empty-row"><td colspan="3">Loading…</td></tr>';
@@ -1814,9 +1817,6 @@ async function deleteDept(name) {
   loadDepartments();
 }
 
-/* ============================================================
- *  EVENTS
- * ============================================================ */
 async function loadEvents() {
   const tb = document.getElementById('eventTable');
   tb.innerHTML = '<tr class="empty-row"><td colspan="6">Loading…</td></tr>';
@@ -1903,9 +1903,6 @@ async function activateEvent(id) {
   loadEvents();
 }
 
-/* ============================================================
- *  SETTINGS
- * ============================================================ */
 async function loadSettings() {
   const res = await api('getSettings');
   if (!res || !res.ok) return;
