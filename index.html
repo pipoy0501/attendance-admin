@@ -42,9 +42,7 @@
     line-height: 1.5;
   }
 
-  /* ============================================
-   *  PIN GATE
-   * ============================================ */
+  /* PIN GATE */
   .gate-wrap {
     display: flex; align-items: center; justify-content: center;
     min-height: 100vh; min-height: 100dvh; padding: 20px;
@@ -79,9 +77,7 @@
   .pin-input.is-err { border-color: #dc2626; }
   .gate-msg { font-size: 12px; color: #b91c1c; margin-top: 10px; min-height: 18px; font-weight: 500; }
 
-  /* ============================================
-   *  LAYOUT
-   * ============================================ */
+  /* LAYOUT */
   .layout { display: none; min-height: 100vh; min-height: 100dvh; }
 
   .sidebar {
@@ -180,9 +176,7 @@
   .bn-item i { font-size: 19px; }
   .bn-item.active { color: var(--brand); }
 
-  /* ============================================
-   *  HEADERS
-   * ============================================ */
+  /* HEADERS */
   .main-header {
     display: flex; justify-content: space-between; align-items: flex-start;
     margin-bottom: 24px; gap: 12px; flex-wrap: wrap;
@@ -193,9 +187,7 @@
   .module { display: none; }
   .module.active { display: block; }
 
-  /* ============================================
-   *  CARDS
-   * ============================================ */
+  /* CARDS */
   .card-soft {
     background: #fff;
     border: 1px solid var(--line);
@@ -212,9 +204,7 @@
     flex-wrap: wrap; gap: 8px;
   }
 
-  /* ============================================
-   *  TABLES
-   * ============================================ */
+  /* TABLES */
   .table-app {
     margin: 0; font-size: 13px; width: 100%;
     border-collapse: separate; border-spacing: 0;
@@ -236,7 +226,6 @@
     text-align: center; color: var(--ink-muted); padding: 40px 20px; font-style: italic;
   }
 
-  /* Badges */
   .badge-status {
     font-size: 10.5px; font-weight: 700; padding: 3px 8px;
     display: inline-block;
@@ -248,9 +237,7 @@
   .badge-morning { background: #fff7ed; color: #b45309; border-color: #fed7aa; }
   .badge-afternoon { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
 
-  /* ============================================
-   *  SCANNER
-   * ============================================ */
+  /* SCANNER */
   .scan-config {
     display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px;
   }
@@ -291,9 +278,7 @@
     letter-spacing: -0.01em;
   }
 
-  /* ============================================
-   *  FORMS
-   * ============================================ */
+  /* FORMS */
   .form-label {
     font-size: 11px; font-weight: 600; color: var(--ink-soft);
     margin-bottom: 6px;
@@ -323,9 +308,7 @@
     padding-right: 36px;
   }
 
-  /* ============================================
-   *  BUTTONS
-   * ============================================ */
+  /* BUTTONS */
   .btn {
     font-family: inherit; font-weight: 600; font-size: 13px;
     min-height: 40px;
@@ -355,9 +338,7 @@
   }
   .btn-sm { font-size: 12px; padding: 6px 12px; min-height: 32px; }
 
-  /* ============================================
-   *  STATS
-   * ============================================ */
+  /* STATS */
   .stat-card {
     background: #fff;
     border: 1px solid var(--line);
@@ -373,9 +354,7 @@
     letter-spacing: -0.02em;
   }
 
-  /* ============================================
-   *  SPINNER
-   * ============================================ */
+  /* SPINNER */
   .spinner-inline {
     display: inline-block;
     width: 14px; height: 14px;
@@ -389,9 +368,7 @@
   @keyframes spin { to { transform: rotate(360deg); } }
   .is-busy { pointer-events: none; opacity: 0.85; }
 
-  /* ============================================
-   *  SWEETALERT (compact, white buttons)
-   * ============================================ */
+  /* SWEETALERT */
   .swal2-popup {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
     border-radius: 0 !important;
@@ -452,9 +429,7 @@
     height: 2px !important;
   }
 
-  /* ============================================
-   *  RESPONSIVE — TABLET
-   * ============================================ */
+  /* RESPONSIVE — TABLET */
   @media (min-width: 768px) and (max-width: 1023.98px) {
     .sidebar { width: 210px; padding: 16px 8px; }
     .main-area { margin-left: 210px; width: calc(100% - 210px); padding: 22px 20px 40px; }
@@ -462,9 +437,7 @@
     .nav-item-btn { padding: 10px 12px; font-size: 13px; }
   }
 
-  /* ============================================
-   *  RESPONSIVE — MOBILE
-   * ============================================ */
+  /* RESPONSIVE — MOBILE */
   @media (max-width: 767.98px) {
     .sidebar { display: none; }
     .main-area {
@@ -490,7 +463,6 @@
     #reader { min-height: 220px; }
     .mode-btn { min-height: 64px; padding: 12px 8px; font-size: 12px; }
 
-    /* Stacked tables */
     .table-app thead { display: none; }
     .table-app, .table-app tbody, .table-app tr, .table-app td { display: block; width: 100%; }
     .table-app tbody tr {
@@ -533,30 +505,21 @@
     .table-app .empty-row td::before { display: none; }
     .table-app tbody td .btn { min-height: 32px; font-size: 12px; }
 
-    /* Buttons full width on mobile when in card context */
     .btn-sm { min-height: 34px; }
-
-    /* Mobile form adjustments */
     .form-control, .form-select { min-height: 44px; font-size: 14px; }
     .btn { min-height: 44px; }
 
-    /* Modal */
     .modal-dialog { margin: 0.5rem; }
     .modal-content { border-radius: 0 !important; }
   }
 
-  /* ============================================
-   *  MODAL (sharp corners to match theme)
-   * ============================================ */
+  /* MODAL (sharp) */
   .modal-content { border-radius: 0 !important; border: 1px solid var(--line); }
   .modal-header { border-bottom: 1px solid var(--line); padding: 16px 20px; }
   .modal-title { font-size: 15px; font-weight: 700; color: var(--ink); }
   .modal-footer { border-top: 1px solid var(--line); padding: 14px 20px; }
   .modal-body { padding: 20px; }
   .btn-close:focus { box-shadow: none; }
-
-  /* Toast holder not used but kept for safety */
-  .toast-holder { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; max-width: calc(100vw - 40px); }
 </style>
 </head>
 <body>
@@ -866,9 +829,9 @@
 
 <script>
 /* =========================================================
- *  CONFIG — point this to your deployed Apps Script
+ *  CONFIG
  * ========================================================= */
-const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyAns8ojt1eahsRQvYFYIpngX0LFiKbJrSkKkXra8wPOiM3kZ68bKBGZhtddFWy8rFc/exec';
+const WEB_APP_URL = 'https://script.google.com/macros/s/REPLACE_WITH_YOUR_DEPLOY_ID/exec';
 
 /* =========================================================
  *  API CLIENT
@@ -896,7 +859,6 @@ let currentModule = 'dashboard';
 let scanMode = 'IN';
 let html5Qr = null;
 let cameraRunning = false;
-let scanLock = false;
 let departmentsCache = [];
 let employeesCache = [];
 let attendanceCache = [];
@@ -1121,8 +1083,13 @@ function todayStr() {
 }
 
 /* =========================================================
- *  SCAN
+ *  SCAN — one-scan-one-alert, camera pauses during processing
  * ========================================================= */
+let scanLock = false;
+let lastScanPayload = '';
+let lastScanTime = 0;
+let scannerPaused = false;
+
 async function loadScanInfo() {
   const res = await api('getTodaySchedule');
   const el = document.getElementById('scanEventInfo');
@@ -1153,6 +1120,7 @@ function startCamera() {
   html5Qr.start({ facingMode: "environment" }, config, onScanSuccess, () => {})
     .then(() => {
       cameraRunning = true;
+      scannerPaused = false;
       document.getElementById('btnStartCam').style.display = 'none';
       document.getElementById('btnStopCam').style.display = '';
     })
@@ -1167,32 +1135,41 @@ function stopCamera() {
     html5Qr.clear();
     html5Qr = null;
     cameraRunning = false;
+    scannerPaused = false;
     document.getElementById('btnStartCam').style.display = '';
     document.getElementById('btnStopCam').style.display = 'none';
   }).catch(() => {});
 }
 
-let lastScanTime = 0;
-let lastScanPayload = '';
-
+/* One-scan-one-alert: pauses camera immediately, blocks re-entry, awaits alert */
 function onScanSuccess(decodedText) {
+  if (scanLock || scannerPaused) return;
+
   const now = Date.now();
-  if (scanLock) return;
-  if (decodedText === lastScanPayload && now - lastScanTime < 2500) return;
+  if (decodedText === lastScanPayload && now - lastScanTime < 3000) return;
+
   lastScanPayload = decodedText;
   lastScanTime = now;
   scanLock = true;
+
+  pauseScanner();
 
   const session = document.getElementById('scanSession').value;
   submitScan({ qrPayload: decodedText, mode: scanMode, session, manual: false });
 }
 
 function submitManual() {
+  if (scanLock) return;
   const empId = document.getElementById('manualEmpId').value.trim();
   if (!empId) return swalError('Enter an Employee ID.', 'Missing input');
+
+  scanLock = true;
   const session = document.getElementById('scanSession').value;
-  submitScan({ employeeId: empId, mode: scanMode, session, manual: true });
-  document.getElementById('manualEmpId').value = '';
+  submitScan({ employeeId: empId, mode: scanMode, session, manual: true })
+    .finally(() => {
+      document.getElementById('manualEmpId').value = '';
+      scanLock = false;
+    });
 }
 
 async function submitScan(payload) {
@@ -1203,8 +1180,14 @@ async function submitScan(payload) {
   document.getElementById('scanTime').textContent = '—';
   document.getElementById('scanMeta').textContent = '—';
 
-  const res = await api('scanAttendance', payload);
-  scanLock = false;
+  await new Promise(r => setTimeout(r, 250));
+
+  let res;
+  try {
+    res = await api('scanAttendance', payload);
+  } catch (e) {
+    res = { ok: false, error: e.message || 'Network error' };
+  }
 
   if (!res || !res.ok) {
     resultEl.classList.remove('success');
@@ -1212,16 +1195,47 @@ async function submitScan(payload) {
     document.getElementById('scanTitle').textContent = '❌ ' + (res ? res.error : 'Unknown error');
     document.getElementById('scanTime').textContent = '—';
     document.getElementById('scanMeta').textContent = '';
-    swalError(res ? res.error : 'Unknown error', 'Scan failed');
-    return;
+
+    await swalError(res ? res.error : 'Unknown error', 'Scan failed');
+  } else {
+    const d = res.data;
+    resultEl.classList.remove('error');
+    resultEl.classList.add('success');
+    document.getElementById('scanTitle').textContent = '✅ ' + d.Action + ' · ' + d.FullName;
+    document.getElementById('scanTime').textContent = fmtTime(d.TimeIn || d.TimeOut || '');
+    document.getElementById('scanMeta').innerHTML =
+      `<strong>${escapeHtml(d.EmployeeID)}</strong> · ${escapeHtml(d.Department)} · ${d.Session} · ${escapeHtml(d.Remarks || '')}`;
+
+    await swalSuccess(
+      `${d.FullName} — ${d.Action} at ${fmtTime(d.TimeIn || d.TimeOut || '')}`,
+      d.Action + ' successful'
+    );
   }
-  const d = res.data;
-  resultEl.classList.remove('error');
-  resultEl.classList.add('success');
-  document.getElementById('scanTitle').textContent = '✅ ' + d.Action + ' · ' + d.FullName;
-  document.getElementById('scanTime').textContent = fmtTime(d.TimeIn || d.TimeOut || '');
-  document.getElementById('scanMeta').innerHTML =
-    `<strong>${escapeHtml(d.EmployeeID)}</strong> · ${escapeHtml(d.Department)} · ${d.Session} · ${escapeHtml(d.Remarks || '')}`;
+
+  scanLock = false;
+  resumeScanner();
+}
+
+function pauseScanner() {
+  if (!html5Qr || !cameraRunning || scannerPaused) return;
+  try {
+    html5Qr.pause(true);
+    scannerPaused = true;
+  } catch (e) { /* older versions may not support pause */ }
+}
+
+function resumeScanner() {
+  if (!html5Qr || !cameraRunning || !scannerPaused) return;
+  try {
+    html5Qr.resume();
+    scannerPaused = false;
+  } catch (e) {
+    scannerPaused = false;
+    const reader = document.getElementById('reader');
+    reader.innerHTML = '';
+    cameraRunning = false;
+    startCamera();
+  }
 }
 
 /* =========================================================
