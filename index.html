@@ -26,6 +26,7 @@
     --ink-soft: #475569;
     --ink-muted: #64748b;
     --line: #e2e8f0;
+    --line-strong: #cbd5e1;
     --bg: #f8fafc;
     --bottom-nav-h: 64px;
   }
@@ -42,6 +43,9 @@
     line-height: 1.5;
   }
 
+  /* ============================================
+   *  PIN GATE
+   * ============================================ */
   .gate-wrap {
     display: flex; align-items: center; justify-content: center;
     min-height: 100vh; min-height: 100dvh; padding: 20px;
@@ -49,16 +53,17 @@
   }
   .gate-card {
     background: #fff;
-    border: 1px solid var(--line);
+    border: 2px solid var(--line-strong);
     padding: 40px 32px;
     width: 100%; max-width: 380px; text-align: center;
-    box-shadow: 0 1px 0 rgba(15,23,42,0.04), 0 12px 32px -16px rgba(15,23,42,0.10);
+    box-shadow: 0 4px 24px -8px rgba(15,23,42,0.12);
   }
   .gate-icon {
     width: 56px; height: 56px;
     background: var(--brand); color: #fff;
     display: inline-flex; align-items: center; justify-content: center;
     font-size: 26px; margin-bottom: 20px;
+    border: 1px solid var(--brand-dark);
   }
   .gate-title { font-size: 20px; font-weight: 700; color: var(--ink); margin: 0 0 6px; letter-spacing: -0.01em; }
   .gate-sub { font-size: 13px; color: var(--ink-muted); margin: 0 0 26px; line-height: 1.5; }
@@ -66,7 +71,7 @@
     width: 100%; padding: 14px 18px;
     font-size: 22px; font-weight: 700;
     letter-spacing: 14px; text-align: center;
-    border: 1px solid var(--line);
+    border: 1.5px solid var(--line-strong);
     background: #fff; color: var(--ink);
     outline: none;
     font-family: 'Inter', monospace;
@@ -76,6 +81,9 @@
   .pin-input.is-err { border-color: #dc2626; }
   .gate-msg { font-size: 12px; color: #b91c1c; margin-top: 10px; min-height: 18px; font-weight: 500; }
 
+  /* ============================================
+   *  LAYOUT
+   * ============================================ */
   .layout { display: none; min-height: 100vh; min-height: 100dvh; }
 
   .sidebar {
@@ -86,10 +94,11 @@
     flex-shrink: 0;
     display: flex; flex-direction: column;
     position: fixed; top: 0; left: 0; bottom: 0; overflow-y: auto;
+    border-right: 2px solid #0a1a2a;
   }
   .brand-block {
     padding: 6px 12px 20px;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
+    border-bottom: 1px solid rgba(255,255,255,0.12);
     margin-bottom: 14px;
   }
   .brand-block h1 {
@@ -104,18 +113,19 @@
     padding: 11px 14px;
     color: var(--sidebar-text); cursor: pointer;
     font-size: 13.5px; font-weight: 500;
-    border: none; background: transparent; width: 100%; text-align: left;
-    margin-bottom: 2px;
-    transition: background 0.15s, color 0.15s;
+    border: 1px solid transparent;
+    background: transparent; width: 100%; text-align: left;
+    margin-bottom: 3px;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
     min-height: 42px;
   }
-  .nav-item-btn:hover { background: rgba(255,255,255,0.06); color: #fff; }
-  .nav-item-btn.active { background: var(--sidebar-active); color: #fff; font-weight: 600; }
+  .nav-item-btn:hover { background: rgba(255,255,255,0.06); color: #fff; border-color: rgba(255,255,255,0.06); }
+  .nav-item-btn.active { background: var(--sidebar-active); color: #fff; font-weight: 600; border-color: #0a1a2a; }
   .nav-item-btn i { font-size: 16px; width: 18px; text-align: center; }
 
   .sidebar-footer {
     margin-top: auto; padding-top: 16px;
-    border-top: 1px solid rgba(255,255,255,0.08);
+    border-top: 1px solid rgba(255,255,255,0.12);
     font-size: 11px; color: #7f97a9; padding-left: 12px;
   }
   .sidebar-footer a { color: #b7c7d6; text-decoration: none; }
@@ -134,11 +144,11 @@
     background: var(--sidebar-bg); color: #fff;
     padding: 14px 16px;
     align-items: center; justify-content: space-between;
-    box-shadow: 0 1px 0 rgba(255,255,255,0.06);
+    border-bottom: 2px solid #0a1a2a;
   }
   .mobile-appbar .title { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; }
   .mobile-appbar .icon-btn {
-    background: transparent; border: none; color: #fff;
+    background: transparent; border: 1px solid rgba(255,255,255,0.15); color: #fff;
     font-size: 20px; padding: 6px; line-height: 1;
     min-width: 40px; min-height: 40px;
     display: flex; align-items: center; justify-content: center;
@@ -148,7 +158,7 @@
     display: none;
     position: fixed; bottom: 0; left: 0; right: 0;
     background: #fff;
-    border-top: 1px solid var(--line);
+    border-top: 2px solid var(--line-strong);
     z-index: 200;
     height: var(--bottom-nav-h);
     padding-bottom: env(safe-area-inset-bottom);
@@ -164,19 +174,27 @@
     flex: 1; min-width: 60px;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     gap: 3px; padding: 8px 4px;
-    background: transparent; border: none;
+    background: transparent;
+    border: none;
+    border-right: 1px solid var(--line);
     color: var(--ink-muted); font-size: 10px; font-weight: 600;
     cursor: pointer;
-    transition: color 0.15s;
+    transition: color 0.15s, background 0.15s;
     letter-spacing: 0.02em;
     text-transform: uppercase;
   }
+  .bn-item:last-child { border-right: none; }
+  .bn-item.active { color: var(--brand); background: var(--brand-light); }
   .bn-item i { font-size: 19px; }
-  .bn-item.active { color: var(--brand); }
 
+  /* ============================================
+   *  HEADERS
+   * ============================================ */
   .main-header {
     display: flex; justify-content: space-between; align-items: flex-start;
     margin-bottom: 24px; gap: 12px; flex-wrap: wrap;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--line-strong);
   }
   .main-header h2 { font-size: 22px; font-weight: 700; color: var(--ink); margin: 0; letter-spacing: -0.01em; }
   .main-header .sub { font-size: 13px; color: var(--ink-muted); margin: 4px 0 0; }
@@ -184,74 +202,89 @@
   .module { display: none; }
   .module.active { display: block; }
 
+  /* ============================================
+   *  CARDS
+   * ============================================ */
   .card-soft {
     background: #fff;
-    border: 1px solid var(--line);
+    border: 1.5px solid var(--line-strong);
     overflow: hidden;
     box-shadow: 0 1px 0 rgba(15,23,42,0.02);
   }
   .card-soft .card-body { padding: 20px; }
   .card-soft .card-head {
     padding: 14px 20px;
-    border-bottom: 1px solid var(--line);
+    border-bottom: 1.5px solid var(--line-strong);
     font-size: 13px; font-weight: 600; color: var(--ink-soft);
     text-transform: uppercase; letter-spacing: 0.04em;
     display: flex; justify-content: space-between; align-items: center;
     flex-wrap: wrap; gap: 8px;
+    background: #f8fafc;
   }
 
   /* ============================================
-   *  TABLE — desktop table / mobile card stack
+   *  TABLE
    * ============================================ */
   .table-responsive {
     width: 100%;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    border: none;
   }
   .table-app {
     margin: 0; font-size: 13px; width: 100%;
-    border-collapse: separate; border-spacing: 0;
-    min-width: 700px; /* desktop minimum so columns don't crush */
+    border-collapse: collapse;
+    min-width: 700px;
   }
   .table-app thead th {
     background: #f8fafc; color: var(--ink-muted);
     font-weight: 600; font-size: 11px; text-transform: uppercase;
     letter-spacing: 0.05em; padding: 12px 14px;
-    border-bottom: 1px solid var(--line); white-space: nowrap;
+    border: 1px solid var(--line);
+    border-bottom: 2px solid var(--line-strong);
+    white-space: nowrap;
     text-align: left;
     position: sticky; top: 0;
     z-index: 1;
   }
   .table-app tbody td {
-    padding: 12px 14px; border-bottom: 1px solid #f1f5f9;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
     vertical-align: middle;
   }
-  .table-app tbody tr:last-child td { border-bottom: none; }
-  .table-app tbody tr:hover { background: #fafbfc; }
+  .table-app tbody tr:hover td { background: #fafbfc; }
+  .table-app tbody tr:last-child td { border-bottom: 1px solid var(--line); }
   .table-app .empty-row td {
     text-align: center; color: var(--ink-muted);
     padding: 40px 20px; font-style: italic;
     background: #fff;
+    border: 1px solid var(--line);
   }
 
+  /* ============================================
+   *  BADGES
+   * ============================================ */
   .badge-status {
     font-size: 10.5px; font-weight: 700; padding: 3px 8px;
     display: inline-block;
     text-transform: uppercase; letter-spacing: 0.04em;
     border: 1px solid;
   }
-  .badge-active { background: #f0fdf4; color: #15803d; border-color: #bbf7d0; }
-  .badge-inactive { background: #fef2f2; color: #b91c1c; border-color: #fecaca; }
-  .badge-morning { background: #fff7ed; color: #b45309; border-color: #fed7aa; }
-  .badge-afternoon { background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; }
+  .badge-active { background: #f0fdf4; color: #15803d; border-color: #86efac; }
+  .badge-inactive { background: #fef2f2; color: #b91c1c; border-color: #fca5a5; }
+  .badge-morning { background: #fff7ed; color: #b45309; border-color: #fdba74; }
+  .badge-afternoon { background: #eff6ff; color: #1d4ed8; border-color: #93c5fd; }
 
+  /* ============================================
+   *  SCANNER
+   * ============================================ */
   .scan-config {
     display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px;
   }
   .mode-toggle { display: flex; gap: 8px; margin-bottom: 18px; }
   .mode-btn {
     flex: 1; padding: 14px;
-    border: 1px solid var(--line); background: #fff; color: var(--ink-muted);
+    border: 1.5px solid var(--line-strong); background: #fff; color: var(--ink-muted);
     font-size: 13px; font-weight: 700;
     cursor: pointer; transition: all 0.15s;
     display: flex; flex-direction: column; align-items: center; gap: 6px;
@@ -265,18 +298,19 @@
 
   #reader {
     background: #000; min-height: 260px;
-    border: 1px solid var(--line);
+    border: 1.5px solid var(--line-strong);
     overflow: hidden;
   }
   #reader video { display: block; width: 100%; height: auto; }
 
   .scan-result {
     padding: 18px; margin-top: 16px;
-    display: none; border: 1px solid;
+    display: none;
+    border: 1.5px solid;
   }
   .scan-result.show { display: block; }
-  .scan-result.success { background: #f0fdf4; border-color: #86efac; }
-  .scan-result.error { background: #fef2f2; border-color: #fca5a5; }
+  .scan-result.success { background: #f0fdf4; border-color: #16a34a; }
+  .scan-result.error { background: #fef2f2; border-color: #dc2626; }
   .scan-result h4 { margin: 0 0 8px; font-size: 15px; font-weight: 700; }
   .scan-result .meta { font-size: 12px; color: var(--ink-soft); }
   .scan-result .time-big {
@@ -285,6 +319,9 @@
     letter-spacing: -0.01em;
   }
 
+  /* ============================================
+   *  FORMS
+   * ============================================ */
   .form-label {
     font-size: 11px; font-weight: 600; color: var(--ink-soft);
     margin-bottom: 6px;
@@ -293,7 +330,7 @@
   }
   .form-control, .form-select {
     font-size: 13.5px; padding: 10px 12px;
-    border: 1px solid var(--line); background: #fff; color: var(--ink);
+    border: 1.5px solid var(--line-strong); background: #fff; color: var(--ink);
     font-family: inherit;
     min-height: 42px;
     outline: none;
@@ -314,11 +351,14 @@
     padding-right: 36px;
   }
 
+  /* ============================================
+   *  BUTTONS
+   * ============================================ */
   .btn {
     font-family: inherit; font-weight: 600; font-size: 13px;
     min-height: 40px;
     border-radius: 0;
-    border: 1px solid transparent;
+    border: 1.5px solid transparent;
     padding: 9px 16px;
     transition: background 0.15s, border-color 0.15s, color 0.15s;
     display: inline-flex; align-items: center; justify-content: center; gap: 6px;
@@ -326,28 +366,32 @@
     line-height: 1;
   }
   .btn-brand {
-    background: var(--brand); color: #fff; border-color: var(--brand);
+    background: var(--brand); color: #fff; border-color: var(--brand-dark);
   }
-  .btn-brand:hover, .btn-brand:focus { background: var(--brand-dark); border-color: var(--brand-dark); color: #fff; }
+  .btn-brand:hover, .btn-brand:focus { background: var(--brand-dark); border-color: #0a1a2a; color: #fff; }
   .btn-outline-brand {
-    background: #fff; color: var(--brand); border-color: var(--line);
+    background: #fff; color: var(--brand); border-color: var(--line-strong);
   }
   .btn-outline-brand:hover, .btn-outline-brand:focus {
     border-color: var(--brand); background: var(--brand-light); color: var(--brand);
   }
   .btn-danger-outline {
-    background: #fff; color: #b91c1c; border-color: #fecaca;
+    background: #fff; color: #b91c1c; border-color: #fca5a5;
   }
   .btn-danger-outline:hover, .btn-danger-outline:focus {
     border-color: #b91c1c; background: #fef2f2; color: #b91c1c;
   }
   .btn-sm { font-size: 12px; padding: 6px 12px; min-height: 32px; }
 
+  /* ============================================
+   *  STATS
+   * ============================================ */
   .stat-card {
     background: #fff;
-    border: 1px solid var(--line);
+    border: 1.5px solid var(--line-strong);
     padding: 18px;
     box-shadow: 0 1px 0 rgba(15,23,42,0.02);
+    border-left: 4px solid var(--brand);
   }
   .stat-card .label {
     font-size: 11px; color: var(--ink-muted); font-weight: 600;
@@ -358,6 +402,9 @@
     letter-spacing: -0.02em;
   }
 
+  /* ============================================
+   *  SPINNER
+   * ============================================ */
   .spinner-inline {
     display: inline-block;
     width: 14px; height: 14px;
@@ -371,13 +418,16 @@
   @keyframes spin { to { transform: rotate(360deg); } }
   .is-busy { pointer-events: none; opacity: 0.85; }
 
+  /* ============================================
+   *  SWEETALERT
+   * ============================================ */
   .swal2-popup {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
     border-radius: 0 !important;
     padding: 20px 22px !important;
     width: 340px !important;
     max-width: calc(100vw - 32px) !important;
-    border: 1px solid var(--line) !important;
+    border: 2px solid var(--line-strong) !important;
   }
   .swal2-title {
     font-size: 16px !important;
@@ -406,17 +456,17 @@
   .swal2-confirm {
     background-color: var(--brand) !important;
     color: #ffffff !important;
-    border: 1px solid var(--brand) !important;
+    border: 1.5px solid var(--brand-dark) !important;
   }
   .swal2-confirm:hover {
     background-color: var(--brand-dark) !important;
-    border-color: var(--brand-dark) !important;
+    border-color: #0a1a2a !important;
     color: #ffffff !important;
   }
   .swal2-cancel {
     background-color: #fff !important;
     color: var(--brand) !important;
-    border: 1px solid var(--line) !important;
+    border: 1.5px solid var(--line-strong) !important;
   }
   .swal2-cancel:hover {
     border-color: var(--brand) !important;
@@ -437,7 +487,7 @@
   }
 
   /* ============================================
-   *  MOBILE — tables become cards
+   *  MOBILE — tables become cards with borders
    * ============================================ */
   @media (max-width: 767.98px) {
     .sidebar { display: none; }
@@ -449,14 +499,14 @@
     .mobile-appbar { display: flex; }
     .bottom-nav { display: block; }
 
-    .main-header { margin-bottom: 16px; }
+    .main-header { margin-bottom: 16px; padding-bottom: 12px; }
     .main-header h2 { font-size: 19px; }
     .main-header .sub { font-size: 12px; margin-top: 2px; }
 
     .card-soft .card-body { padding: 16px; }
     .card-soft .card-head { padding: 12px 16px; font-size: 12px; }
 
-    .stat-card { padding: 14px; }
+    .stat-card { padding: 14px; border-left-width: 4px; }
     .stat-card .label { font-size: 10px; }
     .stat-card .value { font-size: 22px; margin-top: 4px; }
 
@@ -464,12 +514,13 @@
     #reader { min-height: 220px; }
     .mode-btn { min-height: 64px; padding: 12px 8px; font-size: 12px; }
 
-    /* Table → card layout */
+    /* Table → cards with borders */
     .table-responsive { overflow: visible; }
     .table-app {
       display: block;
       min-width: 0;
       border-collapse: separate;
+      border: none;
     }
     .table-app thead { display: none; }
     .table-app tbody,
@@ -477,18 +528,20 @@
     .table-app td { display: block; width: 100%; }
 
     .table-app tbody tr {
-      border: 1px solid var(--line);
+      border: 1.5px solid var(--line-strong);
       background: #fff;
-      padding: 14px 16px;
-      margin-bottom: 10px;
+      padding: 0;
+      margin-bottom: 12px;
       position: relative;
+      overflow: hidden;
     }
-    .table-app tbody tr:hover { background: #fff; }
+    .table-app tbody tr:hover td { background: transparent; }
     .table-app tbody tr:last-child { margin-bottom: 0; }
 
     .table-app tbody td {
-      padding: 6px 0;
+      padding: 10px 14px;
       border: none;
+      border-bottom: 1px solid var(--line);
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
@@ -496,7 +549,9 @@
       font-size: 13px;
       line-height: 1.4;
       text-align: right;
+      background: #fff;
     }
+    .table-app tbody tr td:last-child { border-bottom: none; }
     .table-app tbody td::before {
       content: attr(data-label);
       font-weight: 600;
@@ -511,12 +566,13 @@
     .table-app tbody td > * { text-align: right; }
     .table-app tbody td:empty { display: none; }
 
-    /* Stack action buttons at bottom of card */
+    /* Action row — highlighted with border */
     .table-app tbody td[data-label="Action"],
     .table-app tbody td[data-label="Actions"] {
-      padding-top: 10px;
-      margin-top: 6px;
-      border-top: 1px solid #f1f5f9;
+      background: #f8fafc;
+      border-top: 1.5px solid var(--line-strong);
+      border-bottom: none;
+      padding: 12px 14px;
       justify-content: flex-end;
       flex-wrap: wrap;
       gap: 8px;
@@ -532,7 +588,7 @@
     }
 
     .table-app .empty-row {
-      border: 1px dashed var(--line);
+      border: 1.5px dashed var(--line-strong);
       background: #fafbfc;
       padding: 0;
       margin: 0;
@@ -542,6 +598,7 @@
       text-align: center;
       padding: 32px 16px;
       justify-content: center;
+      border: none;
     }
     .table-app .empty-row td::before { display: none; }
 
@@ -550,27 +607,28 @@
     .btn { min-height: 44px; }
 
     .modal-dialog { margin: 0.5rem; }
-    .modal-content { border-radius: 0 !important; }
+    .modal-content { border-radius: 0 !important; border: 2px solid var(--line-strong) !important; }
   }
 
   /* ============================================
-   *  SMALL PHONES (≤ 380px)
+   *  SMALL PHONES
    * ============================================ */
   @media (max-width: 380px) {
     .main-area { padding: 14px 12px calc(var(--bottom-nav-h) + 20px); }
     .card-soft .card-body { padding: 14px; }
-    .table-app tbody tr { padding: 12px 14px; }
-    .table-app tbody td { font-size: 12.5px; }
+    .table-app tbody td { padding: 9px 12px; font-size: 12.5px; }
     .main-header h2 { font-size: 17px; }
     .stat-card .value { font-size: 20px; }
     .mode-btn { font-size: 11px; min-height: 60px; }
   }
 
-  /* MODAL */
-  .modal-content { border-radius: 0 !important; border: 1px solid var(--line); }
-  .modal-header { border-bottom: 1px solid var(--line); padding: 16px 20px; }
+  /* ============================================
+   *  MODAL
+   * ============================================ */
+  .modal-content { border-radius: 0 !important; border: 2px solid var(--line-strong); }
+  .modal-header { border-bottom: 1.5px solid var(--line-strong); padding: 16px 20px; background: #f8fafc; }
   .modal-title { font-size: 15px; font-weight: 700; color: var(--ink); }
-  .modal-footer { border-top: 1px solid var(--line); padding: 14px 20px; }
+  .modal-footer { border-top: 1.5px solid var(--line-strong); padding: 14px 20px; background: #f8fafc; }
   .modal-body { padding: 20px; }
   .btn-close:focus { box-shadow: none; }
 </style>
@@ -618,7 +676,6 @@
 
   <main class="main-area">
 
-    <!-- DASHBOARD -->
     <section class="module active" id="mod-dashboard">
       <div class="main-header">
         <div>
@@ -648,7 +705,6 @@
       </div>
     </section>
 
-    <!-- SCAN -->
     <section class="module" id="mod-scan">
       <div class="main-header"><div><h2>Scan Attendance</h2><p class="sub" id="scanEventInfo">—</p></div></div>
       <div class="card-soft mb-3">
@@ -687,7 +743,6 @@
       </div>
     </section>
 
-    <!-- EMPLOYEES -->
     <section class="module" id="mod-employees">
       <div class="main-header">
         <div><h2>Employees</h2><p class="sub" id="empCount">—</p></div>
@@ -724,7 +779,6 @@
       </div>
     </section>
 
-    <!-- ATTENDANCE -->
     <section class="module" id="mod-attendance">
       <div class="main-header">
         <div><h2>Attendance</h2><p class="sub" id="attCount">—</p></div>
@@ -762,7 +816,6 @@
       </div>
     </section>
 
-    <!-- DEPARTMENTS -->
     <section class="module" id="mod-departments">
       <div class="main-header"><div><h2>Departments</h2><p class="sub">Shown on registration form</p></div></div>
       <div class="card-soft mb-3">
@@ -789,7 +842,6 @@
       </div>
     </section>
 
-    <!-- EVENTS -->
     <section class="module" id="mod-events">
       <div class="main-header">
         <div><h2>Events</h2><p class="sub">One active at a time</p></div>
@@ -814,7 +866,6 @@
       </div>
     </section>
 
-    <!-- SETTINGS -->
     <section class="module" id="mod-settings">
       <div class="main-header"><div><h2>Settings</h2><p class="sub">System configuration</p></div></div>
       <div class="card-soft mb-3">
@@ -852,7 +903,6 @@
   </nav>
 </div>
 
-<!-- EVENT MODAL -->
 <div class="modal fade" id="eventModal" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
     <div class="modal-content">
@@ -885,7 +935,6 @@
   </div>
 </div>
 
-<!-- OVERRIDE MODAL -->
 <div class="modal fade" id="overrideModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
     <div class="modal-content">
@@ -914,7 +963,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
 <script>
-const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjNzvMU7EvFtVHMWBwoUPT-nWWtETD3_G5DvJuTA6L_Odl8ktUaBUULGKlguO-EGTb/exec';
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbw4K0KD-V8G0Kt2eBtXXKUG6fvJaVsuiGec_agSfyrYLO2NMaBmdR5NX5TuiRRbEfpF/exec';
 
 async function api(action, payload) {
   try {
@@ -1144,7 +1193,6 @@ function todayStr() {
   return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
 }
 
-/* SCAN */
 let scanLock = false;
 let lastScanPayload = '';
 let lastScanTime = 0;
@@ -1290,7 +1338,6 @@ function resumeScanner() {
   }
 }
 
-/* EMPLOYEES — table */
 async function loadEmployees() {
   const tb = document.getElementById('empTable');
   tb.innerHTML = '<tr class="empty-row"><td colspan="6">Loading…</td></tr>';
@@ -1355,7 +1402,6 @@ async function exportEmployees() {
   swalSuccess('Employees CSV downloaded.', 'Export ready');
 }
 
-/* ATTENDANCE — table */
 async function loadAttendanceModule() {
   const sel = document.getElementById('attDept');
   if (sel.options.length <= 1) {
@@ -1452,7 +1498,6 @@ async function submitOverride() {
   renderAttendance();
 }
 
-/* DEPARTMENTS — table */
 async function loadDepartments() {
   const tb = document.getElementById('deptTable');
   tb.innerHTML = '<tr class="empty-row"><td colspan="3">Loading…</td></tr>';
@@ -1512,7 +1557,6 @@ async function deleteDept(name) {
   loadDepartments();
 }
 
-/* EVENTS — table */
 async function loadEvents() {
   const tb = document.getElementById('eventTable');
   tb.innerHTML = '<tr class="empty-row"><td colspan="6">Loading…</td></tr>';
