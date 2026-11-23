@@ -34,598 +34,163 @@
 
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body { height: 100%; }
-  body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-    background: var(--bg);
-    color: var(--ink);
-    margin: 0;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    line-height: 1.5;
-  }
+  body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; background: var(--bg); color: var(--ink); margin: 0; -webkit-font-smoothing: antialiased; line-height: 1.5; }
 
-  .gate-wrap {
-    display: flex; align-items: center; justify-content: center;
-    min-height: 100vh; min-height: 100dvh; padding: 20px;
-    background: var(--bg);
-  }
-  .gate-card {
-    background: #fff;
-    border: 2px solid var(--line-strong);
-    padding: 40px 32px;
-    width: 100%; max-width: 380px; text-align: center;
-    box-shadow: 0 4px 24px -8px rgba(15,23,42,0.12);
-  }
-  .gate-icon {
-    width: 56px; height: 56px;
-    background: var(--brand); color: #fff;
-    display: inline-flex; align-items: center; justify-content: center;
-    font-size: 26px; margin-bottom: 20px;
-    border: 1px solid var(--brand-dark);
-  }
-  .gate-title { font-size: 20px; font-weight: 700; color: var(--ink); margin: 0 0 6px; letter-spacing: -0.01em; }
-  .gate-sub { font-size: 13px; color: var(--ink-muted); margin: 0 0 26px; line-height: 1.5; }
-  .pin-input {
-    width: 100%; padding: 14px 18px;
-    font-size: 22px; font-weight: 700;
-    letter-spacing: 14px; text-align: center;
-    border: 1.5px solid var(--line-strong);
-    background: #fff; color: var(--ink);
-    outline: none;
-    font-family: 'Inter', monospace;
-    transition: border-color 0.15s, box-shadow 0.15s;
-  }
+  .gate-wrap { display: flex; align-items: center; justify-content: center; min-height: 100vh; min-height: 100dvh; padding: 20px; background: var(--bg); }
+  .gate-card { background: #fff; border: 2px solid var(--line-strong); padding: 40px 32px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 4px 24px -8px rgba(15,23,42,0.12); }
+  .gate-icon { width: 56px; height: 56px; background: var(--brand); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 26px; margin-bottom: 20px; border: 1px solid var(--brand-dark); }
+  .gate-title { font-size: 20px; font-weight: 700; color: var(--ink); margin: 0 0 6px; }
+  .gate-sub { font-size: 13px; color: var(--ink-muted); margin: 0 0 26px; }
+  .pin-input { width: 100%; padding: 14px 18px; font-size: 22px; font-weight: 700; letter-spacing: 14px; text-align: center; border: 1.5px solid var(--line-strong); background: #fff; color: var(--ink); outline: none; font-family: 'Inter', monospace; transition: border-color 0.15s, box-shadow 0.15s; }
   .pin-input:focus { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(31,78,120,0.12); }
   .pin-input.is-err { border-color: #dc2626; }
   .gate-msg { font-size: 12px; color: #b91c1c; margin-top: 10px; min-height: 18px; font-weight: 500; }
 
   .layout { display: none; min-height: 100vh; min-height: 100dvh; }
 
-  .sidebar {
-    width: 248px;
-    background: var(--sidebar-bg);
-    color: var(--sidebar-text);
-    padding: 20px 12px;
-    flex-shrink: 0;
-    display: flex; flex-direction: column;
-    position: fixed; top: 0; left: 0; bottom: 0; overflow-y: auto;
-    border-right: 2px solid #0a1a2a;
-  }
-  .brand-block {
-    padding: 6px 12px 20px;
-    border-bottom: 1px solid rgba(255,255,255,0.12);
-    margin-bottom: 14px;
-  }
-  .brand-block h1 {
-    font-size: 15px; font-weight: 700; color: #fff; margin: 0 0 2px;
-    display: flex; align-items: center; gap: 8px;
-    letter-spacing: -0.01em;
-  }
-  .brand-block .small { font-size: 11px; color: #7f97a9; letter-spacing: 0.04em; text-transform: uppercase; }
+  .sidebar { width: 248px; background: var(--sidebar-bg); color: var(--sidebar-text); padding: 20px 12px; flex-shrink: 0; display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; overflow-y: auto; border-right: 2px solid #0a1a2a; }
+  .brand-block { padding: 6px 12px 20px; border-bottom: 1px solid rgba(255,255,255,0.12); margin-bottom: 14px; }
+  .brand-block h1 { font-size: 15px; font-weight: 700; color: #fff; margin: 0 0 2px; display: flex; align-items: center; gap: 8px; }
+  .brand-block .small { font-size: 11px; color: #7f97a9; text-transform: uppercase; letter-spacing: 0.04em; }
 
-  .nav-item-btn {
-    display: flex; align-items: center; gap: 10px;
-    padding: 11px 14px;
-    color: var(--sidebar-text); cursor: pointer;
-    font-size: 13.5px; font-weight: 500;
-    border: 1px solid transparent;
-    background: transparent; width: 100%; text-align: left;
-    margin-bottom: 3px;
-    transition: background 0.15s, color 0.15s, border-color 0.15s;
-    min-height: 42px;
-  }
-  .nav-item-btn:hover { background: rgba(255,255,255,0.06); color: #fff; border-color: rgba(255,255,255,0.06); }
-  .nav-item-btn.active { background: var(--sidebar-active); color: #fff; font-weight: 600; border-color: #0a1a2a; }
+  .nav-item-btn { display: flex; align-items: center; gap: 10px; padding: 11px 14px; color: var(--sidebar-text); cursor: pointer; font-size: 13.5px; font-weight: 500; border: 1px solid transparent; background: transparent; width: 100%; text-align: left; margin-bottom: 3px; min-height: 42px; transition: background 0.15s, color 0.15s; }
+  .nav-item-btn:hover { background: rgba(255,255,255,0.06); color: #fff; }
+  .nav-item-btn.active { background: var(--sidebar-active); color: #fff; font-weight: 600; }
   .nav-item-btn i { font-size: 16px; width: 18px; text-align: center; }
 
-  .sidebar-footer {
-    margin-top: auto; padding-top: 16px;
-    border-top: 1px solid rgba(255,255,255,0.12);
-    font-size: 11px; color: #7f97a9; padding-left: 12px;
-  }
+  .sidebar-footer { margin-top: auto; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.12); font-size: 11px; color: #7f97a9; padding-left: 12px; }
   .sidebar-footer a { color: #b7c7d6; text-decoration: none; }
-  .sidebar-footer a:hover { color: #fff; }
 
-  .main-area {
-    margin-left: 248px;
-    padding: 28px 32px 60px;
-    min-width: 0;
-    width: calc(100% - 248px);
-  }
+  .main-area { margin-left: 248px; padding: 28px 32px 60px; min-width: 0; width: calc(100% - 248px); }
 
-  .mobile-appbar {
-    display: none;
-    position: sticky; top: 0; z-index: 100;
-    background: var(--sidebar-bg); color: #fff;
-    padding: 14px 16px;
-    align-items: center; justify-content: space-between;
-    border-bottom: 2px solid #0a1a2a;
-  }
-  .mobile-appbar .title { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; }
-  .mobile-appbar .icon-btn {
-    background: transparent; border: 1px solid rgba(255,255,255,0.15); color: #fff;
-    font-size: 20px; padding: 6px; line-height: 1;
-    min-width: 40px; min-height: 40px;
-    display: flex; align-items: center; justify-content: center;
-  }
+  .mobile-appbar { display: none; position: sticky; top: 0; z-index: 100; background: var(--sidebar-bg); color: #fff; padding: 14px 16px; align-items: center; justify-content: space-between; border-bottom: 2px solid #0a1a2a; }
+  .mobile-appbar .title { font-size: 15px; font-weight: 700; }
+  .mobile-appbar .icon-btn { background: transparent; border: 1px solid rgba(255,255,255,0.15); color: #fff; font-size: 20px; padding: 6px; min-width: 40px; min-height: 40px; display: flex; align-items: center; justify-content: center; }
 
-  .bottom-nav {
-    display: none;
-    position: fixed; bottom: 0; left: 0; right: 0;
-    background: #fff;
-    border-top: 2px solid var(--line-strong);
-    z-index: 200;
-    height: var(--bottom-nav-h);
-    padding-bottom: env(safe-area-inset-bottom);
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
+  .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 2px solid var(--line-strong); z-index: 200; height: var(--bottom-nav-h); padding-bottom: env(safe-area-inset-bottom); overflow-x: auto; scrollbar-width: none; }
   .bottom-nav::-webkit-scrollbar { display: none; }
-  .bottom-nav-inner {
-    display: flex; height: 100%;
-    min-width: 100%; justify-content: space-around;
-  }
-  .bn-item {
-    flex: 1; min-width: 60px;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 3px; padding: 8px 4px;
-    background: transparent;
-    border: none;
-    border-right: 1px solid var(--line);
-    color: var(--ink-muted); font-size: 10px; font-weight: 600;
-    cursor: pointer;
-    transition: color 0.15s, background 0.15s;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
-  }
+  .bottom-nav-inner { display: flex; height: 100%; min-width: 100%; justify-content: space-around; }
+  .bn-item { flex: 1; min-width: 60px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding: 8px 4px; background: transparent; border: none; border-right: 1px solid var(--line); color: var(--ink-muted); font-size: 10px; font-weight: 600; cursor: pointer; text-transform: uppercase; }
   .bn-item:last-child { border-right: none; }
   .bn-item.active { color: var(--brand); background: var(--brand-light); }
   .bn-item i { font-size: 19px; }
 
-  .main-header {
-    display: flex; justify-content: space-between; align-items: flex-start;
-    margin-bottom: 24px; gap: 12px; flex-wrap: wrap;
-    padding-bottom: 16px;
-    border-bottom: 2px solid var(--line-strong);
-  }
-  .main-header h2 { font-size: 22px; font-weight: 700; color: var(--ink); margin: 0; letter-spacing: -0.01em; }
+  .main-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; gap: 12px; flex-wrap: wrap; padding-bottom: 16px; border-bottom: 2px solid var(--line-strong); }
+  .main-header h2 { font-size: 22px; font-weight: 700; color: var(--ink); margin: 0; }
   .main-header .sub { font-size: 13px; color: var(--ink-muted); margin: 4px 0 0; }
-
-  .header-actions {
-    display: flex; gap: 8px; flex-wrap: wrap;
-    align-items: center;
-  }
+  .header-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 
   .module { display: none; }
   .module.active { display: block; }
 
-  .card-soft {
-    background: #fff;
-    border: 1.5px solid var(--line-strong);
-    overflow: hidden;
-    box-shadow: 0 1px 0 rgba(15,23,42,0.02);
-  }
+  .card-soft { background: #fff; border: 1.5px solid var(--line-strong); overflow: hidden; }
   .card-soft .card-body { padding: 20px; }
-  .card-soft .card-head {
-    padding: 14px 20px;
-    border-bottom: 1.5px solid var(--line-strong);
-    font-size: 13px; font-weight: 600; color: var(--ink-soft);
-    text-transform: uppercase; letter-spacing: 0.04em;
-    display: flex; justify-content: space-between; align-items: center;
-    flex-wrap: wrap; gap: 8px;
-    background: #f8fafc;
-  }
+  .card-soft .card-head { padding: 14px 20px; border-bottom: 1.5px solid var(--line-strong); font-size: 13px; font-weight: 600; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.04em; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; background: #f8fafc; }
 
-  .table-responsive {
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-  .table-app {
-    margin: 0; font-size: 13px; width: 100%;
-    border-collapse: collapse;
-    min-width: 700px;
-  }
-  .table-app thead th {
-    background: #f8fafc; color: var(--ink-muted);
-    font-weight: 600; font-size: 11px; text-transform: uppercase;
-    letter-spacing: 0.05em; padding: 12px 14px;
-    border: 1px solid var(--line);
-    border-bottom: 2px solid var(--line-strong);
-    white-space: nowrap;
-    text-align: left;
-    position: sticky; top: 0;
-    z-index: 1;
-  }
-  .table-app tbody td {
-    padding: 12px 14px;
-    border: 1px solid var(--line);
-    vertical-align: middle;
-  }
+  .table-responsive { width: 100%; overflow-x: auto; }
+  .table-app { margin: 0; font-size: 13px; width: 100%; border-collapse: collapse; min-width: 700px; }
+  .table-app thead th { background: #f8fafc; color: var(--ink-muted); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; padding: 12px 14px; border: 1px solid var(--line); border-bottom: 2px solid var(--line-strong); text-align: left; position: sticky; top: 0; z-index: 1; }
+  .table-app tbody td { padding: 12px 14px; border: 1px solid var(--line); vertical-align: middle; }
   .table-app tbody tr:hover td { background: #fafbfc; }
-  .table-app tbody tr:last-child td { border-bottom: 1px solid var(--line); }
-  .table-app .empty-row td {
-    text-align: center; color: var(--ink-muted);
-    padding: 40px 20px; font-style: italic;
-    background: #fff;
-    border: 1px solid var(--line);
-  }
+  .table-app .empty-row td { text-align: center; color: var(--ink-muted); padding: 40px 20px; font-style: italic; }
 
-  .badge-status {
-    font-size: 10.5px; font-weight: 700; padding: 3px 8px;
-    display: inline-block;
-    text-transform: uppercase; letter-spacing: 0.04em;
-    border: 1px solid;
-  }
+  .badge-status { font-size: 10.5px; font-weight: 700; padding: 3px 8px; display: inline-block; text-transform: uppercase; letter-spacing: 0.04em; border: 1px solid; }
   .badge-active { background: #f0fdf4; color: #15803d; border-color: #86efac; }
   .badge-inactive { background: #fef2f2; color: #b91c1c; border-color: #fca5a5; }
   .badge-morning { background: #fff7ed; color: #b45309; border-color: #fdba74; }
   .badge-afternoon { background: #eff6ff; color: #1d4ed8; border-color: #93c5fd; }
 
-  .scan-config {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px;
-  }
+  .scan-config { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
   .mode-toggle { display: flex; gap: 8px; margin-bottom: 18px; }
-  .mode-btn {
-    flex: 1; padding: 14px;
-    border: 1.5px solid var(--line-strong); background: #fff; color: var(--ink-muted);
-    font-size: 13px; font-weight: 700;
-    cursor: pointer; transition: all 0.15s;
-    display: flex; flex-direction: column; align-items: center; gap: 6px;
-    min-height: 72px;
-    text-transform: uppercase; letter-spacing: 0.06em;
-  }
+  .mode-btn { flex: 1; padding: 14px; border: 1.5px solid var(--line-strong); background: #fff; color: var(--ink-muted); font-size: 13px; font-weight: 700; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px; min-height: 72px; text-transform: uppercase; letter-spacing: 0.06em; }
   .mode-btn i { font-size: 22px; }
-  .mode-btn:hover { border-color: var(--ink-soft); }
   .mode-btn.active.in { background: #f0fdf4; border-color: #16a34a; color: #15803d; }
   .mode-btn.active.out { background: #fff7ed; border-color: #ea580c; color: #c2410c; }
 
-  #reader {
-    background: #f8fafc;
-    border: 1.5px dashed var(--line-strong);
-    overflow: hidden;
-    min-height: 80px;
-    display: block;
-    padding: 32px 20px;
-    text-align: center;
-    color: var(--ink-muted);
-    font-size: 13px;
-    position: relative;
-  }
-  #reader.active {
-    background: #000;
-    border: 1.5px solid var(--line-strong);
-    padding: 0;
-    min-height: 260px;
-  }
-  #reader:not(.active)::before {
-    content: "Camera preview will appear here";
-    display: block;
-    font-style: italic;
-  }
-  /* Hide html5-qrcode's built-in placeholder when camera is not running */
+  #reader { background: #f8fafc; border: 1.5px dashed var(--line-strong); overflow: hidden; min-height: 80px; display: block; padding: 32px 20px; text-align: center; color: var(--ink-muted); font-size: 13px; position: relative; }
+  #reader.active { background: #000; border: 1.5px solid var(--line-strong); padding: 0; min-height: 260px; }
+  #reader:not(.active)::before { content: "Camera preview will appear here"; display: block; font-style: italic; }
   #reader:not(.active) > * { display: none; }
-  #reader.active > video,
-  #reader.active > canvas,
-  #reader.active > div { display: block; }
-  #reader video {
-    display: block;
-    width: 100%;
-    height: auto;
-  }
+  #reader.active > video, #reader.active > canvas, #reader.active > div { display: block; }
+  #reader video { display: block; width: 100%; height: auto; }
 
-  .scan-result {
-    padding: 18px; margin-top: 16px;
-    display: none;
-    border: 1.5px solid;
-  }
+  .scan-result { padding: 18px; margin-top: 16px; display: none; border: 1.5px solid; }
   .scan-result.show { display: block; }
   .scan-result.success { background: #f0fdf4; border-color: #16a34a; }
   .scan-result.error { background: #fef2f2; border-color: #dc2626; }
   .scan-result h4 { margin: 0 0 8px; font-size: 15px; font-weight: 700; }
   .scan-result .meta { font-size: 12px; color: var(--ink-soft); }
-  .scan-result .time-big {
-    font-size: 28px; font-weight: 800; color: var(--brand); margin: 10px 0;
-    font-family: ui-monospace, 'Menlo', 'Consolas', monospace;
-    letter-spacing: -0.01em;
-  }
+  .scan-result .time-big { font-size: 28px; font-weight: 800; color: var(--brand); margin: 10px 0; font-family: ui-monospace, monospace; }
 
-  .form-label {
-    font-size: 11px; font-weight: 600; color: var(--ink-soft);
-    margin-bottom: 6px;
-    text-transform: uppercase; letter-spacing: 0.05em;
-    display: block;
-  }
-  .form-control, .form-select {
-    font-size: 13.5px; padding: 10px 12px;
-    border: 1.5px solid var(--line-strong); background: #fff; color: var(--ink);
-    font-family: inherit;
-    min-height: 42px;
-    outline: none;
-    border-radius: 0;
-    transition: border-color 0.15s, box-shadow 0.15s;
-    -webkit-appearance: none;
-    appearance: none;
-    width: 100%;
-  }
-  .form-control:focus, .form-select:focus {
-    border-color: var(--brand); box-shadow: 0 0 0 3px rgba(31,78,120,0.12);
-  }
-  .form-select {
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%2364748b' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M3 6l5 5 5-5'/%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    background-size: 14px;
-    padding-right: 36px;
-  }
+  .form-label { font-size: 11px; font-weight: 600; color: var(--ink-soft); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em; display: block; }
+  .form-control, .form-select { font-size: 13.5px; padding: 10px 12px; border: 1.5px solid var(--line-strong); background: #fff; color: var(--ink); font-family: inherit; min-height: 42px; outline: none; border-radius: 0; width: 100%; }
+  .form-control:focus, .form-select:focus { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(31,78,120,0.12); }
 
-  .btn {
-    font-family: inherit; font-weight: 600; font-size: 13px;
-    min-height: 40px;
-    border-radius: 0;
-    border: 1.5px solid transparent;
-    padding: 9px 16px;
-    transition: background 0.15s, border-color 0.15s, color 0.15s;
-    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-    cursor: pointer;
-    line-height: 1;
-  }
-  .btn-brand {
-    background: var(--brand); color: #fff; border-color: var(--brand-dark);
-  }
-  .btn-brand:hover, .btn-brand:focus { background: var(--brand-dark); border-color: #0a1a2a; color: #fff; }
-  .btn-outline-brand {
-    background: #fff; color: var(--brand); border-color: var(--line-strong);
-  }
-  .btn-outline-brand:hover, .btn-outline-brand:focus {
-    border-color: var(--brand); background: var(--brand-light); color: var(--brand);
-  }
-  .btn-danger-outline {
-    background: #fff; color: #b91c1c; border-color: #fca5a5;
-  }
-  .btn-danger-outline:hover, .btn-danger-outline:focus {
-    border-color: #b91c1c; background: #fef2f2; color: #b91c1c;
-  }
+  .btn { font-family: inherit; font-weight: 600; font-size: 13px; min-height: 40px; border-radius: 0; border: 1.5px solid transparent; padding: 9px 16px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; line-height: 1; }
+  .btn-brand { background: var(--brand); color: #fff; border-color: var(--brand-dark); }
+  .btn-brand:hover, .btn-brand:focus { background: var(--brand-dark); color: #fff; }
+  .btn-outline-brand { background: #fff; color: var(--brand); border-color: var(--line-strong); }
+  .btn-outline-brand:hover, .btn-outline-brand:focus { border-color: var(--brand); background: var(--brand-light); color: var(--brand); }
+  .btn-danger-outline { background: #fff; color: #b91c1c; border-color: #fca5a5; }
+  .btn-danger-outline:hover { border-color: #b91c1c; background: #fef2f2; }
   .btn-sm { font-size: 12px; padding: 6px 12px; min-height: 32px; }
 
-  .stat-card {
-    background: #fff;
-    border: 1.5px solid var(--line-strong);
-    padding: 18px;
-    box-shadow: 0 1px 0 rgba(15,23,42,0.02);
-    border-left: 4px solid var(--brand);
-  }
-  .stat-card .label {
-    font-size: 11px; color: var(--ink-muted); font-weight: 600;
-    text-transform: uppercase; letter-spacing: 0.05em;
-  }
-  .stat-card .value {
-    font-size: 28px; font-weight: 800; color: var(--ink); margin: 6px 0 0;
-    letter-spacing: -0.02em;
-  }
+  .stat-card { background: #fff; border: 1.5px solid var(--line-strong); padding: 18px; border-left: 4px solid var(--brand); }
+  .stat-card .label { font-size: 11px; color: var(--ink-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  .stat-card .value { font-size: 28px; font-weight: 800; color: var(--ink); margin: 6px 0 0; }
 
-  .spinner-inline {
-    display: inline-block;
-    width: 14px; height: 14px;
-    border: 2px solid rgba(255,255,255,0.4);
-    border-top-color: #fff;
-    border-radius: 50%;
-    animation: spin 0.65s linear infinite;
-    margin-right: 6px;
-    vertical-align: -2px;
-  }
+  .spinner-inline { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.65s linear infinite; margin-right: 6px; vertical-align: -2px; }
   @keyframes spin { to { transform: rotate(360deg); } }
   .is-busy { pointer-events: none; opacity: 0.85; }
 
-  .swal2-popup {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif !important;
-    border-radius: 0 !important;
-    padding: 20px 22px !important;
-    width: 340px !important;
-    max-width: calc(100vw - 32px) !important;
-    border: 2px solid var(--line-strong) !important;
-  }
-  .swal2-title {
-    font-size: 16px !important;
-    font-weight: 700 !important;
-    color: var(--ink) !important;
-    padding: 0 !important;
-    margin: 8px 0 4px !important;
-  }
-  .swal2-html-container {
-    font-size: 13px !important;
-    color: var(--ink-soft) !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    line-height: 1.5 !important;
-  }
-  .swal2-actions { margin: 16px 0 0 !important; gap: 8px !important; }
-  .swal2-confirm, .swal2-cancel {
-    border-radius: 0 !important;
-    font-weight: 600 !important;
-    font-size: 12px !important;
-    padding: 8px 18px !important;
-    min-height: 34px !important;
-    margin: 0 !important;
-    font-family: inherit !important;
-  }
-  .swal2-confirm {
-    background-color: var(--brand) !important;
-    color: #ffffff !important;
-    border: 1.5px solid var(--brand-dark) !important;
-  }
-  .swal2-confirm:hover {
-    background-color: var(--brand-dark) !important;
-    border-color: #0a1a2a !important;
-    color: #ffffff !important;
-  }
-  .swal2-cancel {
-    background-color: #fff !important;
-    color: var(--brand) !important;
-    border: 1.5px solid var(--line-strong) !important;
-  }
-  .swal2-cancel:hover {
-    border-color: var(--brand) !important;
-    background-color: var(--brand-light) !important;
-    color: var(--brand) !important;
-  }
-  .swal2-timer-progress-bar { background: var(--brand) !important; height: 2px !important; }
+  .swal2-popup { font-family: 'Inter', sans-serif !important; border-radius: 0 !important; padding: 20px 22px !important; width: 340px !important; max-width: calc(100vw - 32px) !important; border: 2px solid var(--line-strong) !important; }
+  .swal2-title { font-size: 16px !important; font-weight: 700 !important; color: var(--ink) !important; }
+  .swal2-html-container { font-size: 13px !important; color: var(--ink-soft) !important; }
+  .swal2-confirm, .swal2-cancel { border-radius: 0 !important; font-weight: 600 !important; font-size: 12px !important; padding: 8px 18px !important; min-height: 34px !important; }
+  .swal2-confirm { background-color: var(--brand) !important; color: #fff !important; border: 1.5px solid var(--brand-dark) !important; }
+  .swal2-cancel { background-color: #fff !important; color: var(--brand) !important; border: 1.5px solid var(--line-strong) !important; }
 
-  .qr-display {
-    text-align: center;
-    padding: 16px;
-    border: 1.5px solid var(--line-strong);
-    background: #f8fafc;
-    margin-top: 16px;
-  }
-  .qr-display .qr-frame {
-    display: inline-block;
-    background: #fff;
-    padding: 12px;
-    border: 1.5px solid var(--line-strong);
-  }
+  .qr-display { text-align: center; padding: 16px; border: 1.5px solid var(--line-strong); background: #f8fafc; margin-top: 16px; }
+  .qr-display .qr-frame { display: inline-block; background: #fff; padding: 12px; border: 1.5px solid var(--line-strong); }
   .qr-display .qr-frame canvas, .qr-display .qr-frame img { display: block; }
-  .qr-display .qr-hint {
-    font-size: 12px;
-    color: var(--ink-muted);
-    margin-top: 10px;
-  }
+  .qr-display .qr-hint { font-size: 12px; color: var(--ink-muted); margin-top: 10px; }
 
   @media (min-width: 768px) and (max-width: 1023.98px) {
     .sidebar { width: 210px; padding: 16px 8px; }
     .main-area { margin-left: 210px; width: calc(100% - 210px); padding: 22px 20px 40px; }
-    .brand-block h1 { font-size: 14px; }
-    .nav-item-btn { padding: 10px 12px; font-size: 13px; }
     .table-app { min-width: 640px; }
   }
 
   @media (max-width: 767.98px) {
     .sidebar { display: none; }
-    .main-area {
-      margin-left: 0;
-      width: 100%;
-      padding: 16px 14px calc(var(--bottom-nav-h) + 20px);
-    }
+    .main-area { margin-left: 0; width: 100%; padding: 16px 14px calc(var(--bottom-nav-h) + 20px); }
     .mobile-appbar { display: flex; }
     .bottom-nav { display: block; }
-
     .main-header { margin-bottom: 16px; padding-bottom: 12px; }
     .main-header h2 { font-size: 19px; }
-    .main-header .sub { font-size: 12px; margin-top: 2px; }
     .header-actions { width: 100%; }
-
     .card-soft .card-body { padding: 16px; }
-    .card-soft .card-head { padding: 12px 16px; font-size: 12px; }
-
-    .stat-card { padding: 14px; border-left-width: 4px; }
-    .stat-card .label { font-size: 10px; }
-    .stat-card .value { font-size: 22px; margin-top: 4px; }
-
+    .stat-card { padding: 14px; }
+    .stat-card .value { font-size: 22px; }
     .scan-config { grid-template-columns: 1fr; gap: 10px; }
     #reader.active { min-height: 220px; }
     .mode-btn { min-height: 64px; padding: 12px 8px; font-size: 12px; }
-
     .table-responsive { overflow: visible; }
-    .table-app {
-      display: block;
-      min-width: 0;
-      border-collapse: separate;
-      border: none;
-    }
+    .table-app { display: block; min-width: 0; border-collapse: separate; border: none; }
     .table-app thead { display: none; }
-    .table-app tbody,
-    .table-app tr,
-    .table-app td { display: block; width: 100%; }
-
-    .table-app tbody tr {
-      border: 1.5px solid var(--line-strong);
-      background: #fff;
-      padding: 0;
-      margin-bottom: 12px;
-      position: relative;
-      overflow: hidden;
-    }
-    .table-app tbody tr:hover td { background: transparent; }
-    .table-app tbody tr:last-child { margin-bottom: 0; }
-
-    .table-app tbody td {
-      padding: 10px 14px;
-      border: none;
-      border-bottom: 1px solid var(--line);
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 14px;
-      font-size: 13px;
-      line-height: 1.4;
-      text-align: right;
-      background: #fff;
-    }
+    .table-app tbody, .table-app tr, .table-app td { display: block; width: 100%; }
+    .table-app tbody tr { border: 1.5px solid var(--line-strong); background: #fff; margin-bottom: 12px; overflow: hidden; }
+    .table-app tbody td { padding: 10px 14px; border: none; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; font-size: 13px; text-align: right; }
     .table-app tbody tr td:last-child { border-bottom: none; }
-    .table-app tbody td::before {
-      content: attr(data-label);
-      font-weight: 600;
-      color: var(--ink-muted);
-      font-size: 10.5px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      flex-shrink: 0;
-      text-align: left;
-      padding-top: 1px;
-    }
-    .table-app tbody td > * { text-align: right; }
-    .table-app tbody td:empty { display: none; }
-
-    .table-app tbody td[data-label="Action"],
-    .table-app tbody td[data-label="Actions"] {
-      background: #f8fafc;
-      border-top: 1.5px solid var(--line-strong);
-      border-bottom: none;
-      padding: 12px 14px;
-      justify-content: flex-end;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .table-app tbody td[data-label="Action"]::before,
-    .table-app tbody td[data-label="Actions"]::before {
-      display: none;
-    }
-    .table-app tbody td[data-label="Action"] .btn,
-    .table-app tbody td[data-label="Actions"] .btn {
-      flex: 0 0 auto;
-      min-height: 36px;
-    }
-
-    .table-app .empty-row {
-      border: 1.5px dashed var(--line-strong);
-      background: #fafbfc;
-      padding: 0;
-      margin: 0;
-    }
-    .table-app .empty-row td {
-      display: block;
-      text-align: center;
-      padding: 32px 16px;
-      justify-content: center;
-      border: none;
-    }
+    .table-app tbody td::before { content: attr(data-label); font-weight: 600; color: var(--ink-muted); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.05em; flex-shrink: 0; text-align: left; }
+    .table-app tbody td[data-label="Action"], .table-app tbody td[data-label="Actions"] { background: #f8fafc; border-top: 1.5px solid var(--line-strong); padding: 12px 14px; justify-content: flex-end; flex-wrap: wrap; gap: 8px; }
+    .table-app tbody td[data-label="Action"]::before, .table-app tbody td[data-label="Actions"]::before { display: none; }
+    .table-app .empty-row { border: 1.5px dashed var(--line-strong); background: #fafbfc; }
+    .table-app .empty-row td { display: block; text-align: center; padding: 32px 16px; justify-content: center; border: none; }
     .table-app .empty-row td::before { display: none; }
-
-    .btn-sm { min-height: 34px; }
     .form-control, .form-select { min-height: 44px; font-size: 14px; }
     .btn { min-height: 44px; }
-
     .modal-dialog { margin: 0.5rem; }
-    .modal-content { border-radius: 0 !important; border: 2px solid var(--line-strong) !important; }
-  }
-
-  @media (max-width: 380px) {
-    .main-area { padding: 14px 12px calc(var(--bottom-nav-h) + 20px); }
-    .card-soft .card-body { padding: 14px; }
-    .table-app tbody td { padding: 9px 12px; font-size: 12.5px; }
-    .main-header h2 { font-size: 17px; }
-    .stat-card .value { font-size: 20px; }
-    .mode-btn { font-size: 11px; min-height: 60px; }
   }
 
   .modal-content { border-radius: 0 !important; border: 2px solid var(--line-strong); }
@@ -633,7 +198,20 @@
   .modal-title { font-size: 15px; font-weight: 700; color: var(--ink); }
   .modal-footer { border-top: 1.5px solid var(--line-strong); padding: 14px 20px; background: #f8fafc; }
   .modal-body { padding: 20px; }
-  .btn-close:focus { box-shadow: none; }
+
+  /* Refresh pulse indicator */
+  .refreshing { position: relative; }
+  .refreshing::after {
+    content: '';
+    position: absolute; top: 6px; right: 8px;
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--brand);
+    animation: pulse 1s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.3; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.2); }
+  }
 </style>
 </head>
 <body>
@@ -643,8 +221,7 @@
     <div class="gate-icon"><i class="bi bi-shield-lock"></i></div>
     <h2 class="gate-title">Admin Access</h2>
     <p class="gate-sub">Enter your 4-digit PIN to continue</p>
-    <input type="password" class="pin-input" id="pinInput" maxlength="4"
-           inputmode="numeric" pattern="\d{4}" placeholder="••••" autocomplete="off">
+    <input type="password" class="pin-input" id="pinInput" maxlength="4" inputmode="numeric" pattern="\d{4}" placeholder="••••" autocomplete="off">
     <div class="gate-msg" id="gateMsg"></div>
     <button type="button" class="btn btn-brand w-100 mt-3" id="btnLogin" onclick="doLogin()">
       <i class="bi bi-box-arrow-in-right"></i> Unlock Panel
@@ -655,9 +232,7 @@
 <div class="layout" id="layout">
   <div class="mobile-appbar">
     <div class="title" id="mobileTitle">Dashboard</div>
-    <button class="icon-btn" onclick="doLogout(event)" title="Log out">
-      <i class="bi bi-box-arrow-right"></i>
-    </button>
+    <button class="icon-btn" onclick="doLogout(event)"><i class="bi bi-box-arrow-right"></i></button>
   </div>
 
   <aside class="sidebar">
@@ -672,22 +247,15 @@
     <button class="nav-item-btn" data-module="departments"><i class="bi bi-building"></i> Departments</button>
     <button class="nav-item-btn" data-module="events"><i class="bi bi-calendar-event"></i> Events</button>
     <button class="nav-item-btn" data-module="settings"><i class="bi bi-gear"></i> Settings</button>
-    <div class="sidebar-footer">
-      Logged in · <a href="#" onclick="doLogout(event)">Log out</a>
-    </div>
+    <div class="sidebar-footer">Logged in · <a href="#" onclick="doLogout(event)">Log out</a></div>
   </aside>
 
   <main class="main-area">
 
     <section class="module active" id="mod-dashboard">
       <div class="main-header">
-        <div>
-          <h2>Dashboard</h2>
-          <p class="sub" id="dashActiveEvent">Loading active event…</p>
-        </div>
-        <button class="btn btn-outline-brand btn-sm" onclick="loadDashboard()">
-          <i class="bi bi-arrow-clockwise"></i> Refresh
-        </button>
+        <div><h2>Dashboard</h2><p class="sub" id="dashActiveEvent">Loading active event…</p></div>
+        <button class="btn btn-outline-brand btn-sm" onclick="loadDashboard(true)"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
       </div>
       <div class="row g-2 g-md-3 mb-3">
         <div class="col-6 col-md-3"><div class="stat-card"><div class="label">Employees</div><div class="value" id="statTotal">—</div></div></div>
@@ -696,9 +264,7 @@
         <div class="col-6 col-md-3"><div class="stat-card"><div class="label">Today Out</div><div class="value" id="statOut">—</div></div></div>
       </div>
       <div class="card-soft">
-        <div class="card-head">
-          <span><i class="bi bi-clock-history me-1"></i> Latest Activity</span>
-        </div>
+        <div class="card-head"><span><i class="bi bi-clock-history me-1"></i> Latest Activity</span></div>
         <div class="table-responsive">
           <table class="table-app">
             <thead><tr><th>Date & Time</th><th>Employee</th><th>Session</th><th>Action</th><th>Remarks</th></tr></thead>
@@ -713,19 +279,11 @@
       <div class="card-soft mb-3">
         <div class="card-body">
           <div class="scan-config">
-            <div>
-              <label class="form-label">Session</label>
-              <select class="form-select" id="scanSession">
-                <option value="Morning">Morning</option>
-                <option value="Afternoon">Afternoon</option>
-              </select>
+            <div><label class="form-label">Session</label>
+              <select class="form-select" id="scanSession"><option value="Morning">Morning</option><option value="Afternoon">Afternoon</option></select>
             </div>
-            <div>
-              <label class="form-label">Manual Entry</label>
-              <div class="d-flex gap-2">
-                <input type="text" class="form-control" id="manualEmpId" placeholder="Employee ID">
-                <button class="btn btn-outline-brand btn-sm" onclick="submitManual()">Submit</button>
-              </div>
+            <div><label class="form-label">Manual Entry</label>
+              <div class="d-flex gap-2"><input type="text" class="form-control" id="manualEmpId" placeholder="Employee ID"><button class="btn btn-outline-brand btn-sm" onclick="submitManual()">Submit</button></div>
             </div>
           </div>
           <div class="mode-toggle">
@@ -737,11 +295,7 @@
             <button class="btn btn-brand flex-fill" id="btnStartCam" onclick="startCamera()"><i class="bi bi-camera-video"></i> Start Camera</button>
             <button class="btn btn-outline-brand flex-fill" id="btnStopCam" onclick="stopCamera()" style="display:none;"><i class="bi bi-stop-circle"></i> Stop</button>
           </div>
-          <div class="scan-result" id="scanResult">
-            <h4 id="scanTitle">—</h4>
-            <div class="time-big" id="scanTime">—</div>
-            <div class="meta" id="scanMeta">—</div>
-          </div>
+          <div class="scan-result" id="scanResult"><h4 id="scanTitle">—</h4><div class="time-big" id="scanTime">—</div><div class="meta" id="scanMeta">—</div></div>
         </div>
       </div>
     </section>
@@ -750,39 +304,22 @@
       <div class="main-header">
         <div><h2>Employees</h2><p class="sub" id="empCount">—</p></div>
         <div class="header-actions">
-          <button class="btn btn-brand btn-sm" onclick="openAddEmployee()">
-            <i class="bi bi-person-plus"></i> Register Employee
-          </button>
-          <button class="btn btn-outline-brand btn-sm" onclick="exportEmployees()">
-            <i class="bi bi-download"></i> CSV
-          </button>
+          <button class="btn btn-brand btn-sm" onclick="openAddEmployee()"><i class="bi bi-person-plus"></i> Register Employee</button>
+          <button class="btn btn-outline-brand btn-sm" onclick="exportEmployees()"><i class="bi bi-download"></i> CSV</button>
         </div>
       </div>
       <div class="card-soft mb-3">
         <div class="card-body">
           <div class="row g-2">
             <div class="col-12 col-md-7"><input class="form-control" id="empSearch" placeholder="Search name, ID, or dept…" oninput="renderEmployees()"></div>
-            <div class="col-12 col-md-5">
-              <select class="form-select" id="empFilterStatus" onchange="renderEmployees()">
-                <option value="">All Statuses</option><option value="Active">Active</option><option value="Inactive">Inactive</option>
-              </select>
-            </div>
+            <div class="col-12 col-md-5"><select class="form-select" id="empFilterStatus" onchange="renderEmployees()"><option value="">All Statuses</option><option value="Active">Active</option><option value="Inactive">Inactive</option></select></div>
           </div>
         </div>
       </div>
       <div class="card-soft">
         <div class="table-responsive">
           <table class="table-app">
-            <thead>
-              <tr>
-                <th>Employee ID</th>
-                <th>Name</th>
-                <th>Department</th>
-                <th>Registered</th>
-                <th>Status</th>
-                <th style="text-align:right;">Actions</th>
-              </tr>
-            </thead>
+            <thead><tr><th>Employee ID</th><th>Name</th><th>Department</th><th>Registered</th><th>Status</th><th style="text-align:right;">Actions</th></tr></thead>
             <tbody id="empTable"><tr class="empty-row"><td colspan="6">Loading…</td></tr></tbody>
           </table>
         </div>
@@ -797,29 +334,17 @@
       <div class="card-soft mb-3">
         <div class="card-body">
           <div class="row g-2">
-            <div class="col-6 col-md-3"><label class="form-label">From</label><input type="date" class="form-control" id="attFrom" onchange="renderAttendance()"></div>
-            <div class="col-6 col-md-3"><label class="form-label">To</label><input type="date" class="form-control" id="attTo" onchange="renderAttendance()"></div>
-            <div class="col-6 col-md-3"><label class="form-label">Session</label><select class="form-select" id="attSession" onchange="renderAttendance()"><option value="">All</option><option value="Morning">Morning</option><option value="Afternoon">Afternoon</option></select></div>
-            <div class="col-6 col-md-3"><label class="form-label">Department</label><select class="form-select" id="attDept" onchange="renderAttendance()"><option value="">All</option></select></div>
+            <div class="col-6 col-md-3"><label class="form-label">From</label><input type="date" class="form-control" id="attFrom" onchange="renderAttendance(true)"></div>
+            <div class="col-6 col-md-3"><label class="form-label">To</label><input type="date" class="form-control" id="attTo" onchange="renderAttendance(true)"></div>
+            <div class="col-6 col-md-3"><label class="form-label">Session</label><select class="form-select" id="attSession" onchange="renderAttendance(true)"><option value="">All</option><option value="Morning">Morning</option><option value="Afternoon">Afternoon</option></select></div>
+            <div class="col-6 col-md-3"><label class="form-label">Department</label><select class="form-select" id="attDept" onchange="renderAttendance(true)"><option value="">All</option></select></div>
           </div>
         </div>
       </div>
       <div class="card-soft">
         <div class="table-responsive">
           <table class="table-app">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Employee</th>
-                <th>Department</th>
-                <th>Session</th>
-                <th>Time In</th>
-                <th>Time Out</th>
-                <th>Remarks</th>
-                <th>Encoded By</th>
-                <th style="text-align:right;">Actions</th>
-              </tr>
-            </thead>
+            <thead><tr><th>Date</th><th>Employee</th><th>Department</th><th>Session</th><th>Time In</th><th>Time Out</th><th>Remarks</th><th>Encoded By</th><th style="text-align:right;">Actions</th></tr></thead>
             <tbody id="attTable"><tr class="empty-row"><td colspan="9">Loading…</td></tr></tbody>
           </table>
         </div>
@@ -839,13 +364,7 @@
       <div class="card-soft">
         <div class="table-responsive">
           <table class="table-app">
-            <thead>
-              <tr>
-                <th>Department</th>
-                <th>Status</th>
-                <th style="text-align:right;">Actions</th>
-              </tr>
-            </thead>
+            <thead><tr><th>Department</th><th>Status</th><th style="text-align:right;">Actions</th></tr></thead>
             <tbody id="deptTable"><tr class="empty-row"><td colspan="3">Loading…</td></tr></tbody>
           </table>
         </div>
@@ -860,16 +379,7 @@
       <div class="card-soft">
         <div class="table-responsive">
           <table class="table-app">
-            <thead>
-              <tr>
-                <th>Event</th>
-                <th>Dates</th>
-                <th>Morning</th>
-                <th>Afternoon</th>
-                <th>Status</th>
-                <th style="text-align:right;">Actions</th>
-              </tr>
-            </thead>
+            <thead><tr><th>Event</th><th>Dates</th><th>Morning</th><th>Afternoon</th><th>Status</th><th style="text-align:right;">Actions</th></tr></thead>
             <tbody id="eventTable"><tr class="empty-row"><td colspan="6">Loading…</td></tr></tbody>
           </table>
         </div>
@@ -882,7 +392,7 @@
         <div class="card-head">Change Admin PIN</div>
         <div class="card-body">
           <div class="row g-2">
-            <div class="col-12 col-md-4"><label class="form-label">New PIN (4 digits)</label><input type="password" class="form-control" id="setNewPin" maxlength="4" inputmode="numeric" placeholder="••••"></div>
+            <div class="col-12 col-md-4"><label class="form-label">New PIN</label><input type="password" class="form-control" id="setNewPin" maxlength="4" inputmode="numeric" placeholder="••••"></div>
             <div class="col-12 col-md-4"><label class="form-label">Confirm</label><input type="password" class="form-control" id="setConfirmPin" maxlength="4" inputmode="numeric" placeholder="••••"></div>
             <div class="col-12 col-md-4 d-flex align-items-end"><button class="btn btn-brand w-100" onclick="updatePin()"><i class="bi bi-key"></i> Update PIN</button></div>
           </div>
@@ -891,7 +401,6 @@
       <div class="card-soft">
         <div class="card-head">Grace Period</div>
         <div class="card-body">
-          <p class="small text-muted mb-3" style="font-size: 12px; color: var(--ink-muted);">Minutes before an employee is marked <strong>Late</strong>.</p>
           <div class="row g-2">
             <div class="col-12 col-md-4"><label class="form-label">Minutes</label><input type="number" class="form-control" id="setGrace" min="0" max="120"></div>
             <div class="col-12 col-md-4 d-flex align-items-end"><button class="btn btn-brand w-100" onclick="updateGrace()"><i class="bi bi-check2"></i> Save</button></div>
@@ -916,16 +425,10 @@
 <div class="modal fade" id="eventModal" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="eventModalTitle">New Event</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
+      <div class="modal-header"><h5 class="modal-title" id="eventModalTitle">New Event</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
       <div class="modal-body">
         <input type="hidden" id="evtId">
-        <div class="mb-3">
-          <label class="form-label">Event Name</label>
-          <input class="form-control" id="evtName" placeholder="e.g. Annual Company Outing">
-        </div>
+        <div class="mb-3"><label class="form-label">Event Name</label><input class="form-control" id="evtName" placeholder="e.g. Annual Company Outing"></div>
         <div class="row g-3 mb-3">
           <div class="col-6"><label class="form-label">Date From</label><input type="date" class="form-control" id="evtFrom"></div>
           <div class="col-6"><label class="form-label">Date To</label><input type="date" class="form-control" id="evtTo"></div>
@@ -948,14 +451,9 @@
 <div class="modal fade" id="overrideModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered modal-fullscreen-sm-down">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Override Attendance</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
+      <div class="modal-header"><h5 class="modal-title">Override Attendance</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
       <div class="modal-body">
-        <input type="hidden" id="ovEmpId">
-        <input type="hidden" id="ovDate">
-        <input type="hidden" id="ovSession">
+        <input type="hidden" id="ovEmpId"><input type="hidden" id="ovDate"><input type="hidden" id="ovSession">
         <p class="small text-muted mb-3" id="ovContext" style="font-size: 12px;">—</p>
         <div class="mb-3"><label class="form-label">Time In</label><input type="time" step="1" class="form-control" id="ovTimeIn"></div>
         <div class="mb-3"><label class="form-label">Time Out</label><input type="time" step="1" class="form-control" id="ovTimeOut"></div>
@@ -972,70 +470,36 @@
 <div class="modal fade" id="addEmpModal" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered modal-fullscreen-sm-down">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Register New Employee</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
+      <div class="modal-header"><h5 class="modal-title">Register New Employee</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
       <div class="modal-body">
         <div id="addEmpForm">
-          <p class="small text-muted mb-3" style="font-size: 12px;">
-            Use this form to register employees who don't have a device to use the self-registration link.
-            A QR code will be generated automatically.
-          </p>
-          <div class="mb-3">
-            <label class="form-label">Employee ID <span style="color:#dc2626;">*</span></label>
-            <input type="text" class="form-control" id="newEmpId" placeholder="e.g. EMP-0001" autocomplete="off">
-          </div>
+          <p class="small text-muted mb-3" style="font-size: 12px;">Use this form to register employees who don't have a device. A QR code will be generated automatically.</p>
+          <div class="mb-3"><label class="form-label">Employee ID *</label><input type="text" class="form-control" id="newEmpId" placeholder="e.g. EMP-0001" autocomplete="off"></div>
           <div class="row g-3 mb-3">
-            <div class="col-12 col-md-6">
-              <label class="form-label">First Name <span style="color:#dc2626;">*</span></label>
-              <input type="text" class="form-control" id="newEmpFirst" autocomplete="off">
-            </div>
-            <div class="col-12 col-md-6">
-              <label class="form-label">Middle Name</label>
-              <input type="text" class="form-control" id="newEmpMiddle" placeholder="Optional" autocomplete="off">
-            </div>
+            <div class="col-12 col-md-6"><label class="form-label">First Name *</label><input type="text" class="form-control" id="newEmpFirst" autocomplete="off"></div>
+            <div class="col-12 col-md-6"><label class="form-label">Middle Name</label><input type="text" class="form-control" id="newEmpMiddle" placeholder="Optional" autocomplete="off"></div>
           </div>
-          <div class="mb-3">
-            <label class="form-label">Last Name <span style="color:#dc2626;">*</span></label>
-            <input type="text" class="form-control" id="newEmpLast" autocomplete="off">
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Department <span style="color:#dc2626;">*</span></label>
-            <select class="form-select" id="newEmpDept">
-              <option value="">Loading departments…</option>
-            </select>
-          </div>
+          <div class="mb-3"><label class="form-label">Last Name *</label><input type="text" class="form-control" id="newEmpLast" autocomplete="off"></div>
+          <div class="mb-3"><label class="form-label">Department *</label><select class="form-select" id="newEmpDept"><option value="">Loading departments…</option></select></div>
         </div>
-
         <div id="addEmpQr" style="display:none;">
-          <div class="alert-success" style="background:#f0fdf4; border:1.5px solid #16a34a; padding:14px; margin-bottom:16px; text-align:center;">
+          <div style="background:#f0fdf4; border:1.5px solid #16a34a; padding:14px; margin-bottom:16px; text-align:center;">
             <i class="bi bi-check-circle-fill" style="color:#16a34a; font-size:20px;"></i>
             <div style="font-weight:700; color:#15803d; margin-top:4px;">Employee registered successfully</div>
           </div>
-
           <div class="qr-display">
             <div class="qr-frame"><div id="newEmpQrCanvas"></div></div>
             <div style="font-weight:700; font-size:15px; margin-top:12px;" id="newEmpQrName">—</div>
             <div style="color:var(--ink-muted); font-size:13px;" id="newEmpQrId">—</div>
             <div style="color:var(--ink-muted); font-size:12px;" id="newEmpQrDept">—</div>
-            <div class="qr-hint">
-              Show this QR to the employee so they can take a photo or screenshot it.
-              You can also download it for printing.
-            </div>
+            <div class="qr-hint">Show this QR to the employee. Or download for printing.</div>
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-outline-brand" data-bs-dismiss="modal" onclick="resetAddEmpModal()">
-          <span id="addEmpCloseLabel">Cancel</span>
-        </button>
-        <button class="btn btn-brand" id="btnAddEmpSubmit" onclick="submitAddEmployee()">
-          <i class="bi bi-person-plus"></i> Register Employee
-        </button>
-        <button class="btn btn-brand" id="btnDownloadEmpQr" style="display:none;" onclick="downloadNewEmpQr()">
-          <i class="bi bi-download"></i> Download QR
-        </button>
+        <button class="btn btn-outline-brand" data-bs-dismiss="modal" onclick="resetAddEmpModal()"><span id="addEmpCloseLabel">Cancel</span></button>
+        <button class="btn btn-brand" id="btnAddEmpSubmit" onclick="submitAddEmployee()"><i class="bi bi-person-plus"></i> Register Employee</button>
+        <button class="btn btn-brand" id="btnDownloadEmpQr" style="display:none;" onclick="downloadNewEmpQr()"><i class="bi bi-download"></i> Download QR</button>
       </div>
     </div>
   </div>
@@ -1045,8 +509,11 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
 <script>
-const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbw4K0KD-V8G0Kt2eBtXXKUG6fvJaVsuiGec_agSfyrYLO2NMaBmdR5NX5TuiRRbEfpF/exec';
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxq5qYB1nlCo9L_B1S9cDSrGkILJppDqmFqC8DZKEND9wDd6W8c4AQAfvoWlHFtvTyk/exec';
 
+/* ============================================================
+ *  API CLIENT
+ * ============================================================ */
 async function api(action, payload) {
   try {
     const res = await fetch(WEB_APP_URL, {
@@ -1062,6 +529,23 @@ async function api(action, payload) {
   }
 }
 
+/* ============================================================
+ *  CLIENT CACHE (30s TTL)
+ * ============================================================ */
+const _cache = {};
+const CACHE_TTL = 30000;
+function cacheGet(key) {
+  const c = _cache[key];
+  if (!c || !c.data) return null;
+  if (Date.now() - c.ts > CACHE_TTL) return null;
+  return c.data;
+}
+function cacheSet(key, data) { _cache[key] = { data, ts: Date.now() }; }
+function cacheClear() { Object.keys(_cache).forEach(k => delete _cache[k]); }
+
+/* ============================================================
+ *  STATE
+ * ============================================================ */
 let currentPin = '';
 let currentModule = 'dashboard';
 let scanMode = 'IN';
@@ -1072,11 +556,13 @@ let employeesCache = [];
 let attendanceCache = [];
 let eventsCache = [];
 let eventModal, overrideModal, addEmpModal;
-let newEmpQrInstance = null;
 let newEmpData = null;
+let pollTimer = null;
 
-const MONTHS_SHORT = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.',
-                      'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'];
+/* ============================================================
+ *  FORMATTERS
+ * ============================================================ */
+const MONTHS_SHORT = ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 'Jul.', 'Aug.', 'Sep.', 'Oct.', 'Nov.', 'Dec.'];
 
 function fmtDate(input) {
   if (!input) return '—';
@@ -1084,73 +570,52 @@ function fmtDate(input) {
   const m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
   if (m) {
     const y = m[1], mo = parseInt(m[2], 10), d = parseInt(m[3], 10);
-    if (mo >= 1 && mo <= 12) return `${MONTHS_SHORT[mo - 1]} ${d}, ${y}`;
+    if (mo >= 1 && mo <= 12) return MONTHS_SHORT[mo - 1] + ' ' + d + ', ' + y;
   }
-  const dt = new Date(s);
-  if (!isNaN(dt.getTime())) return `${MONTHS_SHORT[dt.getMonth()]} ${dt.getDate()}, ${dt.getFullYear()}`;
   return s;
 }
-
 function fmtDateTime(input) {
   if (!input) return '—';
   const s = String(input).trim();
-  const m = s.match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})(?::(\d{2}))?/);
+  const m = s.match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/);
   if (m) {
     const y = m[1], mo = parseInt(m[2], 10), d = parseInt(m[3], 10);
     let h = parseInt(m[4], 10);
     const mi = m[5];
     const ampm = h >= 12 ? 'PM' : 'AM';
     let h12 = h % 12; if (h12 === 0) h12 = 12;
-    return `${MONTHS_SHORT[mo - 1]} ${d}, ${y} ${String(h12).padStart(2,'0')}:${mi} ${ampm}`;
-  }
-  const dt = new Date(s);
-  if (!isNaN(dt.getTime())) {
-    const ampm = dt.getHours() >= 12 ? 'PM' : 'AM';
-    let h12 = dt.getHours() % 12; if (h12 === 0) h12 = 12;
-    return `${MONTHS_SHORT[dt.getMonth()]} ${dt.getDate()}, ${dt.getFullYear()} ` +
-           `${String(h12).padStart(2, '0')}:${String(dt.getMinutes()).padStart(2, '0')} ${ampm}`;
+    return MONTHS_SHORT[mo - 1] + ' ' + d + ', ' + y + ' ' + String(h12).padStart(2,'0') + ':' + mi + ' ' + ampm;
   }
   return s;
 }
-
 function fmtTime(input) {
   if (!input) return '—';
-  const s = String(input).trim();
-  const m = s.match(/^(\d{1,2}):(\d{2})(?::(\d{2}))?/);
+  const m = String(input).trim().match(/^(\d{1,2}):(\d{2})/);
   if (m) {
     let h = parseInt(m[1], 10);
-    const mi = m[2];
     const ampm = h >= 12 ? 'PM' : 'AM';
     let h12 = h % 12; if (h12 === 0) h12 = 12;
-    return `${String(h12).padStart(2, '0')}:${mi} ${ampm}`;
+    return String(h12).padStart(2,'0') + ':' + m[2] + ' ' + ampm;
   }
-  return s;
+  return String(input);
 }
 
+/* ============================================================
+ *  SWEETALERT
+ * ============================================================ */
 const SwalApp = Swal.mixin({
   customClass: { confirmButton: 'btn', cancelButton: 'btn' },
-  buttonsStyling: false,
-  reverseButtons: true,
+  buttonsStyling: false, reverseButtons: true,
 });
-
-function swalError(msg, title) {
-  return SwalApp.fire({ icon: 'error', title: title || 'Oops…', text: msg || 'Something went wrong.', confirmButtonText: 'OK' });
-}
-function swalSuccess(msg, title) {
-  return SwalApp.fire({ icon: 'success', title: title || 'Done', text: msg || '', timer: 1600, timerProgressBar: true, showConfirmButton: false });
-}
+function swalError(msg, title) { return SwalApp.fire({ icon: 'error', title: title || 'Oops…', text: msg || 'Something went wrong.', confirmButtonText: 'OK' }); }
+function swalSuccess(msg, title) { return SwalApp.fire({ icon: 'success', title: title || 'Done', text: msg || '', timer: 1600, timerProgressBar: true, showConfirmButton: false }); }
 function swalConfirm(text, title, confirmText, isDanger) {
-  return SwalApp.fire({
-    icon: isDanger ? 'warning' : 'question',
-    title: title || 'Are you sure?',
-    text: text || '',
-    showCancelButton: true,
-    confirmButtonText: confirmText || 'Yes',
-    cancelButtonText: 'Cancel',
-    confirmButtonColor: isDanger ? '#b91c1c' : undefined,
-  }).then(r => r.isConfirmed);
+  return SwalApp.fire({ icon: isDanger ? 'warning' : 'question', title: title || 'Are you sure?', text: text || '', showCancelButton: true, confirmButtonText: confirmText || 'Yes', cancelButtonText: 'Cancel' }).then(r => r.isConfirmed);
 }
 
+/* ============================================================
+ *  AUTH
+ * ============================================================ */
 document.getElementById('pinInput').addEventListener('keydown', (e) => {
   if (e.key === 'Enter') doLogin();
 });
@@ -1160,20 +625,12 @@ async function doLogin() {
   const btn = document.getElementById('btnLogin');
   const msg = document.getElementById('gateMsg');
   msg.textContent = '';
-
-  if (!/^\d{4}$/.test(pin)) {
-    msg.textContent = 'PIN must be 4 digits.';
-    return;
-  }
-
+  if (!/^\d{4}$/.test(pin)) { msg.textContent = 'PIN must be 4 digits.'; return; }
   btn.classList.add('is-busy');
   btn.innerHTML = '<span class="spinner-inline"></span>Verifying…';
-
   const res = await api('verifyPin', { pin });
-
   btn.classList.remove('is-busy');
   btn.innerHTML = '<i class="bi bi-box-arrow-in-right"></i> Unlock Panel';
-
   if (!res || !res.ok) {
     document.getElementById('pinInput').classList.add('is-err');
     document.getElementById('pinInput').value = '';
@@ -1181,7 +638,6 @@ async function doLogin() {
     swalError(res ? res.error : 'Login failed.', 'Access denied');
     return;
   }
-
   currentPin = pin;
   document.getElementById('gate').style.display = 'none';
   document.getElementById('layout').style.display = 'block';
@@ -1191,28 +647,27 @@ async function doLogin() {
 function doLogout(e) {
   if (e) e.preventDefault();
   stopCamera();
+  stopPolling();
+  cacheClear();
   currentPin = '';
   document.getElementById('pinInput').value = '';
   document.getElementById('layout').style.display = 'none';
   document.getElementById('gate').style.display = 'flex';
 }
 
-document.querySelectorAll('.nav-item-btn').forEach(btn => {
-  btn.addEventListener('click', () => switchModule(btn.dataset.module));
-});
-document.querySelectorAll('.bn-item').forEach(btn => {
-  btn.addEventListener('click', () => switchModule(btn.dataset.module));
-});
+/* ============================================================
+ *  NAVIGATION
+ * ============================================================ */
+document.querySelectorAll('.nav-item-btn').forEach(btn => btn.addEventListener('click', () => switchModule(btn.dataset.module)));
+document.querySelectorAll('.bn-item').forEach(btn => btn.addEventListener('click', () => switchModule(btn.dataset.module)));
 
 function switchModule(name) {
   if (name !== 'scan') stopCamera();
   currentModule = name;
-
   document.querySelectorAll('.nav-item-btn').forEach(b => b.classList.toggle('active', b.dataset.module === name));
   document.querySelectorAll('.bn-item').forEach(b => b.classList.toggle('active', b.dataset.module === name));
   document.querySelectorAll('.module').forEach(m => m.classList.remove('active'));
   document.getElementById('mod-' + name).classList.add('active');
-
   const titles = { dashboard:'Dashboard', scan:'Scan Attendance', employees:'Employees', attendance:'Attendance', departments:'Departments', events:'Events', settings:'Settings' };
   const mt = document.getElementById('mobileTitle');
   if (mt) mt.textContent = titles[name] || name;
@@ -1233,26 +688,120 @@ function initPanel() {
   overrideModal = new bootstrap.Modal(document.getElementById('overrideModal'));
   addEmpModal = new bootstrap.Modal(document.getElementById('addEmpModal'));
   switchModule('dashboard');
+  setTimeout(prefetchCommon, 800);
+  startPolling();
 }
 
-async function loadDashboard() {
-  const res = await api('getDashboardStats');
-  if (!res || !res.ok) return;
+/* ============================================================
+ *  REALTIME POLLING
+ * ============================================================ */
+const POLL_INTERVAL = 25000;
 
-  const d = res.data;
-  document.getElementById('statTotal').textContent = d.totalEmployees;
-  document.getElementById('statActive').textContent = d.activeEmployees;
-  document.getElementById('statIn').textContent = d.todayCheckIns;
-  document.getElementById('statOut').textContent = d.todayCheckOuts;
+function startPolling() {
+  stopPolling();
+  pollTimer = setInterval(() => {
+    if (document.hidden) return;
+    if (document.querySelector('.modal.show')) return;
+    if (currentModule === 'dashboard') loadDashboard(true, true);
+    else if (currentModule === 'attendance') renderAttendance(true, true);
+    else if (currentModule === 'employees') loadEmployees(true, true);
+  }, POLL_INTERVAL);
+}
+function stopPolling() {
+  if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && currentPin) {
+    if (currentModule === 'dashboard') loadDashboard(true, true);
+    else if (currentModule === 'attendance') renderAttendance(true, true);
+    else if (currentModule === 'employees') loadEmployees(true, true);
+  }
+});
+
+/* ============================================================
+ *  PREFETCH
+ * ============================================================ */
+async function prefetchCommon() {
+  if (!cacheGet('departments')) {
+    const r = await api('getDepartments', { onlyActive: false });
+    if (r && r.ok) cacheSet('departments', r);
+  }
+  setTimeout(async () => {
+    if (!cacheGet('employees')) {
+      const r = await api('getEmployees', { onlyActive: false });
+      if (r && r.ok) cacheSet('employees', r);
+    }
+  }, 400);
+}
+
+/* ============================================================
+ *  DASHBOARD (with fallback + error UI + silent refresh)
+ * ============================================================ */
+async function loadDashboard(force, silent) {
+  const tb = document.getElementById('dashActivity');
+
+  // If we have cache, render immediately (silent update)
+  if (!force) {
+    const cached = cacheGet('dashboard');
+    if (cached && cached.data) {
+      renderDashboardData(cached.data);
+      // Still fetch in background to update silently
+    }
+  }
+
+  // Show loading only if we don't have content
+  if (!silent && !tb.querySelector('tr:not(.empty-row)')) {
+    tb.innerHTML = '<tr class="empty-row"><td colspan="5">Loading…</td></tr>';
+  }
+
+  // Try bundle first
+  let r = null;
+  if (!force || silent) {
+    const cached = cacheGet('dashboard');
+    if (cached) r = cached;
+  }
+  if (!r) {
+    r = await api('getDashboardBundle');
+    // Fallback: if bundle fails, try individual calls
+    if (!r || !r.ok) {
+      const [statsRes, attRes] = await Promise.all([
+        api('getDashboardStats'),
+        api('getAttendance', { filter: { dateFrom: todayStr(), dateTo: todayStr() } })
+      ]);
+      if (statsRes && statsRes.ok) {
+        r = {
+          ok: true,
+          data: {
+            stats: statsRes.data,
+            activity: (attRes && attRes.ok && Array.isArray(attRes.data)) ? attRes.data.slice(0, 10) : [],
+          },
+        };
+      }
+    }
+    if (!r || !r.ok) {
+      showDashboardError(r ? r.error : 'Unable to load dashboard');
+      return;
+    }
+    cacheSet('dashboard', r);
+  }
+
+  renderDashboardData(r.data);
+}
+
+function renderDashboardData(data) {
+  const d = data.stats || {};
+  document.getElementById('statTotal').textContent = d.totalEmployees != null ? d.totalEmployees : '—';
+  document.getElementById('statActive').textContent = d.activeEmployees != null ? d.activeEmployees : '—';
+  document.getElementById('statIn').textContent = d.todayCheckIns != null ? d.todayCheckIns : '—';
+  document.getElementById('statOut').textContent = d.todayCheckOuts != null ? d.todayCheckOuts : '—';
 
   const ev = d.activeEvent;
   document.getElementById('dashActiveEvent').textContent = ev
-    ? `Active: ${ev.EventName} (${fmtDate(ev.DateFrom)} – ${fmtDate(ev.DateTo)})`
+    ? 'Active: ' + ev.EventName + ' (' + fmtDate(ev.DateFrom) + ' – ' + fmtDate(ev.DateTo) + ')'
     : 'No active event.';
 
-  const today = todayStr();
-  const r2 = await api('getAttendance', { filter: { dateFrom: today, dateTo: today } });
-  const rows = (r2 && r2.ok ? r2.data : []).slice(0, 10);
+  const rows = Array.isArray(data.activity) ? data.activity : [];
   const tb = document.getElementById('dashActivity');
   if (!rows.length) {
     tb.innerHTML = '<tr class="empty-row"><td colspan="5">No activity today yet.</td></tr>';
@@ -1262,15 +811,27 @@ async function loadDashboard() {
     const outT = r.TimeOut || '';
     const action = outT ? 'OUT' : 'IN';
     const time = fmtTime(outT || r.TimeIn || '');
-    const date = fmtDate(r.Date);
-    return `<tr>
-      <td data-label="Date & Time"><strong>${escapeHtml(date)}</strong><br><span style="color:var(--ink-muted);font-size:11px;">${escapeHtml(time)}</span></td>
-      <td data-label="Employee">${escapeHtml(r.FullName)}<br><span style="color:var(--ink-muted);font-size:11px;">${escapeHtml(r.EmployeeID)}</span></td>
-      <td data-label="Session"><span class="badge-status badge-${r.Session.toLowerCase()}">${r.Session}</span></td>
-      <td data-label="Action">${action}</td>
-      <td data-label="Remarks">${escapeHtml(r.Remarks || '—')}</td>
-    </tr>`;
+    return '<tr>' +
+      '<td data-label="Date & Time"><strong>' + escapeHtml(fmtDate(r.Date)) + '</strong><br><span style="color:var(--ink-muted);font-size:11px;">' + escapeHtml(time) + '</span></td>' +
+      '<td data-label="Employee">' + escapeHtml(r.FullName) + '<br><span style="color:var(--ink-muted);font-size:11px;">' + escapeHtml(r.EmployeeID) + '</span></td>' +
+      '<td data-label="Session"><span class="badge-status badge-' + r.Session.toLowerCase() + '">' + r.Session + '</span></td>' +
+      '<td data-label="Action">' + action + '</td>' +
+      '<td data-label="Remarks">' + escapeHtml(r.Remarks || '—') + '</td>' +
+    '</tr>';
   }).join('');
+}
+
+function showDashboardError(msg) {
+  document.getElementById('statTotal').textContent = '—';
+  document.getElementById('statActive').textContent = '—';
+  document.getElementById('statIn').textContent = '—';
+  document.getElementById('statOut').textContent = '—';
+  document.getElementById('dashActiveEvent').textContent = '';
+  document.getElementById('dashActivity').innerHTML =
+    '<tr class="empty-row"><td colspan="5" style="color:#b91c1c;">' +
+      '⚠️ ' + escapeHtml(msg || 'Could not load dashboard') +
+      '<br><button class="btn btn-sm btn-brand mt-2" onclick="loadDashboard(true)">Retry</button>' +
+    '</td></tr>';
 }
 
 function todayStr() {
@@ -1278,13 +839,21 @@ function todayStr() {
   return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
 }
 
+/* ============================================================
+ *  SCAN
+ * ============================================================ */
 let scanLock = false;
 let lastScanPayload = '';
 let lastScanTime = 0;
 let scannerPaused = false;
 
 async function loadScanInfo() {
-  const res = await api('getTodaySchedule');
+  let res = cacheGet('scanInfo');
+  if (!res) {
+    const r = await api('getTodaySchedule');
+    if (r && r.ok) { cacheSet('scanInfo', r); res = r; }
+    else res = r;
+  }
   const el = document.getElementById('scanEventInfo');
   if (!res || !res.ok) {
     el.textContent = res ? res.error : 'No active event.';
@@ -1292,7 +861,7 @@ async function loadScanInfo() {
     return;
   }
   const ev = res.data;
-  el.textContent = `${ev.EventName} • ${fmtDate(ev.DateFrom)} – ${fmtDate(ev.DateTo)}`;
+  el.textContent = ev.EventName + ' • ' + fmtDate(ev.DateFrom) + ' – ' + fmtDate(ev.DateTo);
   el.style.color = 'var(--ink-muted)';
 }
 
@@ -1305,43 +874,30 @@ function setScanMode(mode) {
 function startCamera() {
   if (cameraRunning) return;
   const reader = document.getElementById('reader');
-
-  // Activate the reader FIRST so it's already visible/black before
-  // html5-qrcode measures the container and injects the video.
   reader.classList.add('active');
   reader.innerHTML = '';
-
   html5Qr = new Html5Qrcode("reader");
-  const config = { fps: 10, qrbox: { width: 240, height: 240 } };
-
-  html5Qr.start({ facingMode: "environment" }, config, onScanSuccess, () => {})
+  html5Qr.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 240, height: 240 } }, onScanSuccess, () => {})
     .then(() => {
-      cameraRunning = true;
-      scannerPaused = false;
+      cameraRunning = true; scannerPaused = false;
       document.getElementById('btnStartCam').style.display = 'none';
       document.getElementById('btnStopCam').style.display = '';
     })
     .catch((err) => {
-      // Roll back: remove active class + clear innerHTML on failure
-      reader.classList.remove('active');
-      reader.innerHTML = '';
+      reader.classList.remove('active'); reader.innerHTML = '';
       cameraRunning = false;
       document.getElementById('btnStartCam').style.display = '';
       document.getElementById('btnStopCam').style.display = 'none';
-      swalError('Could not start the camera. Please check permissions.\n\n' + err, 'Camera error');
+      swalError('Could not start the camera: ' + err, 'Camera error');
     });
 }
 
 function stopCamera() {
   if (!html5Qr || !cameraRunning) return;
   html5Qr.stop().then(() => {
-    html5Qr.clear();
-    html5Qr = null;
-    cameraRunning = false;
-    scannerPaused = false;
+    html5Qr.clear(); html5Qr = null; cameraRunning = false; scannerPaused = false;
     const reader = document.getElementById('reader');
-    reader.classList.remove('active');
-    reader.innerHTML = '';
+    reader.classList.remove('active'); reader.innerHTML = '';
     document.getElementById('btnStartCam').style.display = '';
     document.getElementById('btnStopCam').style.display = 'none';
   }).catch(() => {});
@@ -1351,9 +907,7 @@ function onScanSuccess(decodedText) {
   if (scanLock || scannerPaused) return;
   const now = Date.now();
   if (decodedText === lastScanPayload && now - lastScanTime < 3000) return;
-  lastScanPayload = decodedText;
-  lastScanTime = now;
-  scanLock = true;
+  lastScanPayload = decodedText; lastScanTime = now; scanLock = true;
   pauseScanner();
   const session = document.getElementById('scanSession').value;
   submitScan({ qrPayload: decodedText, mode: scanMode, session, manual: false });
@@ -1366,10 +920,7 @@ function submitManual() {
   scanLock = true;
   const session = document.getElementById('scanSession').value;
   submitScan({ employeeId: empId, mode: scanMode, session, manual: true })
-    .finally(() => {
-      document.getElementById('manualEmpId').value = '';
-      scanLock = false;
-    });
+    .finally(() => { document.getElementById('manualEmpId').value = ''; scanLock = false; });
 }
 
 async function submitScan(payload) {
@@ -1379,68 +930,57 @@ async function submitScan(payload) {
   document.getElementById('scanTitle').textContent = 'Processing…';
   document.getElementById('scanTime').textContent = '—';
   document.getElementById('scanMeta').textContent = '—';
-
-  await new Promise(r => setTimeout(r, 250));
-
+  await new Promise(r => setTimeout(r, 200));
   let res;
-  try {
-    res = await api('scanAttendance', payload);
-  } catch (e) {
-    res = { ok: false, error: e.message || 'Network error' };
-  }
+  try { res = await api('scanAttendance', payload); } catch (e) { res = { ok: false, error: e.message }; }
 
   if (!res || !res.ok) {
-    resultEl.classList.remove('success');
-    resultEl.classList.add('error');
-    document.getElementById('scanTitle').textContent = '❌ ' + (res ? res.error : 'Unknown error');
+    resultEl.classList.remove('success'); resultEl.classList.add('error');
+    document.getElementById('scanTitle').textContent = '❌ ' + (res ? res.error : 'Unknown');
     document.getElementById('scanTime').textContent = '—';
     document.getElementById('scanMeta').textContent = '';
     await swalError(res ? res.error : 'Unknown error', 'Scan failed');
   } else {
     const d = res.data;
-    resultEl.classList.remove('error');
-    resultEl.classList.add('success');
+    resultEl.classList.remove('error'); resultEl.classList.add('success');
     document.getElementById('scanTitle').textContent = '✅ ' + d.Action + ' · ' + d.FullName;
     document.getElementById('scanTime').textContent = fmtTime(d.TimeIn || d.TimeOut || '');
-    document.getElementById('scanMeta').innerHTML =
-      `<strong>${escapeHtml(d.EmployeeID)}</strong> · ${escapeHtml(d.Department)} · ${d.Session} · ${escapeHtml(d.Remarks || '')}`;
-    await swalSuccess(
-      `${d.FullName} — ${d.Action} at ${fmtTime(d.TimeIn || d.TimeOut || '')}`,
-      d.Action + ' successful'
-    );
+    document.getElementById('scanMeta').innerHTML = '<strong>' + escapeHtml(d.EmployeeID) + '</strong> · ' + escapeHtml(d.Department) + ' · ' + d.Session + ' · ' + escapeHtml(d.Remarks || '');
+    await swalSuccess(d.FullName + ' — ' + d.Action + ' at ' + fmtTime(d.TimeIn || d.TimeOut || ''), d.Action + ' successful');
   }
-
   scanLock = false;
   resumeScanner();
+  cacheClear();
+  // Refresh dashboard in background so next visit is fresh
+  loadDashboard(true, true);
 }
 
 function pauseScanner() {
   if (!html5Qr || !cameraRunning || scannerPaused) return;
-  try {
-    html5Qr.pause(true);
-    scannerPaused = true;
-  } catch (e) { /* older versions may not support pause */ }
+  try { html5Qr.pause(true); scannerPaused = true; } catch (e) {}
 }
-
 function resumeScanner() {
   if (!html5Qr || !cameraRunning || !scannerPaused) return;
-  try {
-    html5Qr.resume();
-    scannerPaused = false;
-  } catch (e) {
-    scannerPaused = false;
-    const reader = document.getElementById('reader');
-    reader.innerHTML = '';
-    cameraRunning = false;
-    startCamera();
-  }
+  try { html5Qr.resume(); scannerPaused = false; }
+  catch (e) { scannerPaused = false; const r = document.getElementById('reader'); r.innerHTML = ''; cameraRunning = false; startCamera(); }
 }
 
-async function loadEmployees() {
+/* ============================================================
+ *  EMPLOYEES
+ * ============================================================ */
+async function loadEmployees(force, silent) {
   const tb = document.getElementById('empTable');
-  tb.innerHTML = '<tr class="empty-row"><td colspan="6">Loading…</td></tr>';
-  const res = await api('getEmployees', { onlyActive: false });
-  employeesCache = res && res.ok ? res.data : [];
+  let res = !force && cacheGet('employees');
+  if (!res) {
+    if (!silent && !tb.querySelector('tr:not(.empty-row)')) tb.innerHTML = '<tr class="empty-row"><td colspan="6">Loading…</td></tr>';
+    const r = await api('getEmployees', { onlyActive: false });
+    if (r && r.ok) { cacheSet('employees', r); res = r; }
+  }
+  if (!res || !res.ok) {
+    tb.innerHTML = '<tr class="empty-row"><td colspan="6" style="color:#b91c1c;">⚠️ ' + escapeHtml(res ? res.error : 'Failed to load') + '<br><button class="btn btn-sm btn-brand mt-2" onclick="loadEmployees(true)">Retry</button></td></tr>';
+    return;
+  }
+  employeesCache = res.data;
   document.getElementById('empCount').textContent = employeesCache.length + ' total';
   renderEmployees();
 }
@@ -1449,119 +989,96 @@ function renderEmployees() {
   const q = (document.getElementById('empSearch').value || '').toLowerCase();
   const st = document.getElementById('empFilterStatus').value;
   let rows = employeesCache;
-  if (q) rows = rows.filter(r =>
-    r.EmployeeID.toLowerCase().includes(q) ||
-    r.FullName.toLowerCase().includes(q) ||
-    r.Department.toLowerCase().includes(q)
-  );
+  if (q) rows = rows.filter(r => r.EmployeeID.toLowerCase().includes(q) || r.FullName.toLowerCase().includes(q) || r.Department.toLowerCase().includes(q));
   if (st) rows = rows.filter(r => r.Status === st);
-
   const tb = document.getElementById('empTable');
-  if (!rows.length) {
-    tb.innerHTML = '<tr class="empty-row"><td colspan="6">No employees match.</td></tr>';
-    return;
-  }
-  tb.innerHTML = rows.map(r => `
-    <tr>
-      <td data-label="Employee ID"><strong>${escapeHtml(r.EmployeeID)}</strong></td>
-      <td data-label="Name">${escapeHtml(r.FullName)}</td>
-      <td data-label="Department">${escapeHtml(r.Department)}</td>
-      <td data-label="Registered">${escapeHtml(fmtDateTime(r.RegisteredAt))}</td>
-      <td data-label="Status"><span class="badge-status badge-${r.Status.toLowerCase()}">${r.Status}</span></td>
-      <td data-label="Action" style="text-align:right;">
-        <button class="btn btn-sm btn-outline-brand"
-                onclick="toggleEmpStatus('${escapeHtml(r.EmployeeID)}','${r.Status}')">
-          ${r.Status === 'Active' ? 'Deactivate' : 'Activate'}
-        </button>
-      </td>
-    </tr>
-  `).join('');
+  if (!rows.length) { tb.innerHTML = '<tr class="empty-row"><td colspan="6">No employees match.</td></tr>'; return; }
+  tb.innerHTML = rows.map(r =>
+    '<tr>' +
+      '<td data-label="Employee ID"><strong>' + escapeHtml(r.EmployeeID) + '</strong></td>' +
+      '<td data-label="Name">' + escapeHtml(r.FullName) + '</td>' +
+      '<td data-label="Department">' + escapeHtml(r.Department) + '</td>' +
+      '<td data-label="Registered">' + escapeHtml(fmtDateTime(r.RegisteredAt)) + '</td>' +
+      '<td data-label="Status"><span class="badge-status badge-' + r.Status.toLowerCase() + '">' + r.Status + '</span></td>' +
+      '<td data-label="Action" style="text-align:right;"><button class="btn btn-sm btn-outline-brand" onclick="toggleEmpStatus(\'' + escapeHtml(r.EmployeeID) + '\',\'' + r.Status + '\')">' + (r.Status === 'Active' ? 'Deactivate' : 'Activate') + '</button></td>' +
+    '</tr>'
+  ).join('');
 }
 
 async function toggleEmpStatus(empId, currentStatus) {
   const next = currentStatus === 'Active' ? 'Inactive' : 'Active';
-  const ok = await swalConfirm(
-    `Set ${empId} to ${next}?`,
-    next === 'Inactive' ? 'Deactivate employee?' : 'Activate employee?',
-    next === 'Inactive' ? 'Deactivate' : 'Activate',
-    next === 'Inactive'
-  );
+  const ok = await swalConfirm('Set ' + empId + ' to ' + next + '?', 'Confirm change', next, next === 'Inactive');
   if (!ok) return;
   const res = await api('updateEmployeeStatus', { employeeId: empId, status: next });
   if (!res || !res.ok) return swalError(res ? res.error : 'Failed', 'Update failed');
-  swalSuccess(`${empId} is now ${next}.`, 'Updated');
-  loadEmployees();
+  cacheClear();
+  swalSuccess(empId + ' is now ' + next + '.', 'Updated');
+  loadEmployees(true);
+  loadDashboard(true, true);
 }
 
 async function exportEmployees() {
   const res = await api('exportEmployeesCsv');
-  if (!res || !res.ok) return swalError('Could not export employees.', 'Export failed');
+  if (!res || !res.ok) return swalError('Could not export.', 'Export failed');
   downloadCsv(res.data.filename, res.data.csv);
-  swalSuccess('Employees CSV downloaded.', 'Export ready');
+  swalSuccess('CSV downloaded.', 'Ready');
 }
 
+/* ============================================================
+ *  ADD EMPLOYEE MODAL
+ * ============================================================ */
 async function openAddEmployee() {
   document.getElementById('addEmpForm').style.display = 'block';
   document.getElementById('addEmpQr').style.display = 'none';
   document.getElementById('btnAddEmpSubmit').style.display = '';
   document.getElementById('btnDownloadEmpQr').style.display = 'none';
   document.getElementById('addEmpCloseLabel').textContent = 'Cancel';
-
   document.getElementById('newEmpId').value = '';
   document.getElementById('newEmpFirst').value = '';
   document.getElementById('newEmpMiddle').value = '';
   document.getElementById('newEmpLast').value = '';
   document.getElementById('newEmpQrCanvas').innerHTML = '';
   newEmpData = null;
-  newEmpQrInstance = null;
 
   const sel = document.getElementById('newEmpDept');
   sel.innerHTML = '<option value="">Loading departments…</option>';
-  const res = await api('getDepartments', { onlyActive: true });
-  if (res && res.ok && res.data.length) {
-    sel.innerHTML = '<option value="">— Select department —</option>' +
-      res.data.map(d => `<option value="${escapeHtml(d.Department)}">${escapeHtml(d.Department)}</option>`).join('');
-  } else {
-    sel.innerHTML = '<option value="">No active departments — add one first</option>';
+  let res = cacheGet('departments_active');
+  if (!res) {
+    res = await api('getDepartments', { onlyActive: true });
+    if (res && res.ok) cacheSet('departments_active', res);
   }
-
+  if (res && res.ok && res.data.length) {
+    sel.innerHTML = '<option value="">— Select department —</option>' + res.data.map(d => '<option value="' + escapeHtml(d.Department) + '">' + escapeHtml(d.Department) + '</option>').join('');
+  } else {
+    sel.innerHTML = '<option value="">No active departments</option>';
+  }
   addEmpModal.show();
 }
 
 async function submitAddEmployee() {
-  const empId  = document.getElementById('newEmpId').value.trim();
-  const first  = document.getElementById('newEmpFirst').value.trim();
+  const empId = document.getElementById('newEmpId').value.trim();
+  const first = document.getElementById('newEmpFirst').value.trim();
   const middle = document.getElementById('newEmpMiddle').value.trim();
-  const last   = document.getElementById('newEmpLast').value.trim();
-  const dept   = document.getElementById('newEmpDept').value;
-
-  if (!empId)  return swalError('Enter the Employee ID.', 'Missing input');
-  if (!first)  return swalError('Enter the First Name.', 'Missing input');
-  if (!last)   return swalError('Enter the Last Name.', 'Missing input');
-  if (!dept)   return swalError('Select a Department.', 'Missing input');
+  const last = document.getElementById('newEmpLast').value.trim();
+  const dept = document.getElementById('newEmpDept').value;
+  if (!empId) return swalError('Enter Employee ID.', 'Missing input');
+  if (!first) return swalError('Enter First Name.', 'Missing input');
+  if (!last) return swalError('Enter Last Name.', 'Missing input');
+  if (!dept) return swalError('Select Department.', 'Missing input');
 
   const btn = document.getElementById('btnAddEmpSubmit');
   btn.classList.add('is-busy');
   btn.innerHTML = '<span class="spinner-inline"></span>Registering…';
-
-  const res = await api('registerEmployee', {
-    EmployeeID: empId,
-    FirstName: first,
-    MiddleName: middle,
-    LastName: last,
-    Department: dept,
-  });
-
+  const res = await api('registerEmployee', { EmployeeID: empId, FirstName: first, MiddleName: middle, LastName: last, Department: dept });
   btn.classList.remove('is-busy');
   btn.innerHTML = '<i class="bi bi-person-plus"></i> Register Employee';
 
-  if (!res || !res.ok) {
-    return swalError(res ? res.error : 'Registration failed.', 'Could not register');
-  }
-
+  if (!res || !res.ok) return swalError(res ? res.error : 'Failed', 'Could not register');
   newEmpData = res.data;
+  cacheClear();
   showNewEmpQr(res.data);
-  loadEmployees();
+  loadEmployees(true, true);
+  loadDashboard(true, true);
 }
 
 function showNewEmpQr(data) {
@@ -1570,25 +1087,13 @@ function showNewEmpQr(data) {
   document.getElementById('btnAddEmpSubmit').style.display = 'none';
   document.getElementById('btnDownloadEmpQr').style.display = '';
   document.getElementById('addEmpCloseLabel').textContent = 'Close';
-
   document.getElementById('newEmpQrName').textContent = data.FullName;
   document.getElementById('newEmpQrId').textContent = data.EmployeeID;
   document.getElementById('newEmpQrDept').textContent = data.Department;
-
-  renderQr('newEmpQrCanvas', data.QRPayload, 200, (inst) => { newEmpQrInstance = inst; });
-
-  swalSuccess(`${data.FullName} registered successfully.`, 'Employee added');
-}
-
-function renderQr(containerId, payload, size, onReady) {
-  const container = document.getElementById(containerId);
+  const container = document.getElementById('newEmpQrCanvas');
   container.innerHTML = '';
-  const inst = new QRCode(container, {
-    text: payload, width: size, height: size,
-    colorDark: '#0f172a', colorLight: '#ffffff',
-    correctLevel: QRCode.CorrectLevel.M
-  });
-  setTimeout(() => onReady && onReady(inst), 60);
+  new QRCode(container, { text: data.QRPayload, width: 200, height: 200, colorDark: '#0f172a', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.M });
+  swalSuccess(data.FullName + ' registered.', 'Employee added');
 }
 
 function resetAddEmpModal() {
@@ -1599,115 +1104,83 @@ function resetAddEmpModal() {
   document.getElementById('addEmpCloseLabel').textContent = 'Cancel';
   document.getElementById('newEmpQrCanvas').innerHTML = '';
   newEmpData = null;
-  newEmpQrInstance = null;
 }
 
 function downloadNewEmpQr() {
   if (!newEmpData) return;
   const container = document.getElementById('newEmpQrCanvas');
   const src = container.querySelector('canvas') || container.querySelector('img');
-  if (!src) return swalError('QR not ready yet.', 'Please wait');
-
+  if (!src) return;
   const W = 600, H = 700;
   const cv = document.createElement('canvas');
   cv.width = W; cv.height = H;
   const ctx = cv.getContext('2d');
-
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, W, H);
-
-  ctx.strokeStyle = '#1F4E78';
-  ctx.lineWidth = 4;
-  ctx.strokeRect(8, 8, W - 16, H - 16);
-
-  ctx.fillStyle = '#1F4E78';
-  ctx.fillRect(8, 8, W - 16, 56);
-  ctx.fillStyle = '#ffffff';
-  ctx.font = '700 16px Inter, Arial, sans-serif';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText('EVENT ATTENDANCE SYSTEM', W / 2, 36);
-
-  const qrSize = 360;
-  const qrX = (W - qrSize) / 2;
-  const qrY = 96;
-
-  function drawThenDownload() {
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-
-    let y = qrY + qrSize + 60;
-    ctx.fillStyle = '#0f172a';
-    ctx.font = '800 30px Inter, Arial, sans-serif';
-    ctx.fillText((newEmpData.FullName || '').toUpperCase(), W / 2, y);
-
-    y += 44;
-    ctx.fillStyle = '#334155';
-    ctx.font = '700 22px "Courier New", monospace';
-    ctx.fillText(newEmpData.EmployeeID, W / 2, y);
-
-    y += 34;
-    ctx.fillStyle = '#64748b';
-    ctx.font = '500 18px Inter, Arial, sans-serif';
-    ctx.fillText(newEmpData.Department || '', W / 2, y);
-
-    cv.toBlob((blob) => {
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'QR_' + newEmpData.EmployeeID + '.png';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
-      swalSuccess('QR code downloaded.', 'Saved');
-    }, 'image/png');
-  }
-
-  if (src.tagName === 'CANVAS') {
-    ctx.drawImage(src, qrX, qrY, qrSize, qrSize);
-    drawThenDownload();
-  } else {
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
-      ctx.drawImage(img, qrX, qrY, qrSize, qrSize);
-      drawThenDownload();
-    };
-    img.onerror = () => swalError('Could not load QR image.', 'Download failed');
-    img.src = src.src;
-  }
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+  ctx.strokeStyle = '#1F4E78'; ctx.lineWidth = 4; ctx.strokeRect(8, 8, W-16, H-16);
+  ctx.fillStyle = '#1F4E78'; ctx.fillRect(8, 8, W-16, 56);
+  ctx.fillStyle = '#fff'; ctx.font = '700 16px Inter, Arial, sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('EVENT ATTENDANCE SYSTEM', W/2, 36);
+  ctx.drawImage(src, 120, 96, 360, 360);
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  let y = 96 + 360 + 60;
+  ctx.fillStyle = '#0f172a'; ctx.font = '800 30px Inter, Arial, sans-serif';
+  ctx.fillText((newEmpData.FullName || '').toUpperCase(), W/2, y);
+  y += 44; ctx.fillStyle = '#334155'; ctx.font = '700 22px "Courier New", monospace';
+  ctx.fillText(newEmpData.EmployeeID, W/2, y);
+  y += 34; ctx.fillStyle = '#64748b'; ctx.font = '500 18px Inter, Arial, sans-serif';
+  ctx.fillText(newEmpData.Department || '', W/2, y);
+  cv.toBlob((blob) => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'QR_' + newEmpData.EmployeeID + '.png';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    swalSuccess('QR downloaded.', 'Saved');
+  }, 'image/png');
 }
 
+/* ============================================================
+ *  ATTENDANCE
+ * ============================================================ */
 async function loadAttendanceModule() {
   const sel = document.getElementById('attDept');
   if (sel.options.length <= 1) {
-    const res = await api('getDepartments', { onlyActive: false });
-    departmentsCache = res && res.ok ? res.data : [];
-    sel.innerHTML = '<option value="">All</option>' +
-      departmentsCache.map(d => `<option value="${escapeHtml(d.Department)}">${escapeHtml(d.Department)}</option>`).join('');
+    let res = cacheGet('departments');
+    if (!res) {
+      res = await api('getDepartments', { onlyActive: false });
+      if (res && res.ok) cacheSet('departments', res);
+    }
+    if (res && res.ok) {
+      departmentsCache = res.data;
+      sel.innerHTML = '<option value="">All</option>' + departmentsCache.map(d => `<option value="${escapeHtml(d.Department)}">${escapeHtml(d.Department)}</option>`).join('');
+    }
   }
   renderAttendance();
 }
 
-async function renderAttendance() {
+async function renderAttendance(force) {
   const filter = {
     dateFrom: document.getElementById('attFrom').value || undefined,
     dateTo: document.getElementById('attTo').value || undefined,
     session: document.getElementById('attSession').value || undefined,
     department: document.getElementById('attDept').value || undefined,
   };
+  const cacheKey = 'attendance_' + JSON.stringify(filter);
+  let res = !force && cacheGet(cacheKey);
   const tb = document.getElementById('attTable');
-  tb.innerHTML = '<tr class="empty-row"><td colspan="9">Loading…</td></tr>';
 
-  const res = await api('getAttendance', { filter });
-  attendanceCache = res && res.ok ? res.data : [];
-  document.getElementById('attCount').textContent = attendanceCache.length + ' records';
-
-  if (!attendanceCache.length) {
-    tb.innerHTML = '<tr class="empty-row"><td colspan="9">No records.</td></tr>';
-    return;
+  if (!res) {
+    tb.innerHTML = '<tr class="empty-row"><td colspan="9">Loading…</td></tr>';
+    const r = await api('getAttendance', { filter });
+    if (r && r.ok) { cacheSet(cacheKey, r); res = r; }
   }
+  if (!res || !res.ok) return;
+
+  attendanceCache = res.data;
+  document.getElementById('attCount').textContent = attendanceCache.length + ' records';
+  if (!attendanceCache.length) { tb.innerHTML = '<tr class="empty-row"><td colspan="9">No records.</td></tr>'; return; }
+
   tb.innerHTML = attendanceCache.map(r => `
     <tr>
       <td data-label="Date"><strong>${escapeHtml(fmtDate(r.Date))}</strong></td>
@@ -1719,10 +1192,7 @@ async function renderAttendance() {
       <td data-label="Remarks">${escapeHtml(r.Remarks || '—')}</td>
       <td data-label="Encoded By">${escapeHtml(r.EncodedBy || '—')}</td>
       <td data-label="Action" style="text-align:right;">
-        <button class="btn btn-sm btn-outline-brand"
-                onclick="openOverride('${escapeHtml(r.EmployeeID)}','${escapeHtml(r.Date)}','${escapeHtml(r.Session)}','${escapeHtml(r.TimeIn)}','${escapeHtml(r.TimeOut)}','${escapeHtml(r.Remarks)}')">
-          Edit
-        </button>
+        <button class="btn btn-sm btn-outline-brand" onclick="openOverride('${escapeHtml(r.EmployeeID)}','${escapeHtml(r.Date)}','${escapeHtml(r.Session)}','${escapeHtml(r.TimeIn)}','${escapeHtml(r.TimeOut)}','${escapeHtml(r.Remarks)}')">Edit</button>
       </td>
     </tr>
   `).join('');
@@ -1736,9 +1206,9 @@ async function exportAttendance() {
     department: document.getElementById('attDept').value || undefined,
   };
   const res = await api('exportAttendanceCsv', { filter });
-  if (!res || !res.ok) return swalError('Could not export attendance.', 'Export failed');
+  if (!res || !res.ok) return swalError('Export failed.', 'Error');
   downloadCsv(res.data.filename, res.data.csv);
-  swalSuccess('Attendance CSV downloaded.', 'Export ready');
+  swalSuccess('CSV downloaded.', 'Ready');
 }
 
 function openOverride(empId, date, session, timeIn, timeOut, remarks) {
@@ -1771,31 +1241,33 @@ async function submitOverride() {
   const res = await api('overrideAttendance', payload);
   if (!res || !res.ok) return swalError(res ? res.error : 'Failed', 'Override failed');
   overrideModal.hide();
-  swalSuccess('Attendance record updated.', 'Saved');
-  renderAttendance();
+  cacheClear();
+  swalSuccess('Attendance updated.', 'Saved');
+  renderAttendance(true);
 }
 
-async function loadDepartments() {
+/* ============================================================
+ *  DEPARTMENTS
+ * ============================================================ */
+async function loadDepartments(force) {
   const tb = document.getElementById('deptTable');
-  tb.innerHTML = '<tr class="empty-row"><td colspan="3">Loading…</td></tr>';
-  const res = await api('getDepartments', { onlyActive: false });
-  departmentsCache = res && res.ok ? res.data : [];
-  if (!departmentsCache.length) {
-    tb.innerHTML = '<tr class="empty-row"><td colspan="3">No departments yet.</td></tr>';
-    return;
+  let res = !force && cacheGet('departments');
+  if (!res) {
+    tb.innerHTML = '<tr class="empty-row"><td colspan="3">Loading…</td></tr>';
+    const r = await api('getDepartments', { onlyActive: false });
+    if (r && r.ok) { cacheSet('departments', r); res = r; }
   }
+  if (!res || !res.ok) return;
+  departmentsCache = res.data;
+  if (!departmentsCache.length) { tb.innerHTML = '<tr class="empty-row"><td colspan="3">No departments yet.</td></tr>'; return; }
   tb.innerHTML = departmentsCache.map(d => `
     <tr>
       <td data-label="Department"><strong>${escapeHtml(d.Department)}</strong></td>
       <td data-label="Status"><span class="badge-status badge-${d.Status.toLowerCase()}">${d.Status}</span></td>
       <td data-label="Action" style="text-align:right;">
         <div class="d-flex gap-2 flex-wrap justify-content-end">
-          <button class="btn btn-sm btn-outline-brand"
-                  onclick="toggleDept('${escapeHtml(d.Department)}','${d.Status}')">
-            ${d.Status === 'Active' ? 'Deactivate' : 'Activate'}
-          </button>
-          <button class="btn btn-sm btn-danger-outline"
-                  onclick="deleteDept('${escapeHtml(d.Department)}')">Delete</button>
+          <button class="btn btn-sm btn-outline-brand" onclick="toggleDept('${escapeHtml(d.Department)}','${d.Status}')">${d.Status === 'Active' ? 'Deactivate' : 'Activate'}</button>
+          <button class="btn btn-sm btn-danger-outline" onclick="deleteDept('${escapeHtml(d.Department)}')">Delete</button>
         </div>
       </td>
     </tr>
@@ -1804,45 +1276,48 @@ async function loadDepartments() {
 
 async function addDepartment() {
   const name = document.getElementById('newDeptName').value.trim();
-  if (!name) return swalError('Enter a department name.', 'Missing input');
+  if (!name) return swalError('Enter a name.', 'Missing input');
   const res = await api('addDepartment', { name });
   if (!res || !res.ok) return swalError(res ? res.error : 'Failed', 'Could not add');
   document.getElementById('newDeptName').value = '';
-  swalSuccess(`"${name}" added.`, 'Department created');
-  loadDepartments();
+  cacheClear();
+  swalSuccess(`"${name}" added.`, 'Created');
+  loadDepartments(true);
 }
 
 async function toggleDept(name, status) {
   const next = status === 'Active' ? 'Inactive' : 'Active';
   const res = await api('updateDepartment', { originalName: name, newName: name, status: next });
-  if (!res || !res.ok) return swalError(res ? res.error : 'Failed', 'Update failed');
-  swalSuccess(`${name} is now ${next.toLowerCase()}.`, 'Updated');
-  loadDepartments();
+  if (!res || !res.ok) return swalError(res ? res.error : 'Failed', 'Failed');
+  cacheClear();
+  swalSuccess(`${name} ${next.toLowerCase()}.`, 'Updated');
+  loadDepartments(true);
 }
 
 async function deleteDept(name) {
-  const ok = await swalConfirm(
-    `Delete "${name}"? This cannot be undone.`,
-    'Delete department?',
-    'Delete',
-    true
-  );
+  const ok = await swalConfirm(`Delete "${name}"?`, 'Delete department?', 'Delete', true);
   if (!ok) return;
   const res = await api('deleteDepartment', { name });
-  if (!res || !res.ok) return swalError(res ? res.error : 'Failed', 'Delete failed');
+  if (!res || !res.ok) return swalError(res ? res.error : 'Failed', 'Failed');
+  cacheClear();
   swalSuccess(`"${name}" deleted.`, 'Deleted');
-  loadDepartments();
+  loadDepartments(true);
 }
 
-async function loadEvents() {
+/* ============================================================
+ *  EVENTS
+ * ============================================================ */
+async function loadEvents(force) {
   const tb = document.getElementById('eventTable');
-  tb.innerHTML = '<tr class="empty-row"><td colspan="6">Loading…</td></tr>';
-  const res = await api('getEvents');
-  eventsCache = res && res.ok ? res.data : [];
-  if (!eventsCache.length) {
-    tb.innerHTML = '<tr class="empty-row"><td colspan="6">No events yet.</td></tr>';
-    return;
+  let res = !force && cacheGet('events');
+  if (!res) {
+    tb.innerHTML = '<tr class="empty-row"><td colspan="6">Loading…</td></tr>';
+    const r = await api('getEvents');
+    if (r && r.ok) { cacheSet('events', r); res = r; }
   }
+  if (!res || !res.ok) return;
+  eventsCache = res.data;
+  if (!eventsCache.length) { tb.innerHTML = '<tr class="empty-row"><td colspan="6">No events yet.</td></tr>'; return; }
   tb.innerHTML = eventsCache.map(e => `
     <tr>
       <td data-label="Event"><strong>${escapeHtml(e.EventName)}</strong><br><span style="color:var(--ink-muted);font-size:11px;">${escapeHtml(e.EventID)}</span></td>
@@ -1852,11 +1327,8 @@ async function loadEvents() {
       <td data-label="Status"><span class="badge-status badge-${e.Status.toLowerCase()}">${e.Status}</span></td>
       <td data-label="Action" style="text-align:right;">
         <div class="d-flex gap-2 flex-wrap justify-content-end">
-          <button class="btn btn-sm btn-outline-brand"
-                  onclick='editEvent(${JSON.stringify(e).replace(/'/g, "&#39;")})'>Edit</button>
-          ${e.Status !== 'Active'
-            ? `<button class="btn btn-sm btn-brand" onclick="activateEvent('${escapeHtml(e.EventID)}')">Set Active</button>`
-            : `<span class="badge-status badge-active">Active</span>`}
+          <button class="btn btn-sm btn-outline-brand" onclick='editEvent(${JSON.stringify(e).replace(/'/g, "&#39;")})'>Edit</button>
+          ${e.Status !== 'Active' ? `<button class="btn btn-sm btn-brand" onclick="activateEvent('${escapeHtml(e.EventID)}')">Set Active</button>` : `<span class="badge-status badge-active">Active</span>`}
         </div>
       </td>
     </tr>
@@ -1865,14 +1337,7 @@ async function loadEvents() {
 
 function openEventModal() {
   document.getElementById('eventModalTitle').textContent = 'New Event';
-  document.getElementById('evtId').value = '';
-  document.getElementById('evtName').value = '';
-  document.getElementById('evtFrom').value = '';
-  document.getElementById('evtTo').value = '';
-  document.getElementById('evtAmIn').value = '';
-  document.getElementById('evtAmOut').value = '';
-  document.getElementById('evtPmIn').value = '';
-  document.getElementById('evtPmOut').value = '';
+  ['evtId','evtName','evtFrom','evtTo','evtAmIn','evtAmOut','evtPmIn','evtPmOut'].forEach(id => document.getElementById(id).value = '');
   eventModal.show();
 }
 
@@ -1901,68 +1366,70 @@ async function saveEvent() {
     PMOut: document.getElementById('evtPmOut').value,
   };
   const res = await api('saveEvent', payload);
-  if (!res || !res.ok) return swalError(res ? res.error : 'Failed', 'Could not save event');
+  if (!res || !res.ok) return swalError(res ? res.error : 'Failed', 'Could not save');
   eventModal.hide();
-  swalSuccess('Event saved successfully.', 'Saved');
-  loadEvents();
+  cacheClear();
+  swalSuccess('Event saved.', 'Saved');
+  loadEvents(true);
 }
 
 async function activateEvent(id) {
-  const ok = await swalConfirm(
-    'Only one event can be active at a time. The current active event will be deactivated.',
-    'Set event as active?',
-    'Set Active'
-  );
+  const ok = await swalConfirm('Only one event can be active at a time.', 'Set active event?', 'Set Active');
   if (!ok) return;
   const res = await api('setActiveEvent', { eventId: id });
-  if (!res || !res.ok) return swalError(res ? res.error : 'Failed', 'Activation failed');
-  swalSuccess('Event is now active.', 'Activated');
-  loadEvents();
+  if (!res || !res.ok) return swalError(res ? res.error : 'Failed', 'Failed');
+  cacheClear();
+  swalSuccess('Event activated.', 'Active');
+  loadEvents(true);
 }
 
-async function loadSettings() {
-  const res = await api('getSettings');
-  if (!res || !res.ok) return;
-  document.getElementById('setGrace').value = res.data.GraceMinutes || '5';
+/* ============================================================
+ *  SETTINGS
+ * ============================================================ */
+async function loadSettings(force) {
+  let res = !force && cacheGet('settings');
+  if (!res) {
+    const r = await api('getSettings');
+    if (r && r.ok) { cacheSet('settings', r); res = r; }
+  }
+  if (res && res.ok) document.getElementById('setGrace').value = res.data.GraceMinutes || '5';
 }
 
 async function updatePin() {
   const p1 = document.getElementById('setNewPin').value.trim();
   const p2 = document.getElementById('setConfirmPin').value.trim();
-  if (!/^\d{4}$/.test(p1)) return swalError('PIN must be exactly 4 digits.', 'Invalid PIN');
-  if (p1 !== p2) return swalError('The two PINs do not match.', 'PIN mismatch');
-
+  if (!/^\d{4}$/.test(p1)) return swalError('PIN must be 4 digits.', 'Invalid PIN');
+  if (p1 !== p2) return swalError('PINs do not match.', 'Mismatch');
   const res = await api('changePin', { pin: p1 });
-  if (!res || !res.ok) return swalError(res ? res.error : 'Failed', 'Could not update PIN');
+  if (!res || !res.ok) return swalError(res ? res.error : 'Failed', 'Failed');
   document.getElementById('setNewPin').value = '';
   document.getElementById('setConfirmPin').value = '';
-  currentPin = p1;
-  swalSuccess('Admin PIN updated. Use the new PIN next login.', 'PIN changed');
+  cacheClear();
+  swalSuccess('PIN updated.', 'PIN changed');
 }
 
 async function updateGrace() {
   const v = document.getElementById('setGrace').value;
   const res = await api('updateGraceMinutes', { minutes: v });
-  if (!res || !res.ok) return swalError(res ? res.error : 'Failed', 'Could not save');
-  swalSuccess('Grace period updated.', 'Saved');
+  if (!res || !res.ok) return swalError(res ? res.error : 'Failed', 'Failed');
+  cacheClear();
+  swalSuccess('Grace updated.', 'Saved');
 }
 
+/* ============================================================
+ *  CSV
+ * ============================================================ */
 function downloadCsv(filename, csv) {
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 function escapeHtml(s) {
-  return String(s == null ? '' : s)
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 </script>
 </body>
